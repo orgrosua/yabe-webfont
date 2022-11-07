@@ -63,10 +63,10 @@ jobs:
         - run: composer install --no-dev --ansi
 
         # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
-        - run: rsync --exclude orgrosua-build -av * orgrosua-build --quiet
+        - run: rsync --exclude orgrosua-deploy -av * orgrosua-deploy --quiet
 
         # prefix the namespaces
-        - run: sh build/build-scoped.sh orgrosua-build orgrosua-prefixed
+        - run: sh deploy/deploy-scoped.sh orgrosua-deploy orgrosua-prefixed
 
         # copy repository meta files
         # - run: |
