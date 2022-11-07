@@ -47,7 +47,7 @@ jobs:
         - run: yarn build
 
         # clean up the node_modules
-        - run: rm -rf assets node_modules package.json postcss.config.js tailwind.config.js yarn.lock .yarn .yarnrc.yml
+        - run: rm -rf assets node_modules package.json webpack.config.js postcss.config.js tailwind.config.js yarn.lock .yarn .yarnrc.yml
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
