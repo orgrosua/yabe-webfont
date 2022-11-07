@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
+use Sentry\SentrySdk;
+
 use function Composer\Autoload\includeFile;
+use function Sentry\init as sentryInit;
+use function Sentry\configureScope as sentryConfigureScope;
 
 /**
  * Monitors errors and exceptions.
@@ -24,7 +28,7 @@ class Diagnose
 {
     public function __construct(string $release)
     {
-        \Sentry\init([
+        sentryInit([
             'dsn' => YABE_SENTRY_DSN,
             'release' => $release,
             'environment' => defined('WP_DEBUG') && WP_DEBUG ? 'development' : 'production',
@@ -40,7 +44,7 @@ class Diagnose
 
     public function user_feedback_popup($message, $error)
     {
-        $sentryLastEventId = \Sentry\SentrySdk::getCurrentHub()->getLastEventId();
+        $sentryLastEventId = SentrySdk::getCurrentHub()->getLastEventId();
 
         if ($sentryLastEventId !== null) {
             $message .= '<script src="https://browser.sentry-cdn.com/7.17.1/bundle.min.js" integrity="sha384-vNdCKj9jIX+c41215wXDL6Xap/hZNJ8oyy/om470NxVJHff8VAQck1xu53ZYZ7wI" crossorigin="anonymous"></script>';
@@ -55,7 +59,7 @@ class Diagnose
 
     public function register_tags()
     {
-        \Sentry\configureScope(function (\Sentry\State\Scope $scope): void {
+        sentryConfigureScope(function (\Sentry\State\Scope $scope): void {
             $scope->setTag('wordpress.version', get_bloginfo('version'));
         });
     }
@@ -63,7 +67,7 @@ class Diagnose
     public function register_user()
     {
         add_action('init', function (): void {
-            \Sentry\configureScope(function (\Sentry\State\Scope $scope): void {
+            sentryConfigureScope(function (\Sentry\State\Scope $scope): void {
                 $user = wp_get_current_user();
 
                 if ($user->exists()) {
@@ -84,7 +88,7 @@ class Diagnose
         $themes = $this->populateFieldThemes();
         $database = $this->populateFieldDatabase();
 
-        \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($plugins, $themes, $database): void {
+        sentryConfigureScope(function (\Sentry\State\Scope $scope) use ($plugins, $themes, $database): void {
             $scope->setContext('wordpress', [
                 'version' => get_bloginfo('version'),
                 'multisite' => is_multisite(),
