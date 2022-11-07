@@ -13,9 +13,9 @@ use Isolated\Symfony\Component\Finder\Finder;
 
 $timestamp = date('Ymd');
 
-$wp_classes   = json_decode(file_get_contents('build/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-classes.json'));
-$wp_functions = json_decode(file_get_contents('build/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-functions.json'));
-$wp_constants = json_decode(file_get_contents('build/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-constants.json'));
+$wp_classes   = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-classes.json'));
+$wp_functions = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-functions.json'));
+$wp_constants = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-constants.json'));
 
 return [
     // The prefix configuration. If a non null value is be used, a random prefix
