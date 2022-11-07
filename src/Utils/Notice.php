@@ -1,0 +1,115 @@
+<?php
+
+declare(strict_types=1);
+
+/*
+ * This file is part of the Yabe package.
+ *
+ * (c) Joshua <joshua@rosua.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Yabe\Webfont\Utils;
+
+/**
+ * Manage the plugin's notices for the wp-admin page.
+ *
+ * @author Joshua <joshua@rosua.org>
+ */
+class Notice
+{
+    public const ERROR = 'error';
+
+    public const SUCCESS = 'success';
+
+    public const WARNING = 'warning';
+
+    public const INFO = 'info';
+
+    /**
+     * Get lists of notices.
+     */
+    public static function get_lists(?bool $purge = true): array
+    {
+        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+
+        if ($purge) {
+            update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+        }
+
+        return $notices;
+    }
+
+    public static function add(string $status, string $message, ?string $key = null, bool $unique = false): void
+    {
+        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+
+        $payload = [
+            'status' => $status,
+            'message' => $message,
+        ];
+
+        if ($unique) {
+            if ($key && isset($notices[$key])) {
+                return;
+            }
+
+            if (in_array([
+                'status' => $status,
+                'message' => $message,
+            ], $notices, true)) {
+                return;
+            }
+        }
+
+        if ($key) {
+            $notices[$key] = $payload;
+        } else {
+            $notices[] = $payload;
+        }
+
+        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', $notices);
+    }
+
+    /**
+     * Add bulk notices.
+     *
+     * @param string|array $messages a message or an array of messages to add.
+     */
+    public static function adds(string $status, string|array $messages): void
+    {
+        if (! is_array($messages)) {
+            $messages = [$messages];
+        }
+
+        foreach ($messages as $message) {
+            if (! is_array($message)) {
+                self::add($status, $message);
+            } else {
+                self::add($status, ...$message);
+            }
+        }
+    }
+
+    public static function success(string $message, ?string $key = null, bool $unique = false): void
+    {
+        self::add(self::SUCCESS, ...func_get_args());
+    }
+
+    public static function warning(string $message, ?string $key = null, bool $unique = false): void
+    {
+        self::add(self::WARNING, ...func_get_args());
+    }
+
+    public static function info(string $message, ?string $key = null, bool $unique = false): void
+    {
+        self::add(self::INFO, ...func_get_args());
+    }
+
+    public static function error(string $message, ?string $key = null, bool $unique = false): void
+    {
+        self::add(self::ERROR, ...func_get_args());
+    }
+}
