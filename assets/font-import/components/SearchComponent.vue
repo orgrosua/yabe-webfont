@@ -24,10 +24,6 @@ const props = defineProps({
     fontsIndex: {
         type: Object,
         required: true
-    },
-    selectedFont: {
-        type: Object,
-        required: false
     }
 });
 

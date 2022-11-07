@@ -205,17 +205,16 @@ async function importSelectedFont() {
     })
         .then(response => response.json())
         .then(data => {
-            let postData = data.data;
+            let postIds = data.data;
+            const customFontPosts =  postIds.map(postId => {
+                let postUrl = new URL(yabeWebfontImport.postUrl);
+                postUrl.searchParams.append('action', 'edit');
+                postUrl.searchParams.append('post', postId);
 
-            let postUrl = new URL(yabeWebfontImport.postUrl);
-            postUrl.searchParams.append('action', 'edit');
-            postUrl.searchParams.append('post', postData.ID);
+                return `<a href="${postUrl.href}" target="_blank">#${postId}</a>`;
+            });
 
-            // wpNotice.add(`
-            //     Font imported successfully. <a href="${postUrl.toString()}" target="_blank" class="button">Edit</a><br/> 
-            //         ID: <b>#${postData.ID}</b> <br/>
-            //         Title: <b>${postData.post_title}</b>
-            // `, 'success');
+            wpNotice.add(`Font imported successfully: ${customFontPosts.join(', ')}.`, 'success');
         })
         .catch(error => {
             reject('Error importing font');
