@@ -6,6 +6,7 @@ use Rector\Config\RectorConfig;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Set\ValueObject\DowngradeLevelSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
@@ -15,6 +16,7 @@ return static function (RectorConfig $rectorConfig): void {
     // define sets of rules
     $rectorConfig->sets([
         SetList::CODE_QUALITY,
+        DowngradeLevelSetList::DOWN_TO_PHP_80,
         LevelSetList::UP_TO_PHP_80,
     ]);
 
