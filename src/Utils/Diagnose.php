@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
-use Sentry\SentrySdk;
-
 use function Composer\Autoload\includeFile;
-use function Sentry\init as sentryInit;
+
 use function Sentry\configureScope as sentryConfigureScope;
+use function Sentry\init as sentryInit;
+use Sentry\SentrySdk;
 
 /**
  * Monitors errors and exceptions.

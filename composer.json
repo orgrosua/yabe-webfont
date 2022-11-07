@@ -37,6 +37,7 @@
         "symplify/easy-coding-standard": "^11.1"
     },
     "require": {
+        "php": ">=8.0",
         "sentry/sdk": "^3.3"
     }
 }
