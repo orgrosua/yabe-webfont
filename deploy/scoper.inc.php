@@ -119,8 +119,8 @@ return [
 
             'YABE_WEBFONT_FILE',
             'YABE_WEBFONT_OPTION_NAMESPACE',
-            'YABE_HOSTED_WAKUFONT',
-            'YABE_SENTRY_DSN',
+            'YABE_WEBFONT_HOSTED_WAKUFONT',
+            'YABE_WEBFONT_SENTRY_DSN',
             'YABE_WEBFONT_ERROR_REPORTING',
 
             'BRICKS_DB_CUSTOM_FONTS',

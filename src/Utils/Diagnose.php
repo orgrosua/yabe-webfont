@@ -29,7 +29,7 @@ class Diagnose
     public function __construct(string $release)
     {
         sentryInit([
-            'dsn' => YABE_SENTRY_DSN,
+            'dsn' => YABE_WEBFONT_SENTRY_DSN,
             'release' => $release,
             'environment' => defined('WP_DEBUG') && WP_DEBUG ? 'development' : 'production',
             'attach_stacktrace' => true,
@@ -48,7 +48,7 @@ class Diagnose
 
         if ($sentryLastEventId !== null) {
             $message .= '<script src="https://browser.sentry-cdn.com/7.17.1/bundle.min.js" integrity="sha384-vNdCKj9jIX+c41215wXDL6Xap/hZNJ8oyy/om470NxVJHff8VAQck1xu53ZYZ7wI" crossorigin="anonymous"></script>';
-            $message .= '<script>Sentry.init({ dsn: "' . YABE_SENTRY_DSN . '" });Sentry.showReportDialog({
+            $message .= '<script>Sentry.init({ dsn: "' . YABE_WEBFONT_SENTRY_DSN . '" });Sentry.showReportDialog({
                 eventId: "' . $sentryLastEventId . '",
                 title: "Yabe Webfont has detected an error",
                 subtitle: "Our team has been notified. Please help us to improve our plugin by sending us a report.",

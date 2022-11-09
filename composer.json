@@ -16,19 +16,19 @@
     "prefer-stable": true,
     "scripts": {
         "complete-check": [
-            "@check-minimum-php-code",
-            "@check-cs"
+            "@check-rector",
+            "@check-ecs"
         ],
-        "check-cs": [
+        "check-ecs": [
             "vendor/bin/ecs check --ansi"
         ],
-        "fix-cs": [
+        "fix-ecs": [
             "vendor/bin/ecs check --fix --ansi"
         ],
-        "check-minimum-php-code": [
+        "check-rector": [
             "vendor/bin/rector process --dry-run"
         ],
-        "fix-minimum-php-code": [
+        "fix-rector": [
             "vendor/bin/rector process"
         ]
     },
@@ -38,6 +38,7 @@
     },
     "require": {
         "php": ">=8.0",
+        "rosua/edd-sl-plugin-updater": "dev-master",
         "sentry/sdk": "^3.3"
     }
 }

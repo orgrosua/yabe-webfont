@@ -15,6 +15,7 @@ namespace Yabe\Webfont;
 
 use Exception;
 use Yabe\Webfont\Admin\ImportPage;
+use Yabe\Webfont\Admin\LicensePage;
 use Yabe\Webfont\Core\Font;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Diagnose;
@@ -117,6 +118,7 @@ final class Plugin
             do_action('a!yabe/webfont/plugins:boot_admin');
 
             new ImportPage();
+            new LicensePage();
             new Font();
         }
 

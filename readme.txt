@@ -9,7 +9,7 @@ Requires PHP: 8.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Self-hosting Google Fonts and register to Bricks' Custom Font seamlessly.
+Self-host Google Fonts with seamless Bricks' Custom Fonts integration
 
 == Description ==
 

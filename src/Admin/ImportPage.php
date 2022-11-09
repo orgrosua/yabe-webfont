@@ -37,7 +37,7 @@ class ImportPage
             wp_enqueue_script(YABE_WEBFONT_OPTION_NAMESPACE . '-cpt-index', plugin_dir_url(YABE_WEBFONT_FILE) . 'build/cpt-index.js', ['bricks-custom-fonts'], filemtime(plugin_dir_path(YABE_WEBFONT_FILE) . 'build/cpt-index.js'), true);
             wp_localize_script(YABE_WEBFONT_OPTION_NAMESPACE . '-cpt-index', 'yabeWebfontCptIndex', [
                 'action_url' => add_query_arg([
-                    'page' => 'yabe-webfont-import',
+                    'page' => YABE_WEBFONT_OPTION_NAMESPACE . '-import',
                 ], admin_url('admin.php')),
             ]);
         }
@@ -50,7 +50,7 @@ class ImportPage
             __('Import Google Fonts', 'yabe-webfont'),
             __('Import Google Fonts', 'yabe-webfont'),
             'manage_options',
-            'yabe-webfont-import',
+            YABE_WEBFONT_OPTION_NAMESPACE . '-import',
             fn () => $this->render()
         );
 

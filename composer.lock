@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f8e78b1cdbb1c7a707f06c7469b1bba",
+    "content-hash": "5e050bd48d17aa3ccb6e23d57b3cdb9c",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -1089,6 +1089,52 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
+            "name": "rosua/edd-sl-plugin-updater",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orgrosua/edd-sl-plugin-updater.git",
+                "reference": "454d8ad673eda9dc76b91074f4d0b9e4c265cf68"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orgrosua/edd-sl-plugin-updater/zipball/454d8ad673eda9dc76b91074f4d0b9e4c265cf68",
+                "reference": "454d8ad673eda9dc76b91074f4d0b9e4c265cf68",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EDD_SL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "EasyDigitalDownloads",
+                    "email": "contact@easydigitaldownloads.com"
+                },
+                {
+                    "name": "Rosua",
+                    "email": "id@rosua.org"
+                }
+            ],
+            "description": "Easy Digital Downloads WordPress plugin updater class for Software Licenses",
+            "keywords": [
+                "edd",
+                "updates",
+                "wordpress"
+            ],
+            "support": {
+                "source": "https://github.com/orgrosua/edd-sl-plugin-updater/tree/master"
+            },
+            "time": "2022-11-08T06:32:15+00:00"
+        },
+        {
             "name": "sentry/sdk",
             "version": "3.3.0",
             "source": {
@@ -1886,7 +1932,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "rosua/edd-sl-plugin-updater": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
