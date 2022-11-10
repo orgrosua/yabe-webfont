@@ -28,7 +28,7 @@ use Yabe\Webfont\Utils\Notice;
  */
 final class Plugin
 {
-    public const VERSION = '1.0.0-DEV';
+    public const VERSION = '1.0.0';
 
     public const VERSION_ID = 10000;
 
@@ -38,7 +38,7 @@ final class Plugin
 
     public const RELEASE_VERSION = 0;
 
-    public const EXTRA_VERSION = 'DEV';
+    public const EXTRA_VERSION = '';
 
     /**
      * Stores the instance, implementing a Singleton pattern.
