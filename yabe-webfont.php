@@ -9,7 +9,7 @@ declare(strict_types=1);
  * Plugin Name:         Yabe Webfont
  * Plugin URI:          https://yabe.land/webfont
  * Description:         Self-host Google Fonts with seamless Bricks' Custom Fonts integration
- * Version:             1.0.0
+ * Version:             1.0.1-DEV
  * Requires at least:   6.0
  * Requires PHP:        8.0
  * Author:              Rosua
