@@ -5,7 +5,7 @@ Tags: bricks builder, google fonts
 Requires at least: 6.0
 Tested up to: 6.1
 Stable tag: 2.0.0-DEV
-Requires PHP: 8.0
+Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,6 +37,10 @@ The plugin is designed to be user friendly and easy to use. It just require a fe
 * No hassle — Just click the "Import" button, and the font will be downloaded and registered to the Bricks' Custom Font.
 
 == Changelog ==
+
+= Unreleased =
+
+
 
 = 1.0.0 =
 Initial release.

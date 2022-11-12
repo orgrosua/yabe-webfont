@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Yabe Webfont
  *
@@ -11,7 +9,7 @@ declare(strict_types=1);
  * Description:         Self-host Google Fonts with seamless Bricks' Custom Fonts integration
  * Version:             2.0.0-DEV
  * Requires at least:   6.0
- * Requires PHP:        8.0
+ * Requires PHP:        7.4
  * Author:              Rosua
  * Author URI:          https://rosua.org
  * Donate link:         https://github.com/sponsors/suabahasa
@@ -21,6 +19,8 @@ declare(strict_types=1);
  * @package             Yabe
  * @author              Joshua <joshua@rosua.org>
  */
+
+declare(strict_types=1);
 
 defined('ABSPATH') || exit;
 

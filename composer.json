@@ -37,7 +37,7 @@
         "symplify/easy-coding-standard": "^11.1"
     },
     "require": {
-        "php": ">=8.0",
+        "php": "^7.4 || ^8.0",
         "rosua/edd-sl-plugin-updater": "dev-master",
         "sentry/sdk": "^3.3"
     }

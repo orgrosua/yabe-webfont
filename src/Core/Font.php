@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -11,10 +9,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Yabe\Webfont\Core;
 
 use Bricks\Capabilities;
-use stdClass;
 use WP_Error;
 
 /**
@@ -38,8 +37,9 @@ class Font
      * Fetch the font files from the respective API.
      *
      * @param string $slug the font slug
+     * @return \WP_Error|\stdClass
      */
-    public function fetch_font_item($slug, $subsets): WP_Error|stdClass
+    public function fetch_font_item($slug, $subsets)
     {
         $item_hash = substr(wp_hash($slug . '_' . str_replace(',', '_', $subsets), 'nonce'), -12, 10);
 
@@ -151,7 +151,7 @@ class Font
      * @param string $mime_type Mime type of the font file
      * @return int|WP_Error|false Attachment ID on success, WP_Error or false on failure
      */
-    public function upload_font(string $font_url, string $font_name, string $mime_type): int|WP_Error|false
+    public function upload_font(string $font_url, string $font_name, string $mime_type)
     {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
 
@@ -199,7 +199,7 @@ class Font
             if (file_exists($temp_file)) {
                 unlink($temp_file);
             }
-        } catch (\Throwable) {
+        } catch (\Throwable $throwable) {
             //throw $th;
         }
 
@@ -270,7 +270,7 @@ class Font
 
         $mime_types = static::get_custom_fonts_mime_types();
 
-        $weight_axis = array_filter($font_item->font->axes, fn ($axis) => $axis->tag === 'wght')[0];
+        $weight_axis = array_filter($font_item->font->axes, static fn ($axis) => $axis->tag === 'wght')[0];
 
         foreach ($selected_subsets as $selected_subset) {
             $post_attachments = [];

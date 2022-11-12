@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont\Admin;
 
@@ -129,7 +129,7 @@ class LicensePage
                                 update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license_key', $req_license_key);
                                 Notice::success('Plugin license key activated successfully');
                             }
-                        } catch (\Throwable) {
+                        } catch (\Throwable $throwable) {
                             Notice::error('An error occurred while parsing the response, please try again.');
                         }
                     }
@@ -146,7 +146,7 @@ class LicensePage
 
         try {
             $is_license_activated = $this->plugin_updater->is_activated();
-        } catch (\Throwable) {
+        } catch (\Throwable $throwable) {
         }
         ?>
         <div class="wrap bricks-admin-wrapper license">
@@ -167,7 +167,8 @@ class LicensePage
                         <div class="status-wrapper">
                             Status: <span class="status processed">Active</span>
                         </div>
-                    <?php endif; ?>
+                    <?php endif;
+        ?>
                 </form>
             </div>
         </div>

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont\Admin;
 
@@ -26,7 +26,12 @@ class ImportPage
     public function __construct()
     {
         add_action('admin_menu', fn () => $this->admin_menu(), 100);
-        add_action('admin_enqueue_scripts', fn () => $this->cpt_index_enqueue_scripts(), 100);
+
+        add_action('after_setup_theme', function () {
+            if (defined('BRICKS_VERSION')) {
+                add_action('admin_enqueue_scripts', fn () => $this->cpt_index_enqueue_scripts(), 100);
+            }
+        }, 10001);
     }
 
     public function cpt_index_enqueue_scripts()

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -11,13 +9,15 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Yabe\Webfont\Utils;
 
-use function Composer\Autoload\includeFile;
+use Sentry\SentrySdk;
 
+use function Composer\Autoload\includeFile;
 use function Sentry\configureScope as sentryConfigureScope;
 use function Sentry\init as sentryInit;
-use Sentry\SentrySdk;
 
 /**
  * Monitors errors and exceptions.
@@ -59,17 +59,16 @@ class Diagnose
 
     public function register_tags()
     {
-        sentryConfigureScope(function (\Sentry\State\Scope $scope): void {
+        sentryConfigureScope(static function (\Sentry\State\Scope $scope): void {
             $scope->setTag('wordpress.version', get_bloginfo('version'));
         });
     }
 
     public function register_user()
     {
-        add_action('init', function (): void {
-            sentryConfigureScope(function (\Sentry\State\Scope $scope): void {
+        add_action('init', static function (): void {
+            sentryConfigureScope(static function (\Sentry\State\Scope $scope): void {
                 $user = wp_get_current_user();
-
                 if ($user->exists()) {
                     $scope->setUser([
                         'username' => $user->user_login,
@@ -88,7 +87,7 @@ class Diagnose
         $themes = $this->populateFieldThemes();
         $database = $this->populateFieldDatabase();
 
-        sentryConfigureScope(function (\Sentry\State\Scope $scope) use ($plugins, $themes, $database): void {
+        sentryConfigureScope(static function (\Sentry\State\Scope $scope) use ($plugins, $themes, $database): void {
             $scope->setContext('wordpress', [
                 'version' => get_bloginfo('version'),
                 'multisite' => is_multisite(),
@@ -118,7 +117,7 @@ class Diagnose
         if (is_resource($wpdb->dbh)) {
             $database['extension'] = 'mysql';
         } elseif (is_object($wpdb->dbh)) {
-            $database['extension'] = $wpdb->dbh::class;
+            $database['extension'] = get_class($wpdb->dbh);
         } else {
             $database['extension'] = null;
         }
@@ -128,7 +127,7 @@ class Diagnose
             $database['client_version'] = $wpdb->dbh->client_info;
         } else {
             $database['server_version'] = $wpdb->get_var('SELECT VERSION()');
-            $database['client_version'] = preg_match('|\d{1,2}\.\d{1,2}\.\d{1,2}|', mysql_get_client_info(), $matches) ? $matches[0] : null;
+            $database['client_version'] = preg_match('#\d{1,2}\.\d{1,2}\.\d{1,2}#', mysql_get_client_info(), $matches) ? $matches[0] : null;
         }
 
         return $database;

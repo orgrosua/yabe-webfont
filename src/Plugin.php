@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont;
 
@@ -28,16 +28,34 @@ use Yabe\Webfont\Utils\Notice;
  */
 final class Plugin
 {
+    /**
+     * @var string
+     */
     public const VERSION = '2.0.0-DEV';
 
+    /**
+     * @var int
+     */
     public const VERSION_ID = 20000;
 
+    /**
+     * @var int
+     */
     public const MAJOR_VERSION = 2;
 
+    /**
+     * @var int
+     */
     public const MINOR_VERSION = 0;
 
+    /**
+     * @var int
+     */
     public const RELEASE_VERSION = 0;
 
+    /**
+     * @var string
+     */
     public const EXTRA_VERSION = 'DEV';
 
     /**
@@ -152,9 +170,8 @@ final class Plugin
      */
     public function plugins_loaded(): void
     {
-        add_action('admin_notices', function () {
+        add_action('admin_notices', static function () {
             $messages = Notice::get_lists();
-
             if ($messages && is_array($messages)) {
                 foreach ($messages as $message) {
                     echo sprintf(

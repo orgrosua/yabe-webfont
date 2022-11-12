@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
@@ -27,22 +27,29 @@ class Common
      */
     public static function is_request(string $type): bool
     {
-        return match ($type) {
-            'admin' => is_admin(),
-            'ajax' => defined('DOING_AJAX'),
-            'rest' => defined('REST_REQUEST'),
-            'cron' => defined('DOING_CRON'),
-            'frontend' => (! is_admin() || defined('DOING_AJAX')) && ! defined('DOING_CRON'),
-            default => false,
-        };
+        switch ($type) {
+            case 'admin':
+                return is_admin();
+            case 'ajax':
+                return defined('DOING_AJAX');
+            case 'rest':
+                return defined('REST_REQUEST');
+            case 'cron':
+                return defined('DOING_CRON');
+            case 'frontend':
+                return (! is_admin() || defined('DOING_AJAX')) && ! defined('DOING_CRON');
+            default:
+                return false;
+        }
     }
 
     /**
      * Get the plugin's data.
      *
      * @param string $key The key to retrieve.
+     * @return mixed
      */
-    public static function plugin_data(?string $key = null): mixed
+    public static function plugin_data(?string $key = null)
     {
         if (! function_exists('get_plugin_data')) {
             require_once(ABSPATH . 'wp-admin/includes/plugin.php');

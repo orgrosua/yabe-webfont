@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
@@ -20,12 +20,24 @@ namespace Yabe\Webfont\Utils;
  */
 class Notice
 {
+    /**
+     * @var string
+     */
     public const ERROR = 'error';
 
+    /**
+     * @var string
+     */
     public const SUCCESS = 'success';
 
+    /**
+     * @var string
+     */
     public const WARNING = 'warning';
 
+    /**
+     * @var string
+     */
     public const INFO = 'info';
 
     /**
@@ -78,7 +90,7 @@ class Notice
      *
      * @param string|array $messages a message or an array of messages to add.
      */
-    public static function adds(string $status, string|array $messages): void
+    public static function adds(string $status, $messages): void
     {
         if (! is_array($messages)) {
             $messages = [$messages];
