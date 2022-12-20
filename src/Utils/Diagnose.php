@@ -47,7 +47,7 @@ class Diagnose
         $sentryLastEventId = SentrySdk::getCurrentHub()->getLastEventId();
 
         if ($sentryLastEventId !== null) {
-            $message .= '<script src="https://browser.sentry-cdn.com/7.17.1/bundle.min.js" integrity="sha384-vNdCKj9jIX+c41215wXDL6Xap/hZNJ8oyy/om470NxVJHff8VAQck1xu53ZYZ7wI" crossorigin="anonymous"></script>';
+            $message .= '<script src="https://browser.sentry-cdn.com/7.19.0/bundle.min.js" integrity="sha384-ztBHD5Kyf+YJqkbZijnUhyS5dYdQDCEfB2QjYao1rVJ1qBpQn+WMbafstDcVTHnB" crossorigin="anonymous"></script>';
             $message .= '<script>Sentry.init({ dsn: "' . YABE_WEBFONT_SENTRY_DSN . '" });Sentry.showReportDialog({
                 eventId: "' . $sentryLastEventId . '",
                 title: "Yabe Webfont has detected an error",

@@ -6,7 +6,7 @@
  * @wordpress-plugin
  * Plugin Name:         Yabe Webfont
  * Plugin URI:          https://yabe.land/webfont
- * Description:         Self-host Google Fonts with seamless Bricks' Custom Fonts integration
+ * Description:         Self-host Google Fonts with seamless Page Builders integration
  * Version:             2.0.0-DEV
  * Requires at least:   6.0
  * Requires PHP:        7.4
@@ -40,6 +40,8 @@ define('YABE_WEBFONT_EDD_STORE', [
     'item_id' => 18,
     'author' => 'idrosua',
 ]);
+
+define('YABE_WEBFONT_REST_NAMESPACE', 'yabe-webfont/v1');
 
 require_once __DIR__ . '/vendor/autoload.php';
 

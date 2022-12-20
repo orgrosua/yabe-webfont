@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Yabe\Webfont;
 
 use Exception;
-use Yabe\Webfont\Admin\ImportPage;
-use Yabe\Webfont\Admin\LicensePage;
-use Yabe\Webfont\Core\Font;
+use Yabe\Webfont\Admin\AdminPage;
+use Yabe\Webfont\Api\Router as ApiRouter;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Diagnose;
 use Yabe\Webfont\Utils\Notice;
@@ -28,34 +27,11 @@ use Yabe\Webfont\Utils\Notice;
  */
 final class Plugin
 {
-    /**
-     * @var string
-     */
     public const VERSION = '2.0.0-DEV';
-
-    /**
-     * @var int
-     */
     public const VERSION_ID = 20000;
-
-    /**
-     * @var int
-     */
     public const MAJOR_VERSION = 2;
-
-    /**
-     * @var int
-     */
     public const MINOR_VERSION = 0;
-
-    /**
-     * @var int
-     */
     public const RELEASE_VERSION = 0;
-
-    /**
-     * @var string
-     */
     public const EXTRA_VERSION = 'DEV';
 
     /**
@@ -97,15 +73,22 @@ final class Plugin
     public static function get_instance(): self
     {
         $cls = static::class;
-        if (! isset(self::$instance)) {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public function boot_sentry()
+    public function boot_debug()
     {
-        new Diagnose(self::VERSION);
+        if (WP_DEBUG === true && class_exists(\Sentry\SentrySdk::class)) {
+            new Diagnose(self::VERSION);
+        }
+    }
+
+    public function boot_migration()
+    {
+        new Migration();
     }
 
     /**
@@ -115,9 +98,8 @@ final class Plugin
     {
         do_action('a!yabe/webfont/plugins:boot_start');
 
-        if (defined('YABE_WEBFONT_ERROR_REPORTING') && constant('YABE_WEBFONT_ERROR_REPORTING') === true) {
-            $this->boot_sentry();
-        }
+        $this->boot_debug();
+        $this->boot_migration();
 
         // (de)activation hooks.
         register_activation_hook(YABE_WEBFONT_FILE, function (): void {
@@ -127,17 +109,17 @@ final class Plugin
             $this->deactivate_plugin();
         });
 
+        new ApiRouter();
+
         // admin hooks.
         if (is_admin()) {
             add_action('plugins_loaded', function (): void {
                 $this->plugins_loaded();
             }, 100);
 
-            do_action('a!yabe/webfont/plugins:boot_admin');
+            new AdminPage();
 
-            new ImportPage();
-            new LicensePage();
-            new Font();
+            do_action('a!yabe/webfont/plugins:boot_admin');
         }
 
         do_action('a!yabe/webfont/plugins:boot_end');
@@ -170,14 +152,16 @@ final class Plugin
      */
     public function plugins_loaded(): void
     {
+        load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT_FILE)) . '/translations/');
+
         add_action('admin_notices', static function () {
             $messages = Notice::get_lists();
             if ($messages && is_array($messages)) {
                 foreach ($messages as $message) {
                     echo sprintf(
-                        '<div class="notice notice-%s is-dismissible"><p><b>%s:</b> %s</p></div>',
+                        '<div class="notice notice-%s is-dismissible %s">%s</div>',
                         $message['status'],
-                        Common::plugin_data('Name'),
+                        YABE_WEBFONT_OPTION_NAMESPACE,
                         $message['message']
                     );
                 }
