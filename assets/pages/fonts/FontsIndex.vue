@@ -3,7 +3,7 @@
     <router-link :to="{ name: 'fonts.create.google-fonts' }" class="page-title-action">{{ __('Import Google Fonts', 'yabe-webfont') }}</router-link>
 
     <span v-if="searchQuery" class="subtitle"> {{ __('Search results for', 'yabe-webfont') }}: <strong> {{ searchQuery }} </strong> </span>
-    <hr class="invisible m-0 -mt-0.5" />
+    <hr class="tw-invisible tw-m-0 -tw-mt-0.5" />
 
     <ul class="subsubsub">
         <li class="all">
@@ -13,14 +13,14 @@
         </li>
     </ul>
 
-    <p class="search-box relative">
+    <p class="search-box tw-relative">
         <input id="searchInput" v-model.trim.lazy="searchQuery" type="search" name="s" :disabled="isDisableAction" />
         <button type="submit" class="button" :disabled="isDisableAction" @click="doSearch" v-ripple>{{ __('Search', 'yabe-webfont') }} 🔍</button>
     </p>
 
     <div class="tablenav top">
         <TheBulkAction :actions="bulkActions" :is-disable-action="isDisableAction" @do-bulk-actions="doBulkActions" />
-        <div class="tablenav-pages pb-3">
+        <div class="tablenav-pages tw-pb-3">
             <span class="displaying-num"> {{ `${meta.total} ${__('items', 'yabe-webfont')}` }} </span>
             <ThePagination v-if="meta.last_page > 1" :is-enable-goto="true" :is-disable-action="isDisableAction" :current-page="meta.current_page" :first-page="meta.current_page - 1 > 1" :previous-page="meta.current_page > 1" :next-page="meta.current_page < meta.last_page" :last-page="meta.current_page + 1 < meta.last_page" :total-page="meta.last_page" @change-page="doChangePage" />
         </div>
@@ -30,10 +30,10 @@
     <!-- placeholder: start: table here -->
 
 
-    <table class="wp-list-table widefat table-auto plugins min-w-full">
+    <table class="wp-list-table widefat table-auto plugins tw-min-w-full">
         <thead>
             <tr>
-                <td class="px-0.5 align-middle">
+                <td class="tw-px-0.5 tw-align-middle">
                     <input v-model="selectAll" type="checkbox" />
                 </td>
                 <th scope="col">
@@ -66,7 +66,7 @@
         </tbody> -->
         <tfoot>
             <tr>
-                <td class="px-0.5 align-middle">
+                <td class="tw-px-0.5 tw-align-middle">
                     <input v-model="selectAll" type="checkbox" />
                 </td>
                 <th scope="col">

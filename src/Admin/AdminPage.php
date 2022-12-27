@@ -22,7 +22,7 @@ class AdminPage
     {
         add_action('admin_menu', [$this, 'addAdminMenu']);
 
-        Notice::info('<p>info Plugin version: ' . Plugin::VERSION, 'version_info</p>');
+        // Notice::info('<p>info Plugin version: ' . Plugin::VERSION, 'version_info</p>');
         // Notice::success('success Plugin version: ' . Plugin::VERSION, 'version_success');
         // Notice::warning('warning Plugin version: ' . Plugin::VERSION, 'version_warning');
         // Notice::error('error Plugin version: ' . Plugin::VERSION, 'version_error');

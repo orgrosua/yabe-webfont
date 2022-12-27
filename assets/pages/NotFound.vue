@@ -1,11 +1,11 @@
 <template>
-    <div class="notfound-page max-w-7xl px-4 mx-auto text-2xl">
-        <div class="flex my-16 text-left">
+    <div class="notfound-page tw-max-w-7xl tw-px-4 tw-mx-auto tw-text-2xl">
+        <div class="tw-flex tw-my-16 tw-text-left">
             <div class="w-[70%]">
-                <h1 class="my-0 font-light text-8xl">404</h1>
-                <h2 class="subtitle text-4xl font-semibold m-0">Whoops, this page doesn’t exist :-(</h2>
+                <h1 class="tw-my-0 tw-font-light tw-text-8xl">404</h1>
+                <h2 class="subtitle tw-text-4xl tw-font-semibold tw-m-0">Whoops, this page doesn’t exist :-(</h2>
             </div>
-            <div class="mt-0 w-[30%]">
+            <div class="tw-mt-0 tw-w-[30%]">
                 <!-- <img id="ferris-error" src="/static/images/ferris-error.png" alt="404 not found image"> -->
             </div>
         </div>

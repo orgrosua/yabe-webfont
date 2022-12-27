@@ -92,7 +92,7 @@ final class Plugin
     }
 
     /**
-     * Entry to the Plugin.
+     * Boot to the Plugin.
      */
     public function boot(): void
     {

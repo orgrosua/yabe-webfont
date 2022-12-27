@@ -33,8 +33,6 @@ define('YABE_WEBFONT_OPTION_NAMESPACE', 'yabe_webfont');
 
 define('YABE_WEBFONT_HOSTED_WAKUFONT', 'https://wakufont-hosted.rosua.org');
 
-define('YABE_WEBFONT_SENTRY_DSN', 'https://6decbda1f9474f9da6191044c02bcd30@sentry.suabahasa.dev/3');
-
 define('YABE_WEBFONT_EDD_STORE', [
     'url' => 'https://rosua.org',
     'item_id' => 18,
@@ -43,6 +41,10 @@ define('YABE_WEBFONT_EDD_STORE', [
 
 define('YABE_WEBFONT_REST_NAMESPACE', 'yabe-webfont/v1');
 
-require_once __DIR__ . '/vendor/autoload.php';
+if (file_exists(__DIR__ . '/vendor/scoper-autoload.php')) {
+    require_once __DIR__ . '/vendor/scoper-autoload.php';
+} else {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
 
 \Yabe\Webfont\Plugin::get_instance()->boot();

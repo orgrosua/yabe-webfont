@@ -1,133 +1,102 @@
 <template>
-    <span class="text-2xl">» {{ __('New', 'yabe-webfont') }} </span>
+    <span class="tw-mr-2 tw-text-2xl">» {{ __('New', 'yabe-webfont') }} </span>
 
     <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
 
 
-            <div id="post-body-content" style="/* position: relative; */">
-
+            <div id="post-body-content">
                 <div id="titlediv">
                     <div id="titlewrap">
-                        <label class="screen-reader-text" id="title-prompt-text" for="title">Add title</label>
-                        <input type="text" name="post_title" size="30" value="Hello world!" id="title" spellcheck="true" autocomplete="off">
+                        <label class="screen-reader-text" for="title">Add title</label>
+                        <input type="text" name="title" id="title" size="30" v-model="title" placeholder="Title" autocomplete="off">
                     </div>
                     <div class="inside">
-                        <div id="edit-slug-box" class="hide-if-no-js">
-                            <strong>Permalink:</strong>
-                            <span id="sample-permalink"><a href="http://127.0.0.1:8080/?p=1&amp;preview=true" target="wp-preview-1">http://127.0.0.1:8080/<span id="editable-post-name">hello-world</span>/</a></span>
-                            ‎<span id="edit-slug-buttons"><button type="button" class="edit-slug button button-small hide-if-no-js" aria-label="Edit permalink">Edit</button></span>
-                            <span id="editable-post-name-full">hello-world</span>
-                        </div>
+
                     </div>
-                    <input type="hidden" id="samplepermalinknonce" name="samplepermalinknonce" value="8c957095a7">
                 </div><!-- /titlediv -->
-                <div id="postdivrich" class="postarea wp-editor-expand">
+                <div class="postarea wp-editor-expand">
 
-                    <div id="wp-content-wrap" class="wp-core-ui wp-editor-wrap tmce-active has-dfw" style="padding-top: 55px;">
-                        <link rel="stylesheet" id="editor-buttons-css" href="http://127.0.0.1:8080/wp-includes/css/editor.min.css?ver=6.1.1" media="all">
-                        <div id="wp-content-editor-tools" class="wp-editor-tools hide-if-no-js" style="position: absolute; top: 0px; width: 856.4px;">
-                            <div id="wp-content-media-buttons" class="wp-media-buttons"><button type="button" id="insert-media-button" class="button insert-media add_media" data-editor="content"><span class="wp-media-buttons-icon"></span> Add Media</button></div>
-                            <div class="wp-editor-tabs"><button type="button" id="content-tmce" class="wp-switch-editor switch-tmce" data-wp-editor-id="content">Visual</button>
-                                <button type="button" id="content-html" class="wp-switch-editor switch-html" data-wp-editor-id="content">Text</button>
+                    <div id="wp-content-wrap" class="wp-core-ui tw-mt-8">
+                        <h3>Meta</h3>
+                        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+                            <div class="tw-col-span-4 tw-flex tw-flex-col tw-gap-1.5">
+                                <label for="family" class="tw-text-sm tw-font-semibold">Font Family</label>
+                                <input type="text" name="family" id="family" v-model="family" placeholder="Font Family" autocomplete="off">
                             </div>
-                        </div>
-                        <div id="wp-content-editor-container" class="wp-editor-container">
-                            <div id="ed_toolbar" class="quicktags-toolbar hide-if-no-js" style="position: absolute; top: 0px; width: 816.4px;"><input type="button" id="qt_content_strong" class="ed_button button button-small" aria-label="Bold" value="b"><input type="button" id="qt_content_em" class="ed_button button button-small" aria-label="Italic" value="i"><input type="button" id="qt_content_link" class="ed_button button button-small" aria-label="Insert link" value="link"><input type="button" id="qt_content_block" class="ed_button button button-small" aria-label="Blockquote" value="b-quote"><input type="button" id="qt_content_del" class="ed_button button button-small" aria-label="Deleted text (strikethrough)" value="del"><input type="button" id="qt_content_ins" class="ed_button button button-small" aria-label="Inserted text" value="ins"><input type="button" id="qt_content_img" class="ed_button button button-small" aria-label="Insert image" value="img"><input type="button" id="qt_content_ul" class="ed_button button button-small" aria-label="Bulleted list" value="ul"><input type="button" id="qt_content_ol" class="ed_button button button-small" aria-label="Numbered list" value="ol"><input type="button" id="qt_content_li" class="ed_button button button-small" aria-label="List item" value="li"><input type="button" id="qt_content_code" class="ed_button button button-small" aria-label="Code" value="code"><input type="button" id="qt_content_more" class="ed_button button button-small" aria-label="Insert Read More tag" value="more"><input type="button" id="qt_content_close" class="ed_button button button-small" title="Close all open tags" value="close tags"><button type="button" id="qt_content_dfw" class="ed_button qt-dfw" title="Distraction-free writing mode"></button></div>
-                            <div id="mceu_23" class="mce-tinymce mce-container mce-panel" hidefocus="1" tabindex="-1" role="application" style="visibility: hidden; border-width: 1px; width: 100%;"><grammarly-extension data-grammarly-shadow-root="true" style="position: absolute; top: 0px; left: 0px; pointer-events: none;" class="cGcvT"></grammarly-extension><grammarly-extension data-grammarly-shadow-root="true" style="mix-blend-mode: darken; position: absolute; top: 0px; left: 0px; pointer-events: none;" class="cGcvT"></grammarly-extension>
-                                <div id="mceu_23-body" class="mce-container-body mce-stack-layout">
-                                    <div id="mceu_24" class="mce-top-part mce-container mce-stack-layout-item mce-first">
-                                        <div id="mceu_24-body" class="mce-container-body">
-                                            <div id="mceu_25" class="mce-toolbar-grp mce-container mce-panel mce-first mce-last" hidefocus="1" tabindex="-1" role="group" style="position: absolute; top: 0px; width: 854.4px;">
-                                                <div id="mceu_25-body" class="mce-container-body mce-stack-layout">
-                                                    <div id="mceu_26" class="mce-container mce-toolbar mce-stack-layout-item mce-first" role="toolbar">
-                                                        <div id="mceu_26-body" class="mce-container-body mce-flow-layout">
-                                                            <div id="mceu_27" class="mce-container mce-flow-layout-item mce-first mce-last mce-btn-group" role="group">
-                                                                <div id="mceu_27-body">
-                                                                    <div id="mceu_0" class="mce-widget mce-btn mce-menubtn mce-fixed-width mce-listbox mce-first mce-btn-has-text" tabindex="-1" aria-labelledby="mceu_0" role="button" aria-haspopup="true"><button id="mceu_0-open" role="presentation" type="button" tabindex="-1"><span class="mce-txt">Paragraph</span> <i class="mce-caret"></i></button></div>
-                                                                    <div id="mceu_1" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Bold (Ctrl+B)"><button id="mceu_1-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-bold"></i></button></div>
-                                                                    <div id="mceu_2" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Italic (Ctrl+I)"><button id="mceu_2-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-italic"></i></button></div>
-                                                                    <div id="mceu_3" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Bulleted list (Shift+Alt+U)"><button id="mceu_3-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-bullist"></i></button></div>
-                                                                    <div id="mceu_4" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Numbered list (Shift+Alt+O)"><button id="mceu_4-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-numlist"></i></button></div>
-                                                                    <div id="mceu_5" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Blockquote (Shift+Alt+Q)"><button id="mceu_5-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-blockquote"></i></button></div>
-                                                                    <div id="mceu_6" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Align left (Shift+Alt+L)"><button id="mceu_6-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-alignleft"></i></button></div>
-                                                                    <div id="mceu_7" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Align center (Shift+Alt+C)"><button id="mceu_7-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-aligncenter"></i></button></div>
-                                                                    <div id="mceu_8" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Align right (Shift+Alt+R)"><button id="mceu_8-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-alignright"></i></button></div>
-                                                                    <div id="mceu_9" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Insert/edit link (Ctrl+K)"><button id="mceu_9-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-link"></i></button></div>
-                                                                    <div id="mceu_10" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Insert Read More tag (Shift+Alt+T)"><button id="mceu_10-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-wp_more"></i></button></div>
-                                                                    <div id="mceu_11" class="mce-widget mce-btn mce-last" tabindex="-1" role="button" aria-label="Toolbar Toggle (Shift+Alt+Z)"><button id="mceu_11-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-wp_adv"></i></button></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div id="mceu_28" class="mce-container mce-toolbar mce-stack-layout-item mce-last" role="toolbar" style="display: none;">
-                                                        <div id="mceu_28-body" class="mce-container-body mce-flow-layout">
-                                                            <div id="mceu_29" class="mce-container mce-flow-layout-item mce-first mce-last mce-btn-group" role="group">
-                                                                <div id="mceu_29-body">
-                                                                    <div id="mceu_12" class="mce-widget mce-btn mce-first" tabindex="-1" aria-pressed="false" role="button" aria-label="Strikethrough (Shift+Alt+D)"><button id="mceu_12-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-strikethrough"></i></button></div>
-                                                                    <div id="mceu_13" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Horizontal line"><button id="mceu_13-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-hr"></i></button></div>
-                                                                    <div id="mceu_14" class="mce-widget mce-btn mce-splitbtn mce-colorbutton" role="button" tabindex="-1" aria-haspopup="true" aria-label="Text color"><button role="presentation" hidefocus="1" type="button" tabindex="-1"><i class="mce-ico mce-i-forecolor"></i><span id="mceu_14-preview" class="mce-preview"></span></button><button type="button" class="mce-open" hidefocus="1" tabindex="-1"> <i class="mce-caret"></i></button></div>
-                                                                    <div id="mceu_15" class="mce-widget mce-btn" tabindex="-1" aria-pressed="false" role="button" aria-label="Paste as text"><button id="mceu_15-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-pastetext"></i></button></div>
-                                                                    <div id="mceu_16" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Clear formatting"><button id="mceu_16-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-removeformat"></i></button></div>
-                                                                    <div id="mceu_17" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Special character"><button id="mceu_17-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-charmap"></i></button></div>
-                                                                    <div id="mceu_18" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Decrease indent"><button id="mceu_18-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-outdent"></i></button></div>
-                                                                    <div id="mceu_19" class="mce-widget mce-btn" tabindex="-1" role="button" aria-label="Increase indent"><button id="mceu_19-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-indent"></i></button></div>
-                                                                    <div id="mceu_20" class="mce-widget mce-btn mce-disabled" tabindex="-1" role="button" aria-label="Undo (Ctrl+Z)" aria-disabled="true"><button id="mceu_20-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-undo"></i></button></div>
-                                                                    <div id="mceu_21" class="mce-widget mce-btn mce-disabled" tabindex="-1" role="button" aria-label="Redo (Ctrl+Y)" aria-disabled="true"><button id="mceu_21-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-redo"></i></button></div>
-                                                                    <div id="mceu_22" class="mce-widget mce-btn mce-last" tabindex="-1" role="button" aria-label="Keyboard Shortcuts (Shift+Alt+H)"><button id="mceu_22-button" role="presentation" type="button" tabindex="-1"><i class="mce-ico mce-i-wp_help"></i></button></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="mceu_30" class="mce-edit-area mce-container mce-panel mce-stack-layout-item" hidefocus="1" tabindex="-1" role="group" style="border-width: 1px 0px 0px; padding-top: 41px;"><iframe id="content_ifr" frameborder="0" allowtransparency="true" title="Rich Text Area. Press Alt-Shift-H for help." style="width: 100%; height: 334px; display: block;"></iframe></div>
-                                    <div id="mceu_31" class="mce-statusbar mce-container mce-panel mce-stack-layout-item mce-last" hidefocus="1" tabindex="-1" role="group" style="visibility: hidden;">
-                                        <div id="mceu_31-body" class="mce-container-body mce-flow-layout">
-                                            <div id="mceu_32" class="mce-path mce-flow-layout-item mce-first mce-last">
-                                                <div role="button" class="mce-path-item mce-last" data-index="0" tabindex="-1" id="mceu_32-0" aria-level="1">p</div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                            <div class="tw-col-span-2 tw-flex tw-flex-col tw-gap-1.5">
+                                <label for="display" class="tw-text-sm tw-font-semibold">Font Display</label>
+                                <select name="display" id="display" v-model="display" class="tw-capitalize [&_option]:tw-capitalize">
+                                    <option value="auto">auto</option>
+                                    <option value="block">block</option>
+                                    <option value="swap">swap</option>
+                                    <option value="fallback">fallback</option>
+                                    <option value="optional">optional</option>
+                                </select>
+                            </div>
+                            <div class="tw-col-span-4 tw-flex tw-flex-col tw-gap-1.5">
+                                <label for="selector" class="tw-text-sm tw-font-semibold">CSS Selector</label>
+                                <input type="text" name="selector" id="selector" v-model="selector" placeholder="h1, h2, .poetry, .haiku, p, span, #lyric, #description" autocomplete="off">
+                            </div>
+                            <div class="tw-col-span-2 tw-flex tw-flex-col tw-gap-1.5">
+                                <span class="tw-text-sm tw-font-semibold">Preload</span>
+                                <div class="tw-flex-1 tw-flex tw-items-center">
+                                    <label for="preload" class="tw-text-sm">
+                                        <input type="checkbox" name="preload" id="preload" v-model="preload">
+                                        Preload files
+                                    </label>
                                 </div>
-                            </div><textarea class="wp-editor-area" style="height: 300px; display: none; margin-top: 37px;" autocomplete="off" cols="40" name="content" id="content" aria-hidden="true">&lt;!-- wp:paragraph --&gt;
-&lt;p&gt;Welcome to WordPress. This is your first post. Edit or delete it, then start writing!&lt;/p&gt;
-&lt;!-- /wp:paragraph --&gt;
-
-&lt;!-- wp:paragraph --&gt;
-&lt;p&gt;&lt;/p&gt;
-&lt;!-- /wp:paragraph --&gt;
-
-&lt;!-- wp:heading --&gt;
-&lt;h2&gt;a &lt;/h2&gt;
-&lt;!-- /wp:heading --&gt;</textarea>
-                        </div>
-                        <div class="uploader-editor">
-                            <div class="uploader-editor-content">
-                                <div class="uploader-editor-title">Drop files to upload</div>
                             </div>
                         </div>
+
+                        <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8">
+                            <h3 class="tw-mt-5">Font Files</h3>
+
+                            <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview size</span>
+                                <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-py-0 !tw-px-2 !tw-border-1  !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
+                                <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                            </div>
+
+                            <button @click="createNewFontFace" v-ripple class="button tw-my-4">Add a font file</button>
+
+                        </div>
+
+                        <div class="font-files ">
+                            <div class="tw-grid tw-gap-4">
+
+                                <TransitionGroup name="list">
+                                    <TheFontFace v-for="(fontFace, index) in fontFaces" :item="fontFace" :index="index" :key="fontFace.id" :preview="preview" :font-family="family" />
+                                </TransitionGroup>
+
+
+                                <!-- <div class="font-item tw-bg-white tw-border tw-border-solid tw-border-gray-300">
+                                    <div class="font-item__header tw-flex tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300">
+                                        <div class="font-item__weight tw-grow-0 tw-shrink-0 tw-flex tw-p-3 tw-items-center">
+                                            <VueSelect taggable v-model="fontWeight" :options="weightOptions" class="tw-w-36" />
+                                        </div>
+                                        <div class="tw-p-3 tw-items-center">
+                                            <select name="font-style" v-model="fontStyle" :class="{ 'tw-italic': fontStyle === 'italic' }" class="tw-capitalize [&_option]:tw-capitalize ">
+                                                <option value="normal" class="tw-not-italic">normal</option>
+                                                <option value="italic" class="tw-italic">italic</option>
+                                                <option value="oblique" class="tw-not-italic">oblique</option>
+                                            </select>
+                                        </div>
+                                        <div class="tw-flex-1 tw-flex tw-p-3 tw-items-center">
+                                            <div>
+                                                <ContentEditable tag="div" v-model="previewText" :style="previewInlineStyle()" class="preview-text" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+
+
                     </div>
-
-                    <table id="post-status-info" style="">
-                        <tbody>
-                            <tr>
-                                <td id="wp-word-count" class="hide-if-no-js">
-                                    Word count: <span class="word-count">16</span> </td>
-                                <td class="autosave-info">
-                                    <span class="autosave-message">&nbsp;</span>
-                                    <span id="last-edit">Last edited on November 11, 2022 at 4:40 pm</span>
-                                </td>
-                                <td id="content-resize-handle" class="hide-if-no-js"><br></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
                 </div>
             </div>
-
 
             <!-- /post-body-content -->
             <div id="postbox-container-1" class="postbox-container">
@@ -135,18 +104,23 @@
                     <div id="submitdiv" class="postbox ">
                         <div class="postbox-header">
                             <h2 class="hndle ui-sortable-handle">Publish</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="true" aria-describedby="submitdiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="submitdiv-handle-order-higher-description">Move Publish box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="submitdiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="submitdiv-handle-order-lower-description">Move Publish box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Publish</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
+                            <!-- <div class="handle-actions hide-if-no-js">
+                                <button type="button" class="handlediv" aria-expanded="true">
+                                    <span class="screen-reader-text">Toggle panel: Publish</span>
+                                    <span class="toggle-indicator" aria-hidden="true"></span>
+                                </button>
+                            </div> -->
                         </div>
                         <div class="inside">
                             <div class="submitbox" id="submitpost">
 
                                 <div id="minor-publishing">
 
-                                    <div style="display:none;">
+                                    <!-- <div style="display:none;">
                                         <p class="submit"><input type="submit" name="save" id="save" class="button" value="Save"></p>
-                                    </div>
+                                    </div> -->
 
-                                    <div id="minor-publishing-actions">
+                                    <!-- <div id="minor-publishing-actions">
                                         <div id="save-action">
                                             <input type="submit" name="save" id="save-post" value="Save Draft" class="button">
                                             <span class="spinner"></span>
@@ -157,7 +131,7 @@
                                             <input type="hidden" name="wp-preview" id="wp-preview" value="">
                                         </div>
                                         <div class="clear"></div>
-                                    </div>
+                                    </div> -->
 
                                     <div id="misc-publishing-actions">
                                         <div class="misc-pub-section misc-pub-post-status">
@@ -178,7 +152,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="misc-pub-section misc-pub-visibility" id="visibility">
+                                        <!-- <div class="misc-pub-section misc-pub-visibility" id="visibility">
                                             Visibility: <span id="post-visibility-display">
                                                 Public </span>
 
@@ -203,9 +177,9 @@
                                                     <a href="#visibility" class="cancel-post-visibility hide-if-no-js button-cancel">Cancel</a>
                                                 </p>
                                             </div>
-                                        </div>
+                                        </div> -->
 
-                                        <div class="misc-pub-section curtime misc-pub-curtime">
+                                        <!-- <div class="misc-pub-section curtime misc-pub-curtime">
                                             <span id="timestamp">
                                                 Publish on: <b>Aug 24, 2022 at 03:11</b> </span>
                                             <a href="#edit_timestamp" class="edit-timestamp hide-if-no-js" role="button">
@@ -245,7 +219,7 @@
                                                     <a href="#edit_timestamp" class="cancel-timestamp hide-if-no-js button-cancel">Cancel</a>
                                                 </p>
                                             </fieldset>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -266,7 +240,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="categorydiv" class="postbox ">
+                    <!-- <div id="categorydiv" class="postbox ">
                         <div class="postbox-header">
                             <h2 class="hndle ui-sortable-handle">Categories</h2>
                             <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="categorydiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="categorydiv-handle-order-higher-description">Move Categories box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="categorydiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="categorydiv-handle-order-lower-description">Move Categories box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Categories</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
@@ -341,147 +315,278 @@
                         <div class="inside">
                             <p class="hide-if-no-js"><a href="http://127.0.0.1:8080/wp-admin/media-upload.php?post_id=1&amp;type=image&amp;TB_iframe=1&amp;width=753&amp;height=437" id="set-post-thumbnail" class="thickbox">Set featured image</a></p><input type="hidden" id="_thumbnail_id" name="_thumbnail_id" value="-1">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
-            <div id="postbox-container-2" class="postbox-container">
-                <div id="normal-sortables" class="meta-box-sortables ui-sortable empty-container">
-                    <div id="postexcerpt" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Excerpt</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="postexcerpt-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="postexcerpt-handle-order-higher-description">Move Excerpt box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="postexcerpt-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="postexcerpt-handle-order-lower-description">Move Excerpt box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Excerpt</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <label class="screen-reader-text" for="excerpt">Excerpt</label><textarea rows="1" cols="40" name="excerpt" id="excerpt"></textarea>
-                            <p>
-                                Excerpts are optional hand-crafted summaries of your content that can be used in your theme. <a href="https://wordpress.org/support/article/excerpt/">Learn more about manual excerpts</a>.</p>
-                        </div>
-                    </div>
-                    <div id="trackbacksdiv" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Send Trackbacks</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="trackbacksdiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="trackbacksdiv-handle-order-higher-description">Move Send Trackbacks box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="trackbacksdiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="trackbacksdiv-handle-order-lower-description">Move Send Trackbacks box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Send Trackbacks</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <p>
-                                <label for="trackback_url">Send trackbacks to:</label>
-                                <input type="text" name="trackback_url" id="trackback_url" class="code" value="" aria-describedby="trackback-url-desc">
-                            </p>
-                            <p id="trackback-url-desc" class="howto">Separate multiple URLs with spaces</p>
-                            <p>
-                                Trackbacks are a way to notify legacy blog systems that you’ve linked to them. If you link other WordPress sites, they’ll be notified automatically using <a href="https://wordpress.org/support/article/introduction-to-blogging/#comments">pingbacks</a>, no other action necessary.</p>
-                        </div>
-                    </div>
-                    <div id="postcustom" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Custom Fields</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="postcustom-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="postcustom-handle-order-higher-description">Move Custom Fields box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="postcustom-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="postcustom-handle-order-lower-description">Move Custom Fields box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Custom Fields</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <div id="postcustomstuff">
-                                <div id="ajax-response"></div>
+            <div id="postbox-container-2" class="postbox-container tw-mt-3">
 
-                                <table id="list-table" style="display: none;">
-                                    <thead>
-                                        <tr>
-                                            <th class="left">Name</th>
-                                            <th>Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="the-list" data-wp-lists="list:meta">
-                                        <tr>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <p><strong>Add New Custom Field:</strong></p>
-                                <table id="newmeta">
-                                    <thead>
-                                        <tr>
-                                            <th class="left"><label for="metakeyselect">Name</label></th>
-                                            <th><label for="metavalue">Value</label></th>
-                                        </tr>
-                                    </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td id="newmetaleft" class="left">
-                                                <select id="metakeyselect" name="metakeyselect">
-                                                    <option value="#NONE#">— Select —</option>
+                <Transition name="css-preview">
+                    <div v-if="cssPreview" class="tw-mt-4">
+                        <h3 class="tw-mt-5">CSS Preview</h3>
+                        <highlightjs language="css" :code="cssPreview" />
+                    </div>
+                </Transition>
 
-                                                    <option value="bricks_font_faces">bricks_font_faces</option>
-                                                    <option value="ct_builder_json">ct_builder_json</option>
-                                                    <option value="ct_builder_shortcodes">ct_builder_shortcodes</option>
-                                                    <option value="ct_builder_shortcodes_revisions">ct_builder_shortcodes_revisions</option>
-                                                    <option value="ct_builder_shortcodes_revisions_dates">ct_builder_shortcodes_revisions_dates</option>
-                                                    <option value="ct_page_settings">ct_page_settings</option>
-                                                </select>
-                                                <input class="hide-if-js" type="text" id="metakeyinput" name="metakeyinput" value="">
-                                                <a href="#postcustomstuff" class="hide-if-no-js" onclick="jQuery('#metakeyinput, #metakeyselect, #enternew, #cancelnew').toggle();return false;">
-                                                    <span id="enternew">Enter new</span>
-                                                    <span id="cancelnew" class="hidden">Cancel</span></a>
-                                            </td>
-                                            <td><textarea id="metavalue" name="metavalue" rows="2" cols="25"></textarea></td>
-                                        </tr>
 
-                                        <tr>
-                                            <td colspan="2">
-                                                <div class="submit">
-                                                    <input type="submit" name="addmeta" id="newmeta-submit" class="button" value="Add Custom Field" data-wp-lists="add:the-list:newmeta">
-                                                </div>
-                                                <input type="hidden" id="_ajax_nonce-add-meta" name="_ajax_nonce-add-meta" value="f44db26394">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p>
-                                Custom fields can be used to add extra metadata to a post that you can <a href="https://wordpress.org/support/article/custom-fields/">use in your theme</a>.</p>
-                        </div>
-                    </div>
-                    <div id="commentstatusdiv" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Discussion</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="commentstatusdiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="commentstatusdiv-handle-order-higher-description">Move Discussion box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="commentstatusdiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="commentstatusdiv-handle-order-lower-description">Move Discussion box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Discussion</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <input name="advanced_view" type="hidden" value="1">
-                            <p class="meta-options">
-                                <label for="comment_status" class="selectit"><input name="comment_status" type="checkbox" id="comment_status" value="open" checked="checked"> Allow comments</label><br>
-                                <label for="ping_status" class="selectit"><input name="ping_status" type="checkbox" id="ping_status" value="open" checked="checked">
-                                    Allow <a href="https://wordpress.org/support/article/introduction-to-blogging/#managing-comments">trackbacks and pingbacks</a> on this page </label>
-                            </p>
-                        </div>
-                    </div>
-                    <div id="slugdiv" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Slug</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="slugdiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="slugdiv-handle-order-higher-description">Move Slug box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="slugdiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="slugdiv-handle-order-lower-description">Move Slug box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Slug</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <label class="screen-reader-text" for="post_name">Slug</label><input name="post_name" type="text" size="13" id="post_name" value="hello-world">
-                        </div>
-                    </div>
-                    <div id="authordiv" class="postbox  hide-if-js" style="">
-                        <div class="postbox-header">
-                            <h2 class="hndle ui-sortable-handle">Author</h2>
-                            <div class="handle-actions hide-if-no-js"><button type="button" class="handle-order-higher" aria-disabled="false" aria-describedby="authordiv-handle-order-higher-description"><span class="screen-reader-text">Move up</span><span class="order-higher-indicator" aria-hidden="true"></span></button><span class="hidden" id="authordiv-handle-order-higher-description">Move Author box up</span><button type="button" class="handle-order-lower" aria-disabled="false" aria-describedby="authordiv-handle-order-lower-description"><span class="screen-reader-text">Move down</span><span class="order-lower-indicator" aria-hidden="true"></span></button><span class="hidden" id="authordiv-handle-order-lower-description">Move Author box down</span><button type="button" class="handlediv" aria-expanded="true"><span class="screen-reader-text">Toggle panel: Author</span><span class="toggle-indicator" aria-hidden="true"></span></button></div>
-                        </div>
-                        <div class="inside">
-                            <label class="screen-reader-text" for="post_author_override">Author</label>
-                            <select name="post_author_override" id="post_author_override" class="">
-                                <option value="1" selected="selected">admin (admin)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div id="advanced-sortables" class="meta-box-sortables ui-sortable empty-container"></div>
+
+
+                <!-- <div>
+                    <table id="post-status-info" class="tw-border tw-border-solid tw-border-[#c3c4c7]">
+                        <tbody>
+                            <tr>
+                                <td id="wp-word-count">
+                                    Word count: <span class="word-count">16</span> </td>
+                                <td class="autosave-info">
+                                    <span class="autosave-message">&nbsp;</span>
+                                    <span id="last-edit">Last edited on November 11, 2022 at 4:40 pm</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> -->
+
             </div>
         </div>
     </div>
-
-
 </template>
 
 <script setup>
+import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+
+import { useLocalFontStore } from '../../stores/font/localFont.js';
+
+import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
+
+const title = ref('');
+const family = ref('');
+const display = ref('auto');
+const selector = ref('');
+const preload = ref(false);
+
+watch(family, (newFamily, oldFamily) => {
+    if (title.value === '' || title.value === oldFamily) {
+        title.value = newFamily;
+    }
+});
+
+const store = useLocalFontStore();
+
+const { fontFaces } = storeToRefs(store);
+
+const createNewFontFace = () => {
+    store.addFontFace();
+};
+
+
+const preview = reactive({
+    text: `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`,
+    fontSize: 18,
+    lineHeight: 1.5,
+    fontFamily: family,
+});
+
+
+
+const cssPreview = computed(() => {
+    let css = ``;
+
+    if (!family.value) {
+        return css;
+    }
+
+    fontFaces.value.forEach(fontFace => {
+
+        if (fontFace.comment) {
+            css += `/* ${fontFace.comment} */\n`;
+        }
+
+        css += `@font-face {\n`;
+
+        css += `\tfont-family: '${family.value}';\n`;
+
+        css += `\tfont-style: ${fontFace.style};\n`;
+
+        if (fontFace.weight !== '') {
+            css += `\tfont-weight: ${fontFace.weight};\n`;
+        }
+
+        if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
+            css += `\tfont-stretch: 100%;\n`;
+        }
+
+        css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+        // font :src here
+        css += `\t/* src: ; */\n`;
+
+        if (fontFace.unicodeRange) {
+            css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
+        }
+
+        css += `}\n\n`;
+
+        console.log(fontFace);
+    });
+
+    if (selector.value) {
+        css += `${selector.value} {\n\tfont-family: '${family.value}';\n}\n\n`;
+    }
+
+    fontFaces.value.forEach(fontFace => {
+        if (fontFace.selector) {
+            // css += `${fontFace.selector} {\n\tfont-family: '${family.value}';\n\tfont-weight: ${fontFace.weight};\n}\n\n`;
+
+
+
+            css += `${fontFace.selector} {\n`;
+
+            css += `\tfont-family: '${family.value}';\n`;
+            css += `\tfont-style: ${fontFace.style};\n`;
+            css += `\tfont-weight: ${fontFace.weight};\n`;
+
+
+
+
+            css += `}\n\n`;
+        }
+    });
+
+    // replace tabs with 2 spaces
+    css = css.replace(/\t/g, '  ');
+
+    // replace <family> placeholder
+    css = css.replace(/<family>/g, family.value);
+
+    return css;
+});
+
+onBeforeMount(() => {
+    fontFaces.value = [];
+    createNewFontFace();
+});
+
+
+// const cssPreview = ref(``);
+// const cssPreview = computedCssPreview.value;
 </script>
+
+<style>
+.v-select {
+    box-shadow: 0 0 0 transparent;
+    border-radius: 4px;
+    border: 1px solid #8c8f94;
+    background-color: #fff;
+    color: #2c3338;
+}
+
+.v-select.vs--open {
+    box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    ;
+    --tw-ring-color: theme('colors.sky.600');
+}
+
+input[type=search].vs__search {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    line-height: normal;
+    margin: 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    width: theme('width.full');
+    font-size: theme('fontSize.sm');
+}
+
+input[type=search].vs__search::placeholder {
+    color: #646970;
+}
+
+span.vs__selected {
+    font-size: theme('fontSize.sm');
+    margin: 0 2px;
+    width: theme('width.full');
+}
+
+.vs__dropdown-toggle {
+    border: none;
+    padding: 0;
+}
+
+.vs__dropdown-menu {
+    padding: 0;
+}
+
+.vs__selected-options {
+    flex-grow: 0;
+    flex-wrap: nowrap;
+}
+
+.vs__selected-options:has(>span.vs__selected) input[type=search].vs__search {
+    width: 1px;
+}
+
+.vs--single.vs--open .vs__selected,
+.vs--single.vs--loading .vs__selected {
+    position: initial;
+    opacity: .4
+}
+
+.vs__actions {
+    --vs-actions-padding: 0px 6px 0 3px;
+    padding-top: 0;
+}
+
+.vs__actions svg {
+    transform: scale(0.7);
+    fill: #7a7a7a;
+}
+
+.vs--open .vs__actions svg {
+    transform: rotate(180deg) scale(0.7);
+}
+
+.vs__clear {
+    display: none;
+}
+
+.vs__open-indicator {
+    position: absolute;
+    right: 4px;
+}
+
+
+/* Transition for <TheFontFace/> list */
+
+.list-move,
+/* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+    position: absolute;
+}
+
+/* Transition for the CSS Preview syntax highlight */
+
+.css-preview-enter-active,
+.css-preview-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.css-preview-enter-from,
+.css-preview-leave-to {
+    opacity: 0;
+}
+</style>
