@@ -1,7 +1,8 @@
 <template>
     <Transition>
-        <div class="font-item tw-bg-white tw-border tw-border-solid tw-border-gray-300 tw-divide-y tw-divide-x-0 tw-divide-solid tw-divide-gray-300">
+        <div class="font-item tw-relative tw-bg-white tw-border tw-border-solid tw-border-gray-300 tw-divide-y tw-divide-x-0 tw-divide-solid tw-divide-gray-300">
             <!-- Header -->
+
             <div class="font-item__header tw-flex tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300/70">
                 <div ref="weightTooltip" class="font-item__weight tw-grow-0 tw-shrink-0 tw-flex tw-p-3 tw-items-center">
                     <VueSelect taggable v-model="item.weight" :reduce="weight => weight.value || weight.label" :create-option="val => weightOptions.find((option) => option.value == val) || { label: val, value: val }" :options="weightOptions" class="tw-w-36" />
@@ -19,7 +20,7 @@
                     <ContentEditable tag="div" v-model="preview.text" :style="previewInlineStyle()" class="preview-text tw-leading-tight" />
                     <TheTooltip :target-ref="previewTextTooltip" :content="__('Editable preview text', 'yabe-webfont')" />
                 </div>
-                <div class="tw-flex tw-p-3 tw-gap-2 tw-items-stretch">
+                <div class="tw-flex tw-p-3 tw-gap-2 tw-items-stretch tw-relative">
                     <button ref="editTooltip" class="tw-flex tw-items-center tw-cursor-pointer tw-bg-inherit tw-border-none">
                         <svg @click="isShowBody = !isShowBody" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="tw-h-5 tw-w-5 tw-text-blue-700 hover:tw-text-blue-500 tw-fill-current"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                             <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
@@ -39,8 +40,6 @@
             </div>
 
             <!-- Body -->
-
-
             <div v-if="isShowBody" class="font-item__body tw-grid tw-grid-cols-12 tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300/70">
                 <div class="tw-flex tw-col-span-2 tw-flex-col tw-gap-1.5 tw-p-3">
                     <label :for="`display-${item.id}`" class="tw-text-sm tw-font-semibold">Font Display</label>

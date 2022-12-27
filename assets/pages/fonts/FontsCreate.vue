@@ -51,49 +51,38 @@
                         </div>
 
                         <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8">
-                            <h3 class="tw-mt-5">Font Files</h3>
+                            <h3 class="tw-flex-1">Font Files</h3>
 
-                            <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview size</span>
-                                <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-py-0 !tw-px-2 !tw-border-1  !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
-                                <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                            <div class="tw-flex tw-items-center tw-space-x-4 ">
+                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview size</span>
+                                    <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-py-0 !tw-px-2 !tw-border-1  !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                                </div>
+
+                                <button @click="createNewFontFace" v-ripple class="button tw-my-4">Add a font file</button>
                             </div>
-
-                            <button @click="createNewFontFace" v-ripple class="button tw-my-4">Add a font file</button>
 
                         </div>
 
-                        <div class="font-files ">
+                        <div class="font-files">
                             <div class="tw-grid tw-gap-4">
 
-                                <TransitionGroup name="list">
-                                    <TheFontFace v-for="(fontFace, index) in fontFaces" :item="fontFace" :index="index" :key="fontFace.id" :preview="preview" :font-family="family" />
-                                </TransitionGroup>
 
-
-                                <!-- <div class="font-item tw-bg-white tw-border tw-border-solid tw-border-gray-300">
-                                    <div class="font-item__header tw-flex tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300">
-                                        <div class="font-item__weight tw-grow-0 tw-shrink-0 tw-flex tw-p-3 tw-items-center">
-                                            <VueSelect taggable v-model="fontWeight" :options="weightOptions" class="tw-w-36" />
+                                <draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{
+                                    // tag: 'div',
+                                    // type: 'TransitionGroup',
+                                    name: 'font-face'
+                                }" ghost-class="dragged-placeholder" animation="200">
+                                    <template #item="{ element }">
+                                        <div>
+                                            <TheFontFace :item="element" :preview="preview" :font-family="family" />
                                         </div>
-                                        <div class="tw-p-3 tw-items-center">
-                                            <select name="font-style" v-model="fontStyle" :class="{ 'tw-italic': fontStyle === 'italic' }" class="tw-capitalize [&_option]:tw-capitalize ">
-                                                <option value="normal" class="tw-not-italic">normal</option>
-                                                <option value="italic" class="tw-italic">italic</option>
-                                                <option value="oblique" class="tw-not-italic">oblique</option>
-                                            </select>
-                                        </div>
-                                        <div class="tw-flex-1 tw-flex tw-p-3 tw-items-center">
-                                            <div>
-                                                <ContentEditable tag="div" v-model="previewText" :style="previewInlineStyle()" class="preview-text" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
+                                    </template>
+                                </draggable>
                             </div>
+
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -355,6 +344,8 @@
 import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 
+import draggable from 'zhyswan-vuedraggable';
+
 import { useLocalFontStore } from '../../stores/font/localFont.js';
 
 import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
@@ -386,8 +377,6 @@ const preview = reactive({
     lineHeight: 1.5,
     fontFamily: family,
 });
-
-
 
 const cssPreview = computed(() => {
     let css = ``;
@@ -436,19 +425,10 @@ const cssPreview = computed(() => {
 
     fontFaces.value.forEach(fontFace => {
         if (fontFace.selector) {
-            // css += `${fontFace.selector} {\n\tfont-family: '${family.value}';\n\tfont-weight: ${fontFace.weight};\n}\n\n`;
-
-
-
             css += `${fontFace.selector} {\n`;
-
             css += `\tfont-family: '${family.value}';\n`;
             css += `\tfont-style: ${fontFace.style};\n`;
             css += `\tfont-weight: ${fontFace.weight};\n`;
-
-
-
-
             css += `}\n\n`;
         }
     });
@@ -558,23 +538,24 @@ span.vs__selected {
 
 
 /* Transition for <TheFontFace/> list */
+.font-face-list-move,
+.font-face-move,
 
-.list-move,
 /* apply transition to moving elements */
-.list-enter-active,
-.list-leave-active {
+.font-face-enter-active,
+.font-face-leave-active {
     transition: all 0.5s ease;
 }
 
-.list-enter-from,
-.list-leave-to {
+.font-face-enter-from,
+.font-face-leave-to {
     opacity: 0;
     transform: translateX(30px);
 }
 
 /* ensure leaving items are taken out of layout flow so that moving
    animations can be calculated correctly. */
-.list-leave-active {
+.font-face-leave-active {
     position: absolute;
 }
 
@@ -588,5 +569,9 @@ span.vs__selected {
 .css-preview-enter-from,
 .css-preview-leave-to {
     opacity: 0;
+}
+
+.dragged-placeholder {
+  opacity: 0.3;
 }
 </style>
