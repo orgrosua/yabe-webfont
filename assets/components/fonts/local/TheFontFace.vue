@@ -112,7 +112,6 @@ import ContentEditable from 'vue-contenteditable';
 import TheTooltip from '../../../components/TheTooltip.vue';
 import draggable from 'zhyswan-vuedraggable';
 
-
 const props = defineProps({
     item: {
         type: Object,
@@ -146,7 +145,7 @@ function uploadFont(e) {
     });
 
     mediaFrame.on('ready', () => {
-        _wpPluploadSettings.defaults.filters.mime_types[0].extensions = 'woff2,woff,ttf,otf';
+        _wpPluploadSettings.defaults.filters.mime_types[0].extensions = 'woff2,woff,ttf,otf,eot';
     });
 
     mediaFrame.on('insert select', () => {
@@ -169,8 +168,7 @@ function uploadFont(e) {
     mediaFrame.uploader.uploader.param('yabe_webfont_font_upload', true);
 }
 
-// TODO: isShowBody = false
-const isShowBody = ref(!false);
+const isShowBody = ref(false);
 const isShowConfirmDeleteBtn = ref(false);
 
 function deleteFontFace() {

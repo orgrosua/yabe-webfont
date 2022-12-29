@@ -70,10 +70,10 @@
 
 
                                 <draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{
-                                    // tag: 'div',
-                                    // type: 'TransitionGroup',
-                                    name: 'font-face'
-                                }" ghost-class="dragged-placeholder" animation="200">
+    // tag: 'div',
+    // type: 'TransitionGroup',
+    name: 'font-face'
+}" ghost-class="dragged-placeholder" animation="200">
                                     <template #item="{ element }">
                                         <div>
                                             <TheFontFace :item="element" :preview="preview" :font-family="family" />
@@ -314,11 +314,11 @@
 <script setup>
 import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-
-import draggable from 'zhyswan-vuedraggable';
+import debounce from 'lodash/debounce';
 
 import { useLocalFontStore } from '../../stores/font/localFont.js';
 
+import draggable from 'zhyswan-vuedraggable';
 import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
 
 const title = ref('');
@@ -347,6 +347,29 @@ const preview = reactive({
     lineHeight: 1.5,
     fontFamily: family,
 });
+
+const fontFormatMap = (ext) => {
+    console.log(ext);
+    switch (ext) {
+        case 'woff2':
+        case 'font/woff2':
+            return 'woff2';
+        case 'woff':
+        case 'font/woff':
+            return 'woff';
+        case 'ttf':
+        case 'font/ttf':
+            return 'truetype';
+        case 'otf':
+        case 'font/otf':
+            return 'opentype';
+        case 'eot':
+        case 'font/eot':
+            return 'embedded-opentype';
+        default:
+            return 'woff2';
+    }
+};
 
 const cssPreview = computed(() => {
     let css = ``;
@@ -378,15 +401,23 @@ const cssPreview = computed(() => {
         css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
         // font :src here
-        css += `\t/* src: ; */\n`;
+        if (fontFace.files.length > 0) {
+            css += `\tsrc: `;
+
+            let files = fontFace.files.map(file => {
+                return `url('${file.attachment_url}') format(${fontFormatMap(file.extension)})`;
+            });
+
+            css += files.join(',\n\t\t');
+
+            css += `;\n`;
+        }
 
         if (fontFace.unicodeRange) {
             css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
         }
 
         css += `}\n\n`;
-
-        console.log(fontFace);
     });
 
     if (selector.value) {
@@ -412,9 +443,25 @@ const cssPreview = computed(() => {
     return css;
 });
 
+let fontPreviewStylesheet;
+
+watch(cssPreview, debounce((newCss, oldCss) => {
+    console.log(newCss);
+    if (fontPreviewStylesheet) {
+        fontPreviewStylesheet.innerHTML = newCss;
+    }
+}, 1000));
+
 onBeforeMount(() => {
     fontFaces.value = [];
     createNewFontFace();
+
+    fontPreviewStylesheet = document.querySelector('#yabe-webfont-preview');
+    if (!fontPreviewStylesheet) {
+        fontPreviewStylesheet = document.createElement('style');
+        fontPreviewStylesheet.setAttribute('id', 'yabe-webfont-preview');
+        document.head.appendChild(fontPreviewStylesheet);
+    }
 });
 </script>
 

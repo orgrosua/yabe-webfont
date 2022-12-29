@@ -23,7 +23,6 @@ export const useLocalFontStore = defineStore('localFont', {
                         filesize: int (bytes),
                         name: ?string (filename without extension),
                     },
-
                 },
             }
             */
