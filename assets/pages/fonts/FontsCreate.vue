@@ -349,7 +349,6 @@ const preview = reactive({
 });
 
 const fontFormatMap = (ext) => {
-    console.log(ext);
     switch (ext) {
         case 'woff2':
         case 'font/woff2':
@@ -400,7 +399,6 @@ const cssPreview = computed(() => {
 
         css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
-        // font :src here
         if (fontFace.files.length > 0) {
             css += `\tsrc: `;
 
@@ -446,7 +444,6 @@ const cssPreview = computed(() => {
 let fontPreviewStylesheet;
 
 watch(cssPreview, debounce((newCss, oldCss) => {
-    console.log(newCss);
     if (fontPreviewStylesheet) {
         fontPreviewStylesheet.innerHTML = newCss;
     }

@@ -34,7 +34,7 @@ export const useLocalFontStore = defineStore('localFont', {
                 id: nanoid(10),
                 weight: 400,
                 style: 'normal',
-                display: 'auto',
+                display: '',
                 selector: '',
                 comment: '',
                 unicodeRange: '',

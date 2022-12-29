@@ -9,6 +9,8 @@
         <span tabindex="0">Version: {{ yabeWebfont._version }}</span>
     </div>
     <hr class="wp-header-end">
+    <!-- TODO: notification -->
+    <WordpressNotice />
     <h2 class="nav-tab-wrapper">
         <router-link :to="{ name: 'fonts' }" class="nav-tab" activeClass="nav-tab-active">Fonts</router-link>
         <router-link :to="{ name: 'settings' }" class="nav-tab" activeClass="nav-tab-active">Settings</router-link>
@@ -18,7 +20,9 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import WordpressNotice from './components/WordpressNotice.vue';
+</script>
 
 <style lang="scss">
 #wpcontent {
