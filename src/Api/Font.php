@@ -20,7 +20,7 @@ use wpdb;
 
 class Font extends AbstractApi implements ApiInterface
 {
-    public function getPrefix(): string
+    public function get_prefix(): string
     {
         return 'fonts';
     }
@@ -29,7 +29,7 @@ class Font extends AbstractApi implements ApiInterface
     {
         register_rest_route(
             self::API_NAMESPACE,
-            $this->getPrefix() . '/index',
+            $this->get_prefix() . '/index',
             [
                 'methods' => 'GET',
                 'callback' => [$this, 'index'],

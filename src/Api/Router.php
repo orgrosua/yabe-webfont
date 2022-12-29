@@ -71,8 +71,8 @@ class Router
             /** @var ApiInterface $api */
             $api = $reflector->newInstanceWithoutConstructor();
 
-            $this->apis[$api->getPrefix()] = [
-                'name' => $api->getPrefix(),
+            $this->apis[$api->get_prefix()] = [
+                'name' => $api->get_prefix(),
                 'file_path' => $reflector->getFileName(),
                 'class_name' => $reflector->getName(),
             ];

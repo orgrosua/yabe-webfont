@@ -3,7 +3,31 @@ import { nanoid } from 'nanoid';
 
 export const useLocalFontStore = defineStore('localFont', {
     state: () => ({
-        fontFaces: []
+        fontFaces: [
+            /* 
+            {
+                id: string (nanoid),
+                weight: int (100, 200, 300, 400, 500, 600, 700, 800, 900, range<int int>),
+                style: string (normal, italic, oblique),
+                display: ?string (null, auto, block, swap, fallback, optional),
+                selector: ?string (css selector),
+                comment: ?string,
+                unicodeRange: ?string,
+                files: {
+                    {
+                        uid: string (nanoid),
+                        attachment_id: ?int,
+                        attachment_url: string, // for preview only
+                        extension: string (woff, woff2, ttf, otf, eot),
+                        mime: string (font/woff, font/woff2, font/ttf, font/otf, font/eot),
+                        filesize: int (bytes),
+                        name: ?string (filename without extension),
+                    },
+
+                },
+            }
+            */
+        ]
     }),
     actions: {
         addFontFace() {
@@ -15,41 +39,11 @@ export const useLocalFontStore = defineStore('localFont', {
                 selector: '',
                 comment: '',
                 unicodeRange: '',
-                files: [
-                    // {
-                    //     format: string (woff, woff2, ttf, otf, svg, eot),
-                    //     attachment_id: ?int,
-                    //     attachment_url: string, // backup, url to file of attachment — to check if the input:text is external url or coming from current attachment
-                    //     url: ?string, // font-face src:url(),
-                    // }
-                ],
+                files: [],
             });
         },
         deleteFontFace(id) {
             this.fontFaces = this.fontFaces.filter((fontFace) => fontFace.id !== id);
         },
-    }
+    },
 });
-
-
-/*
-
-font = {
-    weight: int (100, 200, 300, 400, 500, 600, 700, 800, 900, range<int, int>),
-    style: string (normal, italic, oblique),
-        display: string (auto, block, swap, fallback, optional),
-        selector: string (css selector),
-        comment: ?string,
-        unicodeRange: ?string,
-        file: {
-            {
-                format: string (woff, woff2, ttf, otf, svg, eot),
-                attachment_id: ?int,
-                attachment_url: string, // backup, url to file of attachment — to check if the input:text is external url or coming from current attachment
-                url: ?string, // font-face src:url(),
-            },
-
-        },
-}
-
-*/

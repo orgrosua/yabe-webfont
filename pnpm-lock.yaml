@@ -26,6 +26,7 @@ specifiers:
   postcss-import: ^15.1.0
   postcss-loader: ^7.0.2
   postcss-scss: ^4.0.6
+  pretty-bytes: ^6.0.0
   primeicons: ^6.0.1
   primevue: ^3.21.0
   regenerator-runtime: ^0.13.11
@@ -53,6 +54,7 @@ dependencies:
   highlight.js: 11.7.0
   nanoid: 4.0.0
   pinia: 2.0.28_vue@3.2.45
+  pretty-bytes: 6.0.0
   slug: 8.2.2
   vue-contenteditable: 4.1.0_vue@3.2.45
   vue-router: 4.1.6_vue@3.2.45
@@ -4558,6 +4560,11 @@ packages:
       nanoid: 3.3.4
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /pretty-bytes/6.0.0:
+    resolution: {integrity: sha512-6UqkYefdogmzqAZWzJ7laYeJnaXDy2/J+ZqiiMtS7t7OfpXWTlaeGMwX8U6EFvPV/YWWEKRkS8hKS4k60WHTOg==}
+    engines: {node: ^14.13.1 || >=16.0.0}
+    dev: false
 
   /pretty-error/4.0.0:
     resolution: {integrity: sha512-AoJ5YMAcXKYxKhuJGdcvse+Voc6v1RgnsR3nWcYU7q4t6z0Q6T86sv5Zq8VIRbOWWFpvdGE83LtdSMNd+6Y0xw==}

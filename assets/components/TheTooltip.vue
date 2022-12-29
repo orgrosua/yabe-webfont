@@ -30,6 +30,7 @@ const floatingArrow = ref(null);
 
 const { x, y, strategy } = useFloating(targetRef, floating, {
     placement: 'top',
+    strategy: 'fixed', // 'absolute' by default
     middleware: [arrow({ element: floatingArrow })],
     whileElementsMounted: autoUpdate,
 });
@@ -69,7 +70,8 @@ watchEffect(() => {
 
 .floating {
     width: max-content;
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
     top: 0;
     left: 0;
     background: #222;

@@ -17,8 +17,8 @@ use Exception;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Api\Router as ApiRouter;
 use Yabe\Webfont\Utils\Common;
-use Yabe\Webfont\Utils\Diagnose;
 use Yabe\Webfont\Utils\Notice;
+use Yabe\Webfont\Utils\Upload;
 
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
@@ -81,9 +81,8 @@ final class Plugin
 
     public function boot_debug()
     {
-        if (WP_DEBUG === true && class_exists(\Sentry\SentrySdk::class)) {
-            new Diagnose(self::VERSION);
-        }
+        // if (WP_DEBUG === true && class_exists(\Sentry\SentrySdk::class)) {
+        // }
     }
 
     public function boot_migration()
@@ -114,7 +113,7 @@ final class Plugin
         // admin hooks.
         if (is_admin()) {
             add_action('plugins_loaded', function (): void {
-                $this->plugins_loaded();
+                $this->plugins_loaded_admin();
             }, 100);
 
             new AdminPage();
@@ -148,9 +147,9 @@ final class Plugin
     }
 
     /**
-     * Warm up the plugin by registering core hooks.
+     * Warm up the plugin for admin.
      */
-    public function plugins_loaded(): void
+    public function plugins_loaded_admin(): void
     {
         load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT_FILE)) . '/translations/');
 

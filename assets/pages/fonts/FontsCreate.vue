@@ -179,29 +179,8 @@
                                                 <legend class="screen-reader-text">Date and time</legend>
                                                 <div class="timestamp-wrap"><label><span class="screen-reader-text">Month</span><select class="form-required" id="mm" name="mm">
                                                             <option value="01" data-text="Jan">01-Jan</option>
-                                                            <option value="02" data-text="Feb">02-Feb</option>
-                                                            <option value="03" data-text="Mar">03-Mar</option>
-                                                            <option value="04" data-text="Apr">04-Apr</option>
-                                                            <option value="05" data-text="May">05-May</option>
-                                                            <option value="06" data-text="Jun">06-Jun</option>
-                                                            <option value="07" data-text="Jul">07-Jul</option>
-                                                            <option value="08" data-text="Aug" selected="selected">08-Aug</option>
-                                                            <option value="09" data-text="Sep">09-Sep</option>
-                                                            <option value="10" data-text="Oct">10-Oct</option>
-                                                            <option value="11" data-text="Nov">11-Nov</option>
                                                             <option value="12" data-text="Dec">12-Dec</option>
                                                         </select></label> <label><span class="screen-reader-text">Day</span><input type="text" id="jj" name="jj" value="24" size="2" maxlength="2" autocomplete="off" class="form-required"></label>, <label><span class="screen-reader-text">Year</span><input type="text" id="aa" name="aa" value="2022" size="4" maxlength="4" autocomplete="off" class="form-required"></label> at <label><span class="screen-reader-text">Hour</span><input type="text" id="hh" name="hh" value="03" size="2" maxlength="2" autocomplete="off" class="form-required"></label>:<label><span class="screen-reader-text">Minute</span><input type="text" id="mn" name="mn" value="11" size="2" maxlength="2" autocomplete="off" class="form-required"></label></div><input type="hidden" id="ss" name="ss" value="27">
-
-                                                <input type="hidden" id="hidden_mm" name="hidden_mm" value="08">
-                                                <input type="hidden" id="cur_mm" name="cur_mm" value="12">
-                                                <input type="hidden" id="hidden_jj" name="hidden_jj" value="24">
-                                                <input type="hidden" id="cur_jj" name="cur_jj" value="20">
-                                                <input type="hidden" id="hidden_aa" name="hidden_aa" value="2022">
-                                                <input type="hidden" id="cur_aa" name="cur_aa" value="2022">
-                                                <input type="hidden" id="hidden_hh" name="hidden_hh" value="03">
-                                                <input type="hidden" id="cur_hh" name="cur_hh" value="09">
-                                                <input type="hidden" id="hidden_mn" name="hidden_mn" value="11">
-                                                <input type="hidden" id="cur_mn" name="cur_mn" value="34">
 
                                                 <p>
                                                     <a href="#edit_timestamp" class="save-timestamp hide-if-no-js button">OK</a>
@@ -220,7 +199,6 @@
 
                                     <div id="publishing-action">
                                         <span class="spinner"></span>
-                                        <input name="original_publish" type="hidden" id="original_publish" value="Publish">
                                         <input type="submit" name="publish" id="publish" class="button button-primary button-large" value="Publish">
                                     </div>
                                     <div class="clear"></div>
@@ -247,7 +225,6 @@
                                 </div>
 
                                 <div id="category-all" class="tabs-panel">
-                                    <input type="hidden" name="post_category[]" value="0">
                                     <ul id="categorychecklist" data-wp-lists="list:category" class="categorychecklist form-no-clear">
 
                                         <li id="category-1"><label class="selectit"><input value="1" type="checkbox" name="post_category[]" id="in-category-1" checked="checked"> Uncategorized</label></li>
@@ -266,7 +243,6 @@
                                             <option class="level-0" value="1">Uncategorized</option>
                                         </select>
                                         <input type="button" id="category-add-submit" data-wp-lists="add:categorychecklist:category-add" class="button category-add-submit" value="Add New Category">
-                                        <input type="hidden" id="_ajax_nonce-add-category" name="_ajax_nonce-add-category" value="5bb74ab04c"> <span id="category-ajax-response"></span>
                                     </p>
                                 </div>
                             </div>
@@ -308,17 +284,12 @@
                 </div>
             </div>
             <div id="postbox-container-2" class="postbox-container tw-mt-3">
-
-
                 <Transition name="css-preview">
                     <div v-if="cssPreview" class="tw-mt-4">
                         <h3 class="tw-mt-5">CSS Preview</h3>
                         <highlightjs language="css" :code="cssPreview" />
                     </div>
                 </Transition>
-
-
-
 
                 <!-- <div>
                     <table id="post-status-info" class="tw-border tw-border-solid tw-border-[#c3c4c7]">
@@ -369,7 +340,6 @@ const { fontFaces } = storeToRefs(store);
 const createNewFontFace = () => {
     store.addFontFace();
 };
-
 
 const preview = reactive({
     text: `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`,
@@ -446,10 +416,6 @@ onBeforeMount(() => {
     fontFaces.value = [];
     createNewFontFace();
 });
-
-
-// const cssPreview = ref(``);
-// const cssPreview = computedCssPreview.value;
 </script>
 
 <style>
@@ -555,12 +521,11 @@ span.vs__selected {
 
 /* ensure leaving items are taken out of layout flow so that moving
    animations can be calculated correctly. */
-.font-face-leave-active {
+/* .font-face-leave-active {
     position: absolute;
-}
+} */
 
 /* Transition for the CSS Preview syntax highlight */
-
 .css-preview-enter-active,
 .css-preview-leave-active {
     transition: opacity 0.5s ease;
@@ -572,6 +537,6 @@ span.vs__selected {
 }
 
 .dragged-placeholder {
-  opacity: 0.3;
+    opacity: 0.3;
 }
 </style>

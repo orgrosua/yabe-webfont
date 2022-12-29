@@ -20,7 +20,7 @@ interface ApiInterface
      *
      * @return string
      */
-    public function getPrefix(): string;
+    public function get_prefix(): string;
 
     /**
      * Register custom REST API endpoints as described in the [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/).

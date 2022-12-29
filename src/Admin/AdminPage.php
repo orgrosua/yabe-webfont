@@ -14,21 +14,26 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Admin;
 
 use Yabe\Webfont\Plugin;
-use Yabe\Webfont\Utils\Notice;
+use Yabe\Webfont\Utils\Upload;
+
+use function wp_enqueue_media;
 
 class AdminPage
 {
     public function __construct()
     {
-        add_action('admin_menu', [$this, 'addAdminMenu']);
+        add_filter('wp_check_filetype_and_ext', fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
 
-        // Notice::info('<p>info Plugin version: ' . Plugin::VERSION, 'version_info</p>');
-        // Notice::success('success Plugin version: ' . Plugin::VERSION, 'version_success');
-        // Notice::warning('warning Plugin version: ' . Plugin::VERSION, 'version_warning');
-        // Notice::error('error Plugin version: ' . Plugin::VERSION, 'version_error');
+        add_action('admin_menu', [$this, 'add_admin_menu']);
+
+        // \Yabe\Webfont\Utils\Notice::info('<p>info Plugin version: ' . Plugin::VERSION, 'version_info</p>');
+        // \Yabe\Webfont\Utils\Notice::success('success Plugin version: ' . Plugin::VERSION, 'version_success');
+        // \Yabe\Webfont\Utils\Notice::warning('warning Plugin version: ' . Plugin::VERSION, 'version_warning');
+        // \Yabe\Webfont\Utils\Notice::error('error Plugin version: ' . Plugin::VERSION, 'version_error');
     }
 
-    public function addAdminMenu()
+    public function add_admin_menu()
     {
         $hook = add_menu_page(
             __('Yabe Webfont', 'yabe-webfont'),
@@ -49,12 +54,13 @@ class AdminPage
 
     public function init_hooks()
     {
-
         add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts());
     }
 
     public function enqueue_scripts()
     {
+        wp_enqueue_media();
+
         wp_enqueue_style(YABE_WEBFONT_OPTION_NAMESPACE . '-app', plugin_dir_url(YABE_WEBFONT_FILE) . 'build/app.css', [], filemtime(plugin_dir_path(YABE_WEBFONT_FILE) . 'build/app.css'));
         wp_enqueue_script(YABE_WEBFONT_OPTION_NAMESPACE . '-app', plugin_dir_url(YABE_WEBFONT_FILE) . 'build/app.js', [], filemtime(plugin_dir_path(YABE_WEBFONT_FILE) . 'build/app.js'), true);
 
