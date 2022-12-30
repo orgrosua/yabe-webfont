@@ -15,7 +15,6 @@ import { storeToRefs } from 'pinia';
 import { useWordpressNotice } from '../stores/wordpressNotice.js';
 
 const store = useWordpressNotice();
-
 const { notices } = storeToRefs(store);
 </script>
 
