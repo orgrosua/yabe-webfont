@@ -3,8 +3,6 @@
 
     <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
-
-
             <div id="post-body-content">
                 <div id="titlediv">
                     <div id="titlewrap">
@@ -285,9 +283,9 @@
             </div>
             <div id="postbox-container-2" class="postbox-container tw-mt-3">
                 <Transition name="css-preview">
-                    <div v-if="cssPreview" class="tw-mt-4">
+                    <div v-if="cssPreviewStylesheet" class="tw-mt-4">
                         <h3 class="tw-mt-5">CSS Preview</h3>
-                        <highlightjs language="css" :code="cssPreview" />
+                        <highlightjs language="css" :code="cssPreviewStylesheet" />
                     </div>
                 </Transition>
 
@@ -314,7 +312,7 @@
 <script setup>
 import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash-es/debounce';
 
 import { useLocalFontStore } from '../../stores/font/localFont.js';
 
@@ -370,53 +368,63 @@ const fontFormatMap = (ext) => {
     }
 };
 
-const cssPreview = computed(() => {
+const cssFontFaceRule = computed(() => {
+    let css = ``;
+
+    if (family.value) {
+        fontFaces.value.forEach(fontFace => {
+
+            if (fontFace.comment) {
+                css += `/* ${fontFace.comment} */\n`;
+            }
+
+            css += `@font-face {\n`;
+
+            css += `\tfont-family: '${family.value}';\n`;
+
+            css += `\tfont-style: ${fontFace.style};\n`;
+
+            if (fontFace.weight !== '') {
+                css += `\tfont-weight: ${fontFace.weight};\n`;
+            }
+
+            if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
+                css += `\tfont-stretch: 100%;\n`;
+            }
+
+            css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+            if (fontFace.files.length > 0) {
+                css += `\tsrc: `;
+
+                let files = fontFace.files.map(file => {
+                    return `url('${file.attachment_url}') format(${fontFormatMap(file.extension)})`;
+                });
+
+                css += files.join(',\n\t\t');
+
+                css += `;\n`;
+            }
+
+            if (fontFace.unicodeRange) {
+                css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
+            }
+
+            css += `}\n\n`;
+        });
+    }
+
+    return css;
+});
+
+const cssPreviewStylesheet = computed(() => {
     let css = ``;
 
     if (!family.value) {
         return css;
     }
 
-    fontFaces.value.forEach(fontFace => {
-
-        if (fontFace.comment) {
-            css += `/* ${fontFace.comment} */\n`;
-        }
-
-        css += `@font-face {\n`;
-
-        css += `\tfont-family: '${family.value}';\n`;
-
-        css += `\tfont-style: ${fontFace.style};\n`;
-
-        if (fontFace.weight !== '') {
-            css += `\tfont-weight: ${fontFace.weight};\n`;
-        }
-
-        if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
-            css += `\tfont-stretch: 100%;\n`;
-        }
-
-        css += `\tfont-display: ${fontFace.display || display.value};\n`;
-
-        if (fontFace.files.length > 0) {
-            css += `\tsrc: `;
-
-            let files = fontFace.files.map(file => {
-                return `url('${file.attachment_url}') format(${fontFormatMap(file.extension)})`;
-            });
-
-            css += files.join(',\n\t\t');
-
-            css += `;\n`;
-        }
-
-        if (fontFace.unicodeRange) {
-            css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
-        }
-
-        css += `}\n\n`;
-    });
+    css += cssFontFaceRule.value;
 
     if (selector.value) {
         css += `${selector.value} {\n\tfont-family: '${family.value}';\n}\n\n`;
@@ -441,11 +449,12 @@ const cssPreview = computed(() => {
     return css;
 });
 
-let fontPreviewStylesheet;
+let fontPreviewStylesheetEl;
 
-watch(cssPreview, debounce((newCss, oldCss) => {
-    if (fontPreviewStylesheet) {
-        fontPreviewStylesheet.innerHTML = newCss;
+watch(cssFontFaceRule, debounce((newCss, oldCss) => {
+    if (fontPreviewStylesheetEl) {
+        // replace tabs with 2 spaces and assign
+        fontPreviewStylesheetEl.innerHTML = newCss.replace(/\t/g, '  ');
     }
 }, 1000));
 
@@ -453,11 +462,11 @@ onBeforeMount(() => {
     fontFaces.value = [];
     createNewFontFace();
 
-    fontPreviewStylesheet = document.querySelector('#yabe-webfont-preview');
-    if (!fontPreviewStylesheet) {
-        fontPreviewStylesheet = document.createElement('style');
-        fontPreviewStylesheet.setAttribute('id', 'yabe-webfont-preview');
-        document.head.appendChild(fontPreviewStylesheet);
+    fontPreviewStylesheetEl = document.querySelector('#yabe-webfont-preview');
+    if (!fontPreviewStylesheetEl) {
+        fontPreviewStylesheetEl = document.createElement('style');
+        fontPreviewStylesheetEl.setAttribute('id', 'yabe-webfont-preview');
+        document.head.appendChild(fontPreviewStylesheetEl);
     }
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
     <TransitionGroup name="notice">
         <div v-for="notice in notices" :key="notice.id" :class="`notice notice-${notice.type} is-dismissible`">
-            <p v-html="notice.message"></p>
+            <div v-html="notice.message"></div>
             <button type="button" @click="store.remove(notice.id)" class="notice-dismiss">
                 <span class="screen-reader-text">{{ __('Dismiss this notice.', 'yabe-webfont') }}</span>
             </button>
