@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory } from 'vue-router';
 
-import NotFound from "./pages/NotFound.vue";
+import NotFound from './pages/NotFound.vue';
 
 import FontsBase from './pages/fonts/FontsBase.vue';
 import FontsIndex from './pages/fonts/FontsIndex.vue';
@@ -26,9 +26,18 @@ const router = createRouter({
                     // component: FontsIndex,
                     children: [
                         { path: 'custom', name: 'fonts.create.custom', component: FontsCreate },
-                        { path: 'google-fonts', name: 'fonts.create.google-fonts', component: FontsIndex },
+                        { path: 'google-fonts', name: 'fonts.create.google-fonts', component: NotFound },
                     ]
                 },
+                {
+                    path: 'edit/:id',
+                    name: 'fonts.edit',
+                    // component: FontsEdit,
+                    children: [
+                        { path: 'custom', name: 'fonts.edit.custom', component: NotFound },
+                        { path: 'google-fonts', name: 'fonts.edit.google-fonts', component: NotFound },
+                    ]
+                }
             ],
         },
         {

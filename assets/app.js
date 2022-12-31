@@ -20,7 +20,7 @@ import router from './router.js';
 import 'highlight.js/styles/stackoverflow-light.css'
 import hljs from 'highlight.js/lib/core';
 import hljsCssLang from 'highlight.js/lib/languages/css';
-import hljsVuePlugin from "@highlightjs/vue-plugin";
+import hljsVuePlugin from '@highlightjs/vue-plugin';
 import vRipple from './directives/ripple/ripple.js';
 
 const pinia = createPinia();

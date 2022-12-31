@@ -7,14 +7,15 @@ export const useWordpressNotice = defineStore('wordpressNotice', {
     }),
     actions: {
         /**
-         * @param {string} type success, error, warning, info
+         * @param {object} notice
+         * @param {string} notice.message
+         * @param {string} notice.type - 'success', 'info', 'warning', 'error'
+         * @param {object} notice.options
          */
-        add(type, message, options = {}) {
+        add(notice) {
             this.notices.unshift({
                 id: nanoid(10),
-                type,
-                message,
-                options,
+                ...notice,
             });
         },
         remove(id) {

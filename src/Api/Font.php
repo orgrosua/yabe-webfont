@@ -16,7 +16,9 @@ namespace Yabe\Webfont\Api;
 use WP_Query;
 use WP_REST_Request;
 use WP_REST_Response;
+use WP_REST_Server;
 use wpdb;
+use Yabe\Webfont\Utils\Common;
 
 class Font extends AbstractApi implements ApiInterface
 {
@@ -31,11 +33,26 @@ class Font extends AbstractApi implements ApiInterface
             self::API_NAMESPACE,
             $this->get_prefix() . '/index',
             [
-                'methods' => 'GET',
+                'methods' => WP_REST_Server::READABLE,
                 'callback' => [$this, 'index'],
                 // 'permission_callback' => [$this, 'permission_callback'],
             ]
         );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/store',
+            [
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => [$this, 'store'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+    }
+
+    public function permission_callback(WP_REST_Request $request): bool
+    {
+        return wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 
     public function index(WP_REST_Request $request): WP_REST_Response
@@ -119,6 +136,43 @@ class Font extends AbstractApi implements ApiInterface
                 'from' => $from,
                 'to' => $to,
             ],
+        ], 200, []);
+    }
+
+    public function store(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $payload = $request->get_json_params();
+
+        $type = 'custom';
+        $title = sanitize_text_field($payload['title']);
+        $slug = Common::random_slug(10);
+        $family = sanitize_text_field($payload['family']);
+        $status = (bool) $payload['publish_status'];
+        $metadata = json_encode([
+            'selector' => $payload['selector'],
+            'display' => sanitize_text_field($payload['display']),
+            'preload' => (bool) $payload['preload'],
+        ]);
+        $files = json_encode($payload['font_faces']);
+
+        $sql = "
+            INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
+            (type, title, slug, family, status, metadata, files, created_at)
+            VALUES
+            (%s, %s, %s, %s, %d, %s, %s, %s)
+        ";
+
+        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, $metadata, $files, current_time('mysql'));
+
+        $wpdb->query($sql);
+
+        $id = $wpdb->insert_id;
+
+        return new WP_REST_Response([
+            'id' => $id,
         ], 200, []);
     }
 }

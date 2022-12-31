@@ -64,4 +64,9 @@ class Common
 
         return $key ? $plugin_data[$key] : $plugin_data;
     }
+
+    public static function random_slug(int $length = 21): string
+    {
+        return (new \Hidehalo\Nanoid\Client())->generateId($length, \Hidehalo\Nanoid\Client::MODE_DYNAMIC);
+    }
 }

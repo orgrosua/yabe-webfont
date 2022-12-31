@@ -35,11 +35,18 @@ final class Migration
         ]);
 
         add_action('a!yabe/webfont/plugins:activate_plugin_start', [$this, 'install']);
+        add_action('a!yabe/webfont/plugins:upgrade_plugin_start', [$this, 'upgrade']);
 
         $this->migrator->boot();
     }
 
     public function install()
+    {
+        $this->migrator->install();
+        $this->migrator->execute();
+    }
+
+    public function upgrade()
     {
         $this->migrator->install();
         $this->migrator->execute();

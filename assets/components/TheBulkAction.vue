@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue';
 
 const props = defineProps({
     actions: {
@@ -29,7 +29,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(["doBulkActions"]);
+const emit = defineEmits(['doBulkActions']);
 
-const chosen = ref("-1");
+const chosen = ref('-1');
 </script>

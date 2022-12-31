@@ -1,9 +1,9 @@
 <template>
     <span class="pagination-links">
-        <button :disabled="isDisableAction || !firstPage" class="tablenav-pages-navspan button mx-0.5 " @click="$emit('changePage', 1)">
+        <button type="button" :disabled="isDisableAction || !firstPage" class="tablenav-pages-navspan button mx-0.5 " @click="$emit('changePage', 1)">
             «
         </button>
-        <button :disabled="isDisableAction || !previousPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', currentPage - 1)">
+        <button type="button" :disabled="isDisableAction || !previousPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', currentPage - 1)">
             ‹
         </button>
         <span class="paging-input mx-0.5">
@@ -12,17 +12,17 @@
                 {{ isEnableGoto === false ? currentPage : '' }} of <span class="total-pages"> {{ totalPage }} </span>
             </span>
         </span>
-        <button :disabled="isDisableAction || !nextPage" class="next-page button mx-0.5" @click="$emit('changePage', currentPage + 1)">
+        <button type="button" :disabled="isDisableAction || !nextPage" class="next-page button mx-0.5" @click="$emit('changePage', currentPage + 1)">
             ›
         </button>
-        <button :disabled="isDisableAction || !lastPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', totalPage)">
+        <button type="button" :disabled="isDisableAction || !lastPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', totalPage)">
             »
         </button>
     </span>
 </template>
   
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch } from 'vue';
 
 const props = defineProps({
     isEnableGoto: {
@@ -67,7 +67,7 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(["changePage"]);
+const emit = defineEmits(['changePage']);
 
 const thePage = ref(props.currentPage);
 

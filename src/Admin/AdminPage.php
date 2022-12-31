@@ -16,8 +16,6 @@ namespace Yabe\Webfont\Admin;
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Upload;
 
-use function wp_enqueue_media;
-
 class AdminPage
 {
     public function __construct()
@@ -67,10 +65,16 @@ class AdminPage
         wp_set_script_translations(YABE_WEBFONT_OPTION_NAMESPACE . '-app', 'yabe-webfont');
         wp_localize_script(YABE_WEBFONT_OPTION_NAMESPACE . '-app', 'yabeWebfont', [
             '_version' => Plugin::VERSION,
-            '_wpnonce' => wp_create_nonce(YABE_WEBFONT_OPTION_NAMESPACE . '-app'),
+            '_wpnonce' => wp_create_nonce(YABE_WEBFONT_OPTION_NAMESPACE),
             'web_history'  => add_query_arg([
                 'page' => YABE_WEBFONT_OPTION_NAMESPACE,
             ], admin_url('admin.php')),
+            'rest_api' => [
+                'nonce' => wp_create_nonce('wp_rest'),
+                'root' => esc_url_raw(rest_url()),
+                'namespace' => YABE_WEBFONT_REST_NAMESPACE,
+                'url' => esc_url_raw(rest_url(YABE_WEBFONT_REST_NAMESPACE)),
+            ],
             // 'postUrl' => admin_url('post.php'),
             // 'mimeTypes' => array_keys(Font::get_custom_fonts_mime_types()),
             // 'hostedWakufont' => Font::hosted_wakufont(),

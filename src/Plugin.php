@@ -18,7 +18,6 @@ use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Api\Router as ApiRouter;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Notice;
-use Yabe\Webfont\Utils\Upload;
 
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
@@ -108,6 +107,17 @@ final class Plugin
             $this->deactivate_plugin();
         });
 
+        // upgrade hooks.
+        add_action('upgrader_process_complete', function ($upgrader, $options): void {
+            if ($options['action'] === 'update' && $options['type'] === 'plugin') {
+                foreach ($options['plugins'] as $plugin) {
+                    if ($plugin === plugin_basename(YABE_WEBFONT_FILE)) {
+                        $this->upgrade_plugin();
+                    }
+                }
+            }
+        }, 10, 2);
+
         new ApiRouter();
 
         // admin hooks.
@@ -131,7 +141,7 @@ final class Plugin
     {
         do_action('a!yabe/webfont/plugins:activate_plugin_start');
 
-        add_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
+        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
 
         do_action('a!yabe/webfont/plugins:activate_plugin_end');
     }
@@ -144,6 +154,15 @@ final class Plugin
         do_action('a!yabe/webfont/plugins:deactivate_plugin_start');
         // TODO: Add deactivation logic here.
         do_action('a!yabe/webfont/plugins:deactivate_plugin_end');
+    }
+    /**
+     * Handle the plugin's upgrade
+     */
+    public function upgrade_plugin(): void
+    {
+        do_action('a!yabe/webfont/plugins:upgrade_plugin_start');
+        // TODO: Add upgrade logic here.
+        do_action('a!yabe/webfont/plugins:upgrade_plugin_end');
     }
 
     /**
