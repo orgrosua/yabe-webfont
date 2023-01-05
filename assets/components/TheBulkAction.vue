@@ -8,7 +8,7 @@
                 {{ action.label }}
             </option>
         </select>
-        <button type="submit" class="button action" :disabled="busy.isBusy" @click="$emit('doBulkActions', chosen)" v-ripple >
+        <button type="submit" class="button action" :disabled="busy.isBusy" @click="$emit('bulkActions', chosen)" v-ripple >
             {{ __('Apply', 'yabe-webfont') }}
         </button>
     </div>
@@ -27,7 +27,7 @@ const props = defineProps({
 
 const busy = useBusy();
 
-const emit = defineEmits(['doBulkActions']);
+const emit = defineEmits(['bulkActions']);
 
 const chosen = ref('-1');
 </script>

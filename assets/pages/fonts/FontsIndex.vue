@@ -38,7 +38,7 @@
     </p>
 
     <div class="tablenav top">
-        <TheBulkAction :actions="bulkActions" @do-bulk-actions="doBulkActions" />
+        <TheBulkAction :actions="bulkActions" @bulk-actions="doBulkActions" />
         <div class="tablenav-pages tw-pb-3">
             <span class="displaying-num"> {{ `${meta.total_filtered} ${__('items', 'yabe-webfont')}` }} </span>
             <ThePagination v-if="meta.last_page > 1" :is-enable-goto="true" :current-page="meta.current_page" :first-page="meta.current_page - 1 > 1" :previous-page="meta.current_page > 1" :next-page="meta.current_page < meta.last_page" :last-page="meta.current_page + 1 < meta.last_page" :total-page="meta.last_page" @change-page="doChangePage" />
@@ -49,8 +49,8 @@
     <table class="wp-list-table widefat table-auto tw-min-w-full plugins">
         <thead>
             <tr>
-                <td class="manage-column column-cb check-column tw-px-0.5 tw-align-middle">
-                    <input v-model="selectAll" type="checkbox" />
+                <td class="manage-column column-cb ywf-check-column tw-px-0.5 tw-align-middle">
+                    <input v-model="selectAll" class="tw-ml-3" type="checkbox" />
                 </td>
                 <th scope="col">
                     {{ __('Title', 'yabe-webfont') }}
@@ -69,11 +69,11 @@
             </tr>
         </thead>
         <tbody v-if="items.length > 0 && !getBusyHasTask('fonts.index:fetch-items')">
-            <TheFontIndexRow v-for="item in items" :key="item.id" :item="item" :preview="preview" />
+            <TheFontIndexRow v-for="item in items" :key="item.id" :item="item" :preview="preview" @delete="doDelete(item)" @restore="doRestore(item)" @update-status="doUpdateStatus(item, null)" />
         </tbody>
         <tbody v-else-if="getBusyHasTask('fonts.index:fetch-items')">
             <tr v-for="skeleton in meta.skeleton" class="inactive tw-animate-pulse">
-                <th scope="row" class="align-middle tw-py-2 check-column">
+                <th scope="row" class="align-middle tw-py-2 ywf-check-column">
                     <input type="checkbox" value="0" disabled />
                 </th>
                 <td width="25%">
@@ -106,8 +106,8 @@
         </tbody>
         <tfoot>
             <tr>
-                <td class="manage-column column-cb check-column tw-px-0.5 tw-align-middle">
-                    <input v-model="selectAll" type="checkbox" />
+                <td class="manage-column column-cb ywf-check-column tw-px-0.5 tw-align-middle">
+                    <input v-model="selectAll" class="tw-ml-3" type="checkbox" />
                 </td>
                 <th scope="col">
                     {{ __('Title', 'yabe-webfont') }}
@@ -123,7 +123,7 @@
     </table>
 
     <div class="tablenav bottom">
-        <TheBulkAction :actions="bulkActions" @do-bulk-actions="doBulkActions" />
+        <TheBulkAction :actions="bulkActions" @bulk-actions="doBulkActions" />
         <div class="tablenav-pages">
             <span class="displaying-num"> {{ `${meta.total_filtered} ${__('items', 'yabe-webfont')}` }} </span>
             <ThePagination v-if="meta.last_page > 1" :current-page="meta.current_page" :first-page="meta.current_page - 1 > 1" :previous-page="meta.current_page > 1" :next-page="meta.current_page < meta.last_page" :last-page="meta.current_page + 1 < meta.last_page" :total-page="meta.last_page" @change-page="doChangePage" />
@@ -135,6 +135,7 @@
 <script setup>
 import { ref, reactive, computed, watch, onMounted, provide } from 'vue';
 import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
+import { __ } from '@wordpress/i18n';
 
 import { useApi } from '../../library/api';
 import { useBusy } from '../../stores/busy';
@@ -183,7 +184,6 @@ provide('selectedItems', selectedItems);
 
 const getBusyHasTask = busy.hasTask;
 
-// REVIEWED:
 function pushWithQuery() {
     router.push({
         name: 'fonts.index',
@@ -199,7 +199,6 @@ onMounted(() => {
     doRefreshItems();
 });
 
-// REVIEWED:
 // do search when query.search cleared
 watch(() => query.search, (value, oldValue) => {
     if ('' === value && route.query.search.trim() !== value) {
@@ -207,13 +206,11 @@ watch(() => query.search, (value, oldValue) => {
     }
 });
 
-// REVIEWED:
 function doChangePage(page) {
     query.page = page;
     pushWithQuery();
 }
 
-// REVIEWED:
 onBeforeRouteUpdate((to, from) => {
     if (to.query.page !== from.query.page) {
         query.page = to.query.page ? Number(to.query.page) : 1;
@@ -230,7 +227,6 @@ onBeforeRouteUpdate((to, from) => {
     doRefreshItems();
 });
 
-// REVIEWED:
 function doSearch(reset = false) {
     query.page = 1;
 
@@ -241,7 +237,6 @@ function doSearch(reset = false) {
     pushWithQuery();
 }
 
-// REVIEWED:
 function doRefreshItems() {
     busy.add('fonts.index:fetch-items');
     api
@@ -283,46 +278,89 @@ function doRefreshItems() {
         })
         .finally(() => {
             busy.remove('fonts.index:fetch-items');
+            resetBulkSelection();
         });
 }
 
+function doUpdateStatus(item, status = null) {
+    if (status === item.status) {
+        return;
+    }
 
+    busy.add('fonts.updateStatus');
+    item.isUpdatingStatus = true;
 
+    api
+        .request({
+            method: 'PATCH',
+            url: `/fonts/update-status/${item.id}`,
+            data: {
+                status: status !== null ? status : !item.status,
+            },
+        })
+        .then((response) => {
+            return response.data;
+        })
+        .then(data => {
+            item.status = data.status;
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            item.isUpdatingStatus = false;
+            busy.remove('fonts.updateStatus');
+        });
+}
 
+function doDelete(item) {
+    item.isDeleting = true;
+    busy.add('fonts.delete');
 
+    api
+        .request({
+            method: 'DELETE',
+            url: `/fonts/delete/${item.id}`,
+        })
+        .then((response) => {
+            item.isDeleted = true;
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            item.isDeleting = false;
+            busy.remove('fonts.delete');
+        });
+}
 
+function doRestore(item) {
+    busy.add('fonts.restore');
+    item.isRestoring = true;
 
+    api
+        .request({
+            method: 'POST',
+            url: `/fonts/restore/${item.id}`,
+        })
+        .then((response) => {
+            item.isRestored = true;
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            item.isRestoring = false;
+            busy.remove('fonts.restore');
+        });
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TODO
 const selectAll = computed({
     get() {
         if (items.value.length > 0) {
             let allChecked = true;
-            for (const [index, value] of items.value.entries()) {
-                if (!selectedItems.value.includes(index)) {
+            for (const [index, item] of items.value.entries()) {
+                if (!selectedItems.value.includes(item.id)) {
                     allChecked = false;
                 }
                 if (!allChecked) break;
@@ -334,17 +372,8 @@ const selectAll = computed({
     set(value) {
         const checked = [];
         if (value) {
-            items.value.forEach((item, index) => {
-                if (
-                    !(
-                        items.value[index].isDeleted !== null &&
-                        items.value[index].isDeleted !== undefined &&
-                        items.value[index].isDeleting !== null &&
-                        items.value[index].isDeleting !== undefined
-                    )
-                ) {
-                    checked.push(index);
-                }
+            items.value.forEach((item) => {
+                checked.push(item.id);
             });
         }
         selectedItems.value = checked;
@@ -352,27 +381,176 @@ const selectAll = computed({
 });
 
 function resetBulkSelection() {
-    selectAll.value = false;
+    selectedItems.value = [];
 }
 
-const bulkActions = [{ key: "delete", label: "Delete" }];
+const bulkActions = ref([]);
 
-// TODO
+watch(
+    () => query.soft_deleted,
+    () => {
+        if (Boolean(query.soft_deleted)) {
+            bulkActions.value = [
+                { key: 'restore', label: 'Restore' },
+                { key: 'delete', label: 'Delete permanently' },
+            ];
+        } else {
+            bulkActions.value = [
+                { key: 'activate', label: 'Activate' },
+                { key: 'deactivate', label: 'Deactivate' },
+                { key: 'delete', label: 'Delete' },
+            ];
+        }
+    },
+    { immediate: true }
+);
+
 function doBulkActions(action) {
     if (action === '-1') {
         return;
     }
-    // switch (action) {
-    //     case 'delete':
-    //         if (
-    //             confirm(`Are you sure you want to delete the selected font(s)?`)
-    //         ) {
-    //             // doDestroy(selectedItems.value, true);
-    //         }
-    //         break;
-    //     default:
-    //         break;
-    // }
+    switch (action) {
+        case 'delete':
+            if (
+                confirm(__(`Are you sure you want to delete the selected font(s)?`, 'yabe-webfont'))
+            ) {
+                selectedItems.value.forEach(async (id) => {
+                    const item = items.value.find((item) => item.id === id);
+                    doDelete(item);
+                });
+                resetBulkSelection();
+            }
+            break;
+        case 'deactivate':
+            if (
+                confirm(__(`Are you sure you want to deactivate the selected font(s)?`, 'yabe-webfont'))
+            ) {
+                selectedItems.value.forEach(async (id) => {
+                    const item = items.value.find((item) => item.id === id);
+                    doUpdateStatus(item, false);
+                });
+                resetBulkSelection();
+            }
+            break;
+        case 'activate':
+            if (
+                confirm(__(`Are you sure you want to activate the selected font(s)?`, 'yabe-webfont'))
+            ) {
+                selectedItems.value.forEach(async (id) => {
+                    const item = items.value.find((item) => item.id === id);
+                    doUpdateStatus(item, true);
+                });
+                resetBulkSelection();
+            }
+            break;
+        case 'restore':
+            if (
+                confirm(__(`Are you sure you want to restore the selected font(s)?`, 'yabe-webfont'))
+            ) {
+                selectedItems.value.forEach(async (id) => {
+                    const item = items.value.find((item) => item.id === id);
+                    doRestore(item);
+                });
+                resetBulkSelection();
+            }
+            break;
+        default:
+            break;
+    }
+}
+</script>
+
+<style>
+.widefat .ywf-check-column {
+    width: 2.2em;
+    padding: 6px 0 25px;
+    vertical-align: top
 }
 
-</script>
+.widefat tbody th.ywf-check-column {
+    padding: 9px 0 22px
+}
+
+.updates-table tbody td.ywf-check-column,
+.widefat tbody th.ywf-check-column,
+.widefat tfoot td.ywf-check-column,
+.widefat thead td.ywf-check-column {
+    padding: 11px 0 0 3px
+}
+
+.widefat tfoot td.ywf-check-column,
+.widefat thead td.ywf-check-column {
+    padding-top: 4px;
+    vertical-align: middle
+}
+
+.plugins tbody,
+.plugins tbody th.ywf-check-column {
+    padding: 8px 0 0 2px
+}
+
+.plugins tbody th.ywf-check-column input[type=checkbox] {
+    margin-top: 4px
+}
+
+.plugins .inactive th.ywf-check-column,
+.plugins tfoot td.ywf-check-column,
+.plugins thead td.ywf-check-column {
+    padding-left: 6px
+}
+
+.plugin-update-tr.active td,
+.plugins .active th.ywf-check-column {
+    border-left: 4px solid #72aee6
+}
+
+.plugins tr.paused th.ywf-check-column {
+    border-left: 4px solid #b32d2e
+}
+
+@media screen and (max-width: 782px) {
+    .wp-list-table tr th.ywf-check-column {
+        display: table-cell
+    }
+
+    .wp-list-table .ywf-check-column {
+        width: 2.5em
+    }
+
+    .wp-list-table tr:not(.inline-edit-row):not(.no-items) td:not(.ywf-check-column) {
+        position: relative;
+        clear: both;
+        width: auto !important
+    }
+
+    .wp-list-table tr:not(.inline-edit-row):not(.no-items) td.column-primary~td:not(.ywf-check-column) {
+        padding: 3px 8px 3px 35%
+    }
+
+    .widefat tfoot td.ywf-check-column,
+    .widefat thead td.ywf-check-column {
+        padding-top: 10px
+    }
+
+    .plugins .plugin-update-tr:before,
+    .plugins tr.active+tr.inactive td.column-description,
+    .plugins tr.active+tr.inactive th.ywf-check-column {
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1)
+    }
+
+    .plugins tr.active+tr.inactive td,
+    .plugins tr.active+tr.inactive th.ywf-check-column {
+        border-top: none
+    }
+
+    .plugins tbody th.ywf-check-column {
+        padding: 8px 0 0 5px
+    }
+
+    .plugins .inactive th.ywf-check-column,
+    .plugins tfoot td.ywf-check-column,
+    .plugins thead td.ywf-check-column {
+        padding-left: 9px
+    }
+}
+</style>

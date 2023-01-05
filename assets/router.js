@@ -23,11 +23,6 @@ const router = createRouter({
                     path: 'index',
                     name: 'fonts.index',
                     component: FontsIndex,
-                    // beforeEnter: (to, from) => {
-                    //     // reject the navigation
-                    //     // return false
-                    //     console.log('beforeEnter', to, from);
-                    // },
                 },
                 {
                     path: 'create',
@@ -52,6 +47,7 @@ const router = createRouter({
         {
             path: '/settings',
             name: 'settings',
+            component: NotFound,
         },
         { path: '/:notFound(.*)', component: NotFound },
     ]
