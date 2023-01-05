@@ -85,7 +85,7 @@
                                         </a>
                                     </span>
                                 </h3>
-                                <p class="tw-my-0 tw-text-base tw-text-gray-500">{{__('Read our latest news and articles', 'yabe-webfont')}}</p>
+                                <p class="tw-my-0 tw-text-base tw-text-gray-500">{{ __('Read our latest news and articles', 'yabe-webfont') }}</p>
                             </div>
                             <div class="tw-flex-shrink-0 tw-self-center">
                                 <!-- Heroicon name: mini/chevron-right -->
@@ -97,7 +97,7 @@
                     </ul>
                     <div class="tw-mt-8">
                         <router-link :to="{ name: 'home' }" class="tw-no-underline tw-text-base tw-font-medium tw-text-sky-600 hover:tw-text-sky-500">
-                            Or go back home
+                            {{ __('Or go back home', 'yabe-webfont') }}
                             <span aria-hidden="true"> &rarr;</span>
                         </router-link>
                     </div>

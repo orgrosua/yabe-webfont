@@ -12,14 +12,23 @@ const router = createRouter({
         return savedPosition || { left: 0, top: 0 };
     },
     routes: [
-        { path: '/', redirect: { name: 'fonts' } },
+        { path: '/', name: 'home', redirect: { name: 'fonts' } },
         {
             path: '/fonts',
             name: 'fonts',
             component: FontsBase,
             redirect: { name: 'fonts.index' },
             children: [
-                { path: 'index', name: 'fonts.index', component: FontsIndex },
+                {
+                    path: 'index',
+                    name: 'fonts.index',
+                    component: FontsIndex,
+                    // beforeEnter: (to, from) => {
+                    //     // reject the navigation
+                    //     // return false
+                    //     console.log('beforeEnter', to, from);
+                    // },
+                },
                 {
                     path: 'create',
                     name: 'fonts.create',

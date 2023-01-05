@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Api;
 
-use WP_Query;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -48,6 +47,36 @@ class Font extends AbstractApi implements ApiInterface
                 'permission_callback' => [$this, 'permission_callback'],
             ]
         );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/update-status/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_status'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/delete/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::DELETABLE,
+                'callback' => [$this, 'destroy'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/restore/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => [$this, 'restore'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
     }
 
     public function permission_callback(WP_REST_Request $request): bool
@@ -60,68 +89,69 @@ class Font extends AbstractApi implements ApiInterface
         /** @var wpdb $wpdb */
         global $wpdb;
 
+        $soft_deleted = $request->get_param('soft_deleted') ? (bool) sanitize_text_field($request->get_param('soft_deleted')) : false;
+
         $page = $request->get_param('page') ? (int) sanitize_text_field($request->get_param('page')) : 1;
-        $per_page = $request->get_param('per_page') ? (int) sanitize_text_field($request->get_param('per_page')) : 10;
+        $per_page = $request->get_param('per_page') ? (int) sanitize_text_field($request->get_param('per_page')) : 20;
         $offset = ($page * $per_page) - $per_page;
 
         $search = $request->get_param('search') ? sanitize_text_field($request->get_param('search')) : null;
 
         $items = [];
 
+        $where_clause = [];
+
         if ($search) {
             $escaped_search = '%' . $wpdb->esc_like($search) . '%';
-            $sql = "
-                SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
-                WHERE name LIKE '%1\$s'
-                    OR slug LIKE '%1\$s'
-                    OR family LIKE '%1\$s'
-                LIMIT {$per_page} OFFSET {$offset}
-            ";
-
-            $sql = $wpdb->prepare($sql, $escaped_search);
-        } else {
-            $sql = "
-                SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
-                LIMIT {$per_page} OFFSET {$offset}
-            ";
+            $where_clause[] = $wpdb->prepare("( title LIKE '%1\$s' OR family LIKE '%1\$s' )", $escaped_search);
         }
 
-        // TODO: Map result to $items array
+        $where_clause[] = $soft_deleted ? 'deleted_at IS NOT NULL' : 'deleted_at IS NULL';
+
+        $where_clause = count($where_clause) > 0 ? 'WHERE ' . implode(' AND ', $where_clause) : '';
+
+        $sql = "
+            SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
+            {$where_clause}
+            LIMIT {$per_page} OFFSET {$offset}
+        ";
+
+        $sql = $wpdb->prepare($sql, $where_clause);
+
         $result = $wpdb->get_results($sql);
 
-        // foreach ($result as $row) {
-        //     $items[] = [
-        //         'id' => $row->id,
-        //         'name' => $row->name,
-        //         'slug' => $row->slug,
-        //         'family' => $row->family,
-        //         'variants' => $row->variants,
-        //         'subsets' => $row->subsets,
-        //         'created_at' => $row->created_at,
-        //         'updated_at' => $row->updated_at,
-        //     ];
-        // }
-
-
-        if ($search) {
-            $escaped_search = '%' . $wpdb->esc_like($search) . '%';
-            $sql = "
-                SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
-                WHERE name LIKE '%1\$s'
-                    OR slug LIKE '%1\$s'
-                    OR family LIKE '%1\$s'
-            ";
-
-            $sql = $wpdb->prepare($sql, $escaped_search);
-        } else {
-            $sql = "
-                SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
-            ";
+        foreach ($result as $row) {
+            $items[] = [
+                'id' => $row->id,
+                'type' => $row->type,
+                'title' => $row->title,
+                'slug' => $row->slug,
+                'family' => $row->family,
+                'metadata' => json_decode($row->metadata),
+                'files' => json_decode($row->files),
+                'status' => (bool) $row->status,
+                'created_at' => $row->created_at,
+                'updated_at' => $row->updated_at,
+                'deleted_at' => $row->deleted_at,
+            ];
         }
 
-        $total = (int) $wpdb->get_var($sql);
+        $total_exists = (int) $wpdb->get_var("
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE deleted_at IS NULL
+        ");
 
-        $total_pages = ceil($total / $per_page);
+        $total_deleted = (int) $wpdb->get_var("
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE deleted_at IS NOT NULL
+        ");
+
+        $total_filtered =  (int) $wpdb->get_var("
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            {$where_clause}
+        ");
+
+        $total_pages = ceil($total_filtered / $per_page);
         $from = count($items) > 0 ? ($page - 1) * $per_page + 1 : null;
         $to = count($items) > 0 ? $from + count($items) - 1 : null;
 
@@ -131,10 +161,12 @@ class Font extends AbstractApi implements ApiInterface
                 'page' => $page,
                 'per_page' => $per_page,
                 'search' => $search,
-                'total' => $total,
                 'total_pages' => $total_pages,
                 'from' => $from,
                 'to' => $to,
+                'total_filtered' => $total_filtered,
+                'total_deleted' => $total_deleted,
+                'total_exists' => $total_exists,
             ],
         ], 200, []);
     }
@@ -150,7 +182,7 @@ class Font extends AbstractApi implements ApiInterface
         $title = sanitize_text_field($payload['title']);
         $slug = Common::random_slug(10);
         $family = sanitize_text_field($payload['family']);
-        $status = (bool) $payload['publish_status'];
+        $status = (bool) $payload['status'];
         $metadata = json_encode([
             'selector' => $payload['selector'],
             'display' => sanitize_text_field($payload['display']),
@@ -170,6 +202,131 @@ class Font extends AbstractApi implements ApiInterface
         $wpdb->query($sql);
 
         $id = $wpdb->insert_id;
+
+        return new WP_REST_Response([
+            'id' => $id,
+        ], 200, []);
+    }
+
+    public function update_status(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $request->get_url_params();
+        $payload = $request->get_json_params();
+
+        $id = (int) $url_params['id'];
+        $status = (bool) $payload['status'];
+
+        $sql = "
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $count = (int) $wpdb->get_var($sql);
+
+        if ($count === 0) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        $sql = "
+            UPDATE {$wpdb->prefix}yabe_webfont_fonts
+            SET status = %d
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $status, $id);
+
+        $wpdb->query($sql);
+
+        return new WP_REST_Response([
+            'id' => $id,
+            'status' => $status,
+        ], 200, []);
+    }
+
+    public function destroy(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $request->get_url_params();
+
+        $id = (int) $url_params['id'];
+
+        $sql = "
+            SELECT deleted_at FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $item = $wpdb->get_row($sql);
+
+        if (!$item) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        if ($item->deleted_at) {
+            $sql = "
+                DELETE FROM {$wpdb->prefix}yabe_webfont_fonts
+                WHERE id = %d
+            ";
+            $sql = $wpdb->prepare($sql, $id);
+        } else {
+            $sql = "
+                UPDATE {$wpdb->prefix}yabe_webfont_fonts
+                SET deleted_at = %s
+                WHERE id = %d
+            ";
+            $sql = $wpdb->prepare($sql, current_time('mysql'), $id);
+        }
+
+        $wpdb->query($sql);
+
+        return new WP_REST_Response(null, 200, []);
+    }
+
+    public function restore(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $request->get_url_params();
+
+        $id = (int) $url_params['id'];
+
+        $sql = "
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $count = (int) $wpdb->get_var($sql);
+
+        if ($count === 0) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        $sql = "
+            UPDATE {$wpdb->prefix}yabe_webfont_fonts
+            SET deleted_at = null
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $wpdb->query($sql);
 
         return new WP_REST_Response([
             'id' => $id,

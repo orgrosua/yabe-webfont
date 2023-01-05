@@ -32,7 +32,7 @@
             "description": "Preload the font",
             "type": "boolean"
         },
-        "publish_status": {
+        "status": {
             "description": "The publish status of the font",
             "type": "boolean"
         },
@@ -49,6 +49,6 @@
         "family",
         "display",
         "preload",
-        "publish_status"
+        "status"
     ]
 }

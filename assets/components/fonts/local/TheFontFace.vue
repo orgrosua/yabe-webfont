@@ -72,22 +72,23 @@
                         <button type="button" @click="uploadFont" v-ripple class="button">Upload Fonts</button>
                     </div>
                     <draggable v-model="item.files" tag="transition-group" item-key="attachment_id" :component-data="{
-                        // tag: 'div',
-                        // type: 'TransitionGroup',
-                        name: 'font-file'
-                    }" ghost-class="dragged-placeholder" animation="200">
+    // tag: 'div',
+    // type: 'TransitionGroup',
+    name: 'font-file'
+}" ghost-class="dragged-placeholder" animation="200">
                         <template #item="{ element }">
                             <div class="tw-flex tw-col-span-6 tw-gap-1.5 tw-p-3">
                                 <div class="tw-flex tw-w-0 tw-flex-1 tw-items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="tw-h-5 tw-w-5 tw-flex-shrink-0 tw-text-gray-400 tw-fill-current"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                         <path d="M254 52.8C249.3 40.3 237.3 32 224 32s-25.3 8.3-30 20.8L57.8 416H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32h-1.8l18-48H303.8l18 48H320c-17.7 0-32 14.3-32 32s14.3 32 32 32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H390.2L254 52.8zM279.8 304H168.2L224 155.1 279.8 304z" />
                                     </svg>
-                                    <span class="tw-ml-2 tw-w-0 tw-flex-1 tw-truncate">[<b>{{ element.extension }}</b>] {{ element.name }} ({{ prettyBytes(element.filesize) }})</span>
+                                    <span class="tw-ml-2 tw-w-0 tw-flex-1 tw-truncate" :title="`${element.name} (${prettyBytes(element.filesize)})`">[<b>{{ element.extension }}</b>] {{ element.name }} ({{ prettyBytes(element.filesize) }})</span>
                                 </div>
-                                <button type="button" @click="deleteFontFile(element.uid)" v-ripple class="button tw-flex tw-ml-4 tw-flex-shrink-0 tw-items-center focus:tw-shadow-none tw-cursor-pointer tw-bg-inherit tw-border-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="tw-h-5 tw-w-5 tw-text-red-700 hover:tw-text-red-500 tw-fill-current hover:tw-animate-pulse"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                        <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                                <button type="button" @click="deleteFontFile(element.uid)" v-ripple class="button tw-flex tw-ml-4 tw-flex-shrink-0 tw-items-center focus:tw-shadow-none tw-cursor-pointer tw-bg-inherit tw-border-none tw-text-gray-500 hover:tw-text-red-500 tw-font-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="tw-h-5 tw-w-5 tw-fill-current hover:tw-animate-pulse tw-pr-1.5"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                        <path d="M576 128c0-35.3-28.7-64-64-64H205.3c-17 0-33.3 6.7-45.3 18.7L9.4 233.4c-6 6-9.4 14.1-9.4 22.6s3.4 16.6 9.4 22.6L160 429.3c12 12 28.3 18.7 45.3 18.7H512c35.3 0 64-28.7 64-64V128zM271 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" />
                                     </svg>
+                                    Delete
                                 </button>
                             </div>
                         </template>

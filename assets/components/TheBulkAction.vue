@@ -1,6 +1,6 @@
 <template>
     <div class="alignleft actions bulkactions">
-        <select id="bulk-action-selector-top" v-model="chosen" name="action" :disabled="isDisableAction">
+        <select id="bulk-action-selector-top" v-model="chosen" name="action" :disabled="busy.isBusy">
             <option value="-1">
                 {{ __('Bulk actions', 'yabe-webfont') }}
             </option>
@@ -8,7 +8,7 @@
                 {{ action.label }}
             </option>
         </select>
-        <button type="submit" class="button action" :disabled="isDisableAction" @click="$emit('doBulkActions', chosen)" v-ripple >
+        <button type="submit" class="button action" :disabled="busy.isBusy" @click="$emit('doBulkActions', chosen)" v-ripple >
             {{ __('Apply', 'yabe-webfont') }}
         </button>
     </div>
@@ -16,18 +16,16 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useBusy } from '../stores/busy';
 
 const props = defineProps({
     actions: {
         type: Array,
         default: () => []
     },
-    isDisableAction: {
-        type: Boolean,
-        default: false,
-        required: false
-    }
 });
+
+const busy = useBusy();
 
 const emit = defineEmits(['doBulkActions']);
 
