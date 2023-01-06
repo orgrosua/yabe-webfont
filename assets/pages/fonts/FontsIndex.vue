@@ -58,6 +58,9 @@
                 <th scope="col">
                     {{ __('Font Family', 'yabe-webfont') }}
                 </th>
+                <th scope="col">
+                    {{ __('Modified', 'yabe-webfont') }}
+                </th>
                 <th scope="col" class="tw-flex tw-items-center">
                     {{ __('Preview', 'yabe-webfont') }}
                     <div v-if="items.length > 0" class="tw-px-4 tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
@@ -76,21 +79,23 @@
                 <th scope="row" class="tw-align-middle tw-py-2 ywf-check-column">
                     <input type="checkbox" value="0" disabled />
                 </th>
-                <td width="25%">
+                <td width="20%">
                     <div class="tw-h-3 tw-bg-slate-400 tw-rounded tw-w-1/2"></div>
                     <div class="row-actions visible tw-mt-1 tw-items-center tw-flex tw-divide-x-2 tw-divide-solid tw-divide-y-0 tw-divide-gray-400">
-                        <span class="tw-pr-1 tw-text-gray-400 tw-flex tw-items-center">ID: <div class="tw-ml-1 tw-h-3 tw-bg-slate-400 tw-rounded tw-w-6"></div></span>
-                        <a class="tw-px-1 tw-text-red-700 tw-cursor-wait hover:tw-text-red-800">
+                        <a class="tw-px-1 tw-cursor-pointer"> Edit </a>
+                        <a class="tw-px-1 tw-text-yellow-700 tw-cursor-wait hover:tw-text-yellow-800">
                             (De)activate
                         </a>
-                        <a class="tw-px-1 tw-cursor-pointer"> Edit </a>
-                        <a class="tw-px-1 tw-text-red-700 tw-cursor-wait hover:tw-text-red-800">
+                        <a class="tw-px-1 tw-text-yellow-700 tw-cursor-wait hover:tw-text-yellow-800">
                             Delete
                         </a>
                     </div>
                 </td>
                 <td width="20%" class="tw-items-center tw-align-middle">
                     <div class="tw-h-3 tw-bg-slate-400 tw-rounded tw-w-1/2"></div>
+                </td>
+                <td width="10%" class="tw-items-center tw-align-middle">
+                    <div class="tw-h-3 tw-bg-slate-400 tw-rounded tw-w-full"></div>
                 </td>
                 <td class="tw-align-middle">
                     <div class="tw-h-3 tw-bg-slate-400 tw-rounded tw-w-11/12"></div>
@@ -100,7 +105,8 @@
         <tbody v-else>
             <tr>
                 <td colspan="5">
-                    {{ __('No fonts found.', 'yabe-webfont') }}
+                    {{ __(`It looks like you don't have any fonts.`, 'yabe-webfont') }}
+                    <router-link :to="{ name: 'fonts.create.custom' }">{{ __('Perhaps you would like to add a new one?', 'yabe-webfont') }}</router-link>
                 </td>
             </tr>
         </tbody>
@@ -114,6 +120,9 @@
                 </th>
                 <th scope="col">
                     {{ __('Font Family', 'yabe-webfont') }}
+                </th>
+                <th scope="col">
+                    {{ __('Modified', 'yabe-webfont') }}
                 </th>
                 <th scope="col">
                     {{ __('Preview', 'yabe-webfont') }}
@@ -552,5 +561,12 @@ function doBulkActions(action) {
     .plugins thead td.ywf-check-column {
         padding-left: 9px
     }
+}
+
+.plugins tr:last-child.active td,
+.plugins tr:last-child.active th,
+.plugins tr:last-child.inactive td,
+.plugins tr:last-child.inactive th {
+    box-shadow: none;
 }
 </style>

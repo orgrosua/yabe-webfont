@@ -72,10 +72,8 @@
                         <button type="button" @click="uploadFont" v-ripple class="button">Upload Fonts</button>
                     </div>
                     <draggable v-model="item.files" tag="transition-group" item-key="attachment_id" :component-data="{
-    // tag: 'div',
-    // type: 'TransitionGroup',
-    name: 'font-file'
-}" ghost-class="dragged-placeholder" animation="200">
+                        name: 'font-file'
+                    }" ghost-class="dragged-placeholder" animation="200">
                         <template #item="{ element }">
                             <div class="tw-flex tw-col-span-6 tw-gap-1.5 tw-p-3">
                                 <div class="tw-flex tw-w-0 tw-flex-1 tw-items-center">

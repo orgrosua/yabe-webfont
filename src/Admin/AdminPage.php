@@ -76,7 +76,6 @@ class AdminPage
                 'url' => esc_url_raw(rest_url(YABE_WEBFONT_REST_NAMESPACE)),
             ],
             // 'postUrl' => admin_url('post.php'),
-            // 'mimeTypes' => array_keys(Font::get_custom_fonts_mime_types()),
             // 'hostedWakufont' => Font::hosted_wakufont(),
         ]);
     }

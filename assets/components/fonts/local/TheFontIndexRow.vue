@@ -10,19 +10,22 @@
                 <strong>{{ item.title }}</strong> was successfully restored.
             </td>
         </tr>
-        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': !item.status }">
-            <th scope="row" :class="{ 'tw-pl-1.5': !item.status }" class="tw-align-middle tw-py-2 ywf-check-column">
+        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': !item.status }" class="tw-group">
+            <th scope="row" class="tw-align-middle tw-pl-1.5 tw-py-2 ywf-check-column">
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
-            <td width="25%" class="tw-align-middle">
-                <strong>
+            <td width="20%" class="tw-align-middle">
+                <router-link :to="{ name: 'fonts.edit.custom', params: { id: item.id } }" :class="{
+                    'tw-font-semibold': item.status
+                }">
                     {{ item.title }}
-                </strong>
+                    <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal">ID: {{ item.id }}</span>
+                </router-link>
                 <div class="row-actions visible">
-                    <span class="tw-text-gray-400">ID: {{ item.id }}</span>
-                    |
                     <template v-if="item.deleted_at == null">
-                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('updateStatus')">
+                        <router-link :to="{ name: 'fonts.edit.custom', params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
+                        |
+                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-yellow-700 tw-cursor-pointer hover:tw-text-yellow-800" @click="$emit('updateStatus')">
                             <template v-if="item.status">
                                 {{ item.isUpdatingStatus ? 'Deactivating...' : 'Deactivate' }}
                             </template>
@@ -30,8 +33,6 @@
                                 {{ item.isUpdatingStatus ? 'Activating...' : 'Activate' }}
                             </template>
                         </a>
-                        |
-                        <router-link :to="{ name: 'fonts.edit.custom', params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
                         |
                         <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
                             {{ item.isDeleting ? 'Deleting...' : 'Trash' }}
@@ -53,6 +54,11 @@
                     {{ item.family }}
                 </div>
             </td>
+            <td width="10%" class="tw-align-middle">
+                <div class="tw-flex tw-items-center tw-space-x-3">
+                    <span :title="new Date(item.updated_at * 1000)" class="tw-underline tw-decoration-dotted tw-text-gray-700">{{ ago(new Date(item.updated_at * 1000)) }}</span>
+                </div>
+            </td>
             <td class="tw-align-middle ">
                 <ContentEditable tag="div" v-model="preview.text" :style="previewInlineStyle()" class="preview-text tw-leading-tight" />
             </td>
@@ -61,7 +67,8 @@
 </template>
 
 <script setup>
-import { computed, inject, onBeforeMount, onBeforeUnmount, onUnmounted } from 'vue';
+import ago from 's-ago';
+import { computed, inject, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useBusy } from '../../../stores/busy';
 
 import { useApi } from '../../../library/api';

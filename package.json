@@ -53,6 +53,7 @@
     "nanoid": "^4.0.0",
     "pinia": "^2.0.28",
     "pretty-bytes": "^6.0.0",
+    "s-ago": "^2.2.0",
     "slug": "^8.2.2",
     "vue-contenteditable": "^4.1.0",
     "vue-router": "^4.1.6",

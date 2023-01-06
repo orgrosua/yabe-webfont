@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useBusy } from '../stores/busy';
 
 const props = defineProps({
@@ -30,4 +30,9 @@ const busy = useBusy();
 const emit = defineEmits(['bulkActions']);
 
 const chosen = ref('-1');
+
+watch(() => props.actions, () => {
+    chosen.value = '-1';
+});
+
 </script>

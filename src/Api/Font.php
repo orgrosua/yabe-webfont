@@ -55,6 +55,16 @@ class Font extends AbstractApi implements ApiInterface
 
         register_rest_route(
             self::API_NAMESPACE,
+            $this->get_prefix() . '/show/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'show'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
             $this->get_prefix() . '/update-status/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
@@ -145,9 +155,9 @@ class Font extends AbstractApi implements ApiInterface
                 'font_faces' => json_decode($row->font_faces),
                 'font_faces' => $this->attach_font_files(json_decode($row->font_faces)),
                 'status' => (bool) $row->status,
-                'created_at' => $row->created_at,
-                'updated_at' => $row->updated_at,
-                'deleted_at' => $row->deleted_at,
+                'created_at' => strtotime($row->created_at),
+                'updated_at' => strtotime($row->updated_at),
+                'deleted_at' => $row->deleted_at ? strtotime($row->deleted_at) : null,
             ];
         }
 
@@ -201,12 +211,16 @@ class Font extends AbstractApi implements ApiInterface
         $slug = Common::random_slug(10);
         $family = sanitize_text_field($payload['family']);
         $status = (bool) $payload['status'];
-        $metadata = json_encode([
+        $metadata = [
             'selector' => $payload['selector'],
             'display' => sanitize_text_field($payload['display']),
             'preload' => (bool) $payload['preload'],
-        ]);
-        $font_faces = json_encode($payload['font_faces']);
+        ];
+        $font_faces = $payload['font_faces'];
+
+        if (array_key_exists('metadata', $payload)) {
+            $metadata = array_merge($metadata, $payload['metadata']);
+        }
 
         $sql = "
             INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
@@ -215,7 +229,7 @@ class Font extends AbstractApi implements ApiInterface
             (%s, %s, %s, %s, %d, %s, %s, %s)
         ";
 
-        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, $metadata, $font_faces, current_time('mysql'));
+        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, json_encode($metadata), json_encode($font_faces), current_time('mysql'));
 
         $wpdb->query($sql);
 
