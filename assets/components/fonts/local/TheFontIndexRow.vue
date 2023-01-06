@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { inject } from 'vue';
+import { computed, inject, onBeforeMount, onBeforeUnmount, onUnmounted } from 'vue';
 import { useBusy } from '../../../stores/busy';
 
 import { useApi } from '../../../library/api';
@@ -88,14 +88,142 @@ const emit = defineEmits(['delete', 'restore', 'updateStatus']);
 
 const selectedItems = inject('selectedItems');
 
+function fontFormatMap(ext) {
+    switch (ext) {
+        case 'woff2':
+        case 'font/woff2':
+            return 'woff2';
+        case 'woff':
+        case 'font/woff':
+            return 'woff';
+        case 'ttf':
+        case 'font/ttf':
+            return 'truetype';
+        case 'otf':
+        case 'font/otf':
+            return 'opentype';
+        case 'eot':
+        case 'font/eot':
+            return 'embedded-opentype';
+        default:
+            return 'woff2';
+    }
+};
+
+const cssFontFaceRule = computed(() => {
+    let css = ``;
+
+    if (props.item.family) {
+        props.item.font_faces.forEach(fontFace => {
+
+            if (fontFace.comment) {
+                css += `/* ${fontFace.comment} */\n`;
+            }
+
+            css += `@font-face {\n`;
+
+            css += `\tfont-family: '${props.item.family}';\n`;
+
+            css += `\tfont-style: ${fontFace.style};\n`;
+
+            if (fontFace.weight !== '') {
+                css += `\tfont-weight: ${fontFace.weight};\n`;
+            }
+
+            if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
+                css += `\tfont-stretch: 100%;\n`;
+            }
+
+            css += `\tfont-display: ${fontFace.display || props.item.metadata.display};\n`;
+
+            if (fontFace.files.length > 0) {
+                css += `\tsrc: `;
+
+                let files = fontFace.files.map(file => {
+                    return `url('${file.attachment_url}') format(${fontFormatMap(file.extension)})`;
+                });
+
+                css += files.join(',\n\t\t');
+
+                css += `;\n`;
+            }
+
+            if (fontFace.unicodeRange) {
+                css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
+            }
+
+            css += `}\n\n`;
+        });
+    }
+
+    return css;
+});
+
+const cssPreviewStylesheet = computed(() => {
+    let css = ``;
+
+    if (!props.item.family) {
+        return css;
+    }
+
+    css += cssFontFaceRule.value;
+
+    // replace tabs with 2 spaces
+    css = css.replace(/\t/g, '  ');
+
+    // replace <family> placeholder
+    css = css.replace(/<family>/g, props.item.family);
+
+    return css;
+});
+
 function previewInlineStyle() {
+    let weight = 400;
+    let style = 'normal';
+
+    if (props.item.font_faces.length > 0) {
+        const fontFace = props.item.font_faces.find(fontFace => {
+            return fontFace.files.length > 0;
+        });
+
+        if (fontFace) {
+            style = fontFace.style;
+
+            if (typeof fontFace.weight === 'number') {
+                weight = fontFace.weight;
+            } else if (fontFace.weight.split(' ').length > 1) {
+                // randomize weight
+                let weight_range = fontFace.weight.split(' ');
+                weight = Math.floor(Math.random() * (parseInt(weight_range[1]) - parseInt(weight_range[0]) + 1)) + parseInt(weight_range[0]);
+            }
+        }
+    }
+
     return {
         fontFamily: props.item.family,
         fontSize: `${props.preview.fontSize}px`,
-        fontWeight: props.item.weight,
-        fontStyle: props.item.style,
+        fontWeight: weight,
+        fontStyle: style,
     };
 }
+
+let previewStylesheetEl = null;
+
+onBeforeMount(() => {
+    previewStylesheetEl = document.querySelector(`#yabe-webfont-preview-${props.item.id}`);
+    if (!previewStylesheetEl) {
+        previewStylesheetEl = document.createElement('style');
+        previewStylesheetEl.setAttribute('id', `yabe-webfont-preview-${props.item.id}`);
+        document.head.appendChild(previewStylesheetEl);
+        previewStylesheetEl.innerHTML = cssPreviewStylesheet.value;
+    }
+});
+
+onBeforeUnmount(() => {
+    if (previewStylesheetEl) {
+        document.head.removeChild(previewStylesheetEl);
+    }
+});
 </script>
 
 <style scoped>

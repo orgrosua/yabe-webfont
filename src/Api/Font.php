@@ -19,6 +19,11 @@ use WP_REST_Server;
 use wpdb;
 use Yabe\Webfont\Utils\Common;
 
+use function current_user_can;
+use function sanitize_text_field;
+use function wp_get_attachment_url;
+use function wp_verify_nonce;
+
 class Font extends AbstractApi implements ApiInterface
 {
     public function get_prefix(): string
@@ -84,6 +89,17 @@ class Font extends AbstractApi implements ApiInterface
         return wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 
+    private function attach_font_files(array $font_faces): array
+    {
+        foreach ($font_faces as $i => $font_face) {
+            foreach ($font_face->files as $j => $file) {
+                $font_faces[$i]->files[$j]->attachment_url = wp_get_attachment_url($file->attachment_id);
+            }
+        }
+
+        return $font_faces;
+    }
+
     public function index(WP_REST_Request $request): WP_REST_Response
     {
         /** @var wpdb $wpdb */
@@ -128,7 +144,8 @@ class Font extends AbstractApi implements ApiInterface
                 'slug' => $row->slug,
                 'family' => $row->family,
                 'metadata' => json_decode($row->metadata),
-                'files' => json_decode($row->files),
+                'font_faces' => json_decode($row->font_faces),
+                'font_faces' => $this->attach_font_files(json_decode($row->font_faces)),
                 'status' => (bool) $row->status,
                 'created_at' => $row->created_at,
                 'updated_at' => $row->updated_at,
@@ -188,16 +205,16 @@ class Font extends AbstractApi implements ApiInterface
             'display' => sanitize_text_field($payload['display']),
             'preload' => (bool) $payload['preload'],
         ]);
-        $files = json_encode($payload['font_faces']);
+        $font_faces = json_encode($payload['font_faces']);
 
         $sql = "
             INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
-            (type, title, slug, family, status, metadata, files, created_at)
+            (type, title, slug, family, status, metadata, font_faces, created_at)
             VALUES
             (%s, %s, %s, %s, %d, %s, %s, %s)
         ";
 
-        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, $metadata, $files, current_time('mysql'));
+        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, $metadata, $font_faces, current_time('mysql'));
 
         $wpdb->query($sql);
 

@@ -32,7 +32,7 @@ final class Version20221121114557 extends AbstractMigration
             `slug` VARCHAR(255) NOT NULL,
             `family` VARCHAR(255),
             `metadata` TEXT,
-            `files` TEXT,
+            `font_faces` TEXT,
             `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             `deleted_at` DATETIME DEFAULT NULL,
