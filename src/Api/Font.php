@@ -39,7 +39,7 @@ class Font extends AbstractApi implements ApiInterface
             [
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => [$this, 'index'],
-                // 'permission_callback' => [$this, 'permission_callback'],
+                'permission_callback' => [$this, 'permission_callback'],
             ]
         );
 
@@ -132,8 +132,6 @@ class Font extends AbstractApi implements ApiInterface
             LIMIT {$per_page} OFFSET {$offset}
         ";
 
-        $sql = $wpdb->prepare($sql, $where_clause);
-
         $result = $wpdb->get_results($sql);
 
         foreach ($result as $row) {
@@ -185,7 +183,10 @@ class Font extends AbstractApi implements ApiInterface
                 'total_deleted' => $total_deleted,
                 'total_exists' => $total_exists,
             ],
-        ], 200, []);
+        ], 200, [
+            'X-WP-Total' => $total_filtered,
+            'X-WP-TotalPages' => $total_pages,
+        ]);
     }
 
     public function store(WP_REST_Request $request): WP_REST_Response

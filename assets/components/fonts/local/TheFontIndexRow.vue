@@ -11,10 +11,10 @@
             </td>
         </tr>
         <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': !item.status }">
-            <th scope="row" :class="{ 'tw-pl-1.5': !item.status }" class="align-middle tw-py-2 ywf-check-column">
+            <th scope="row" :class="{ 'tw-pl-1.5': !item.status }" class="tw-align-middle tw-py-2 ywf-check-column">
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
-            <td width="25%" class="align-middle">
+            <td width="25%" class="tw-align-middle">
                 <strong>
                     {{ item.title }}
                 </strong>

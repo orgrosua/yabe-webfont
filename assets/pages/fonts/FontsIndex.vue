@@ -73,7 +73,7 @@
         </tbody>
         <tbody v-else-if="getBusyHasTask('fonts.index:fetch-items')">
             <tr v-for="skeleton in meta.skeleton" class="inactive tw-animate-pulse">
-                <th scope="row" class="align-middle tw-py-2 ywf-check-column">
+                <th scope="row" class="tw-align-middle tw-py-2 ywf-check-column">
                     <input type="checkbox" value="0" disabled />
                 </th>
                 <td width="25%">
