@@ -328,7 +328,7 @@ function doUpdateStatus(item, status = null) {
         return;
     }
 
-    busy.add('fonts.updateStatus');
+    busy.add('fonts.index:update-status');
     item.isUpdatingStatus = true;
 
     api
@@ -350,13 +350,13 @@ function doUpdateStatus(item, status = null) {
         })
         .finally(() => {
             item.isUpdatingStatus = false;
-            busy.remove('fonts.updateStatus');
+            busy.remove('fonts.index:update-status');
         });
 }
 
 function doDelete(item) {
     item.isDeleting = true;
-    busy.add('fonts.delete');
+    busy.add('fonts.index:delete');
 
     api
         .request({
@@ -371,12 +371,12 @@ function doDelete(item) {
         })
         .finally(() => {
             item.isDeleting = false;
-            busy.remove('fonts.delete');
+            busy.remove('fonts.index:delete');
         });
 }
 
 function doRestore(item) {
-    busy.add('fonts.restore');
+    busy.add('fonts.index:restore');
     item.isRestoring = true;
 
     api
@@ -392,7 +392,7 @@ function doRestore(item) {
         })
         .finally(() => {
             item.isRestoring = false;
-            busy.remove('fonts.restore');
+            busy.remove('fonts.index:restore');
         });
 }
 

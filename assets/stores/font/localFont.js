@@ -29,7 +29,7 @@ export const useLocalFontStore = defineStore('localFont', {
         ]
     }),
     actions: {
-        addFontFace() {
+        add() {
             this.fontFaces.unshift({
                 id: nanoid(10),
                 weight: 400,
@@ -41,8 +41,11 @@ export const useLocalFontStore = defineStore('localFont', {
                 files: [],
             });
         },
-        deleteFontFace(id) {
+        delete(id) {
             this.fontFaces = this.fontFaces.filter((fontFace) => fontFace.id !== id);
         },
+        reset() {
+            this.fontFaces = [];
+        }
     },
 });

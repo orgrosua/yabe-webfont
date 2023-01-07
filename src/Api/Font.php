@@ -55,16 +55,6 @@ class Font extends AbstractApi implements ApiInterface
 
         register_rest_route(
             self::API_NAMESPACE,
-            $this->get_prefix() . '/show/(?P<id>\d+)',
-            [
-                'methods' => WP_REST_Server::READABLE,
-                'callback' => [$this, 'show'],
-                'permission_callback' => [$this, 'permission_callback'],
-            ]
-        );
-
-        register_rest_route(
-            self::API_NAMESPACE,
             $this->get_prefix() . '/update-status/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
@@ -97,6 +87,16 @@ class Font extends AbstractApi implements ApiInterface
             [
                 'methods' => WP_REST_Server::CREATABLE,
                 'callback' => [$this, 'restore'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/detail/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => [$this, 'detail'],
                 'permission_callback' => [$this, 'permission_callback'],
             ]
         );
@@ -207,7 +207,7 @@ class Font extends AbstractApi implements ApiInterface
         ]);
     }
 
-    public function show(WP_REST_Request $request): WP_REST_Response
+    public function detail(WP_REST_Request $request): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;

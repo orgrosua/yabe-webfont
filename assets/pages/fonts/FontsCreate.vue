@@ -2,7 +2,7 @@
     <span class="tw-mr-2 tw-text-2xl">» {{ __('New', 'yabe-webfont') }} </span>
 
     <div id="poststuff">
-        <form id="post-body" method="post" @submit="sendForm" action="/fonts/store" class="metabox-holder columns-2">
+        <form id="post-body" @submit="sendForm" class="metabox-holder columns-2">
             <div id="post-body-content">
                 <div id="titlediv">
                     <div id="titlewrap">
@@ -114,7 +114,7 @@
                                                         </span>
                                                     </Switch>
                                                     <SwitchLabel as="span" :class="[status ? 'tw-text-black' : 'tw-text-gray-500']" class="tw-ml-2 tw-font-medium tw-cursor-pointer">
-                                                        {{ status ? 'published' : 'draft' }}
+                                                        {{ status? 'published': 'draft' }}
                                                     </SwitchLabel>
                                                 </SwitchGroup>
                                             </div>
@@ -209,7 +209,7 @@ const store = useLocalFontStore();
 const { fontFaces } = storeToRefs(store);
 
 const createNewFontFace = () => {
-    store.addFontFace();
+    store.add();
 };
 
 const preview = reactive({
@@ -337,7 +337,7 @@ function resetForm() {
     selector.value = '';
     display.value = 'auto';
     preload.value = false;
-    fontFaces.value = [];
+    store.reset();
     createNewFontFace();
 
     preview.text = `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`;
@@ -360,8 +360,8 @@ function sendForm(e) {
 
     let promise = api
         .request({
-            method: e.target.getAttribute('method'),
-            url: e.target.getAttribute('action'),
+            method: 'POST',
+            url: '/fonts/store',
             data: {
                 title: title.value,
                 family: family.value,

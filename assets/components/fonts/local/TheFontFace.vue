@@ -185,7 +185,7 @@ function deleteFontFace() {
         return;
     }
 
-    store.deleteFontFace(props.item.id);
+    store.delete(props.item.id);
 }
 
 function deleteFontFile(uid) {

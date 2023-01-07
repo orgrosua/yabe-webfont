@@ -5,6 +5,7 @@ import NotFound from './pages/NotFound.vue';
 import FontsBase from './pages/fonts/FontsBase.vue';
 import FontsIndex from './pages/fonts/FontsIndex.vue';
 import FontsCreate from './pages/fonts/FontsCreate.vue';
+import FontsEdit from './pages/fonts/FontsEdit.vue';
 
 const router = createRouter({
     history: createWebHistory(`${yabeWebfont.web_history}#/`),
@@ -34,11 +35,11 @@ const router = createRouter({
                     ]
                 },
                 {
-                    path: 'edit/:id',
+                    path: 'edit/:id(\\d+)',
                     name: 'fonts.edit',
                     // component: FontsEdit,
                     children: [
-                        { path: 'custom', name: 'fonts.edit.custom', component: NotFound },
+                        { path: 'custom', name: 'fonts.edit.custom', component: FontsEdit },
                         { path: 'google-fonts', name: 'fonts.edit.google-fonts', component: NotFound },
                     ]
                 }
@@ -49,7 +50,7 @@ const router = createRouter({
             name: 'settings',
             component: NotFound,
         },
-        { path: '/:notFound(.*)', component: NotFound },
+        { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ]
 });
 
