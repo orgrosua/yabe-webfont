@@ -11,11 +11,33 @@
             </td>
         </tr>
         <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': !item.status }" class="tw-group">
-            <th scope="row" class="tw-align-middle tw-pl-1.5 tw-py-2 ywf-check-column">
+            <th scope="row" :class="{ 'tw-pl-1.5': !item.status }" class="tw-align-middle tw-py-2 ywf-check-column">
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
+            <td v-if="item.deleted_at == null" width="1%" class="manage-column tw-align-middle">
+                <Switch :checked="item.status" @click="$emit('updateStatus')" @keyup="handleKeyUp" :class="[item.status ? 'tw-bg-sky-600' : 'tw-opacity-50 tw-bg-gray-200']" class="tw-relative tw-inline-flex tw-p-0 tw-h-6 tw-w-11 tw-flex-shrink-0 tw-cursor-pointer tw-rounded-full tw-border-2 tw-border-transparent tw-transition-colors tw-duration-200 tw-ease-in-out focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-sky-500 focus:tw-ring-offset-2">
+                    <span :class="[item.status ? 'tw-translate-x-5' : 'tw-translate-x-0']" class="tw-pointer-events-none tw-relative tw-inline-block tw-h-5 tw-w-5 tw-transform tw-rounded-full tw-bg-white tw-shadow tw-ring-0 tw-transition tw-duration-200 tw-ease-in-out">
+                        <span aria-hidden="true" :class="[item.status ? 'tw-opacity-0 tw-ease-out tw-duration-100' : 'tw-opacity-100 tw-ease-in tw-duration-200']" class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-transition-opacity">
+                            <svg v-if="!item.isUpdatingStatus" class="tw-h-3 tw-w-3 tw-text-gray-400" fill="none" viewBox="0 0 12 12">
+                                <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="tw-animate-spin tw-h-3 tw-w-3 tw-text-gray-400" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z" />
+                            </svg>
+                        </span>
+                        <span aria-hidden="true" :class="[item.status ? 'tw-opacity-100 tw-ease-in tw-duration-200' : 'tw-opacity-0 tw-ease-out tw-duration-100']" class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-transition-opacity">
+                            <svg v-if="!item.isUpdatingStatus" class="tw-h-3 tw-w-3 tw-text-sky-600" fill="currentColor" viewBox="0 0 12 12">
+                                <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="tw-animate-spin tw-h-3 tw-w-3 tw-text-sky-600" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z" />
+                            </svg>
+                        </span>
+                    </span>
+                </Switch>
+            </td>
             <td width="20%" class="tw-align-middle">
-                <router-link :to="{ name: 'fonts.edit.custom', params: { id: item.id } }" :class="{
+                <router-link :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
                     'tw-font-semibold': item.status
                 }">
                     {{ item.title }}
@@ -23,16 +45,7 @@
                 </router-link>
                 <div class="row-actions visible">
                     <template v-if="item.deleted_at == null">
-                        <router-link :to="{ name: 'fonts.edit.custom', params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
-                        |
-                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-yellow-700 tw-cursor-pointer hover:tw-text-yellow-800" @click="$emit('updateStatus')">
-                            <template v-if="item.status">
-                                {{ item.isUpdatingStatus ? 'Deactivating...' : 'Deactivate' }}
-                            </template>
-                            <template v-else>
-                                {{ item.isUpdatingStatus ? 'Activating...' : 'Activate' }}
-                            </template>
-                        </a>
+                        <router-link :to="{ name: getRouteName(), params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
                         |
                         <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
                             {{ item.isDeleting ? 'Deleting...' : 'Trash' }}
@@ -74,6 +87,7 @@ import { useBusy } from '../../../stores/busy';
 import { useApi } from '../../../library/api';
 import { useNotifier } from '../../../library/notifier';
 
+import { Switch } from '@headlessui/vue';
 import ContentEditable from 'vue-contenteditable';
 
 const busy = useBusy();
@@ -94,6 +108,16 @@ const props = defineProps({
 const emit = defineEmits(['delete', 'restore', 'updateStatus']);
 
 const selectedItems = inject('selectedItems');
+
+function getRouteName() {
+    switch (props.item.type) {
+        case 'google-fonts':
+            return 'fonts.edit.google-fonts';
+        case 'custom':
+        default:
+            return 'fonts.edit.custom';
+    }
+}
 
 function fontFormatMap(ext) {
     switch (ext) {
@@ -231,6 +255,13 @@ onBeforeUnmount(() => {
         document.head.removeChild(previewStylesheetEl);
     }
 });
+
+function handleKeyUp(e) {
+    if (e.code === 'Space') {
+        e.preventDefault();
+        emit('updateStatus');
+    }
+}
 </script>
 
 <style scoped>

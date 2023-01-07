@@ -70,6 +70,14 @@ class Font extends AbstractApi implements ApiInterface
                 'methods' => WP_REST_Server::EDITABLE,
                 'callback' => [$this, 'update_status'],
                 'permission_callback' => [$this, 'permission_callback'],
+                'args' => [
+                    'status' => [
+                        'required' => true,
+                        'validate_callback' => function ($param) {
+                            return is_bool($param);
+                        },
+                    ],
+                ],
             ]
         );
 
@@ -197,6 +205,49 @@ class Font extends AbstractApi implements ApiInterface
             'X-WP-Total' => $total_filtered,
             'X-WP-TotalPages' => $total_pages,
         ]);
+    }
+
+    public function show(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $request->get_url_params();
+        $payload = $request->get_json_params();
+
+        $id = (int) $url_params['id'];
+        $status = (bool) $payload['status'];
+
+        $sql = "
+            SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $row = $wpdb->get_row($sql);
+
+        if (!$row) {
+            return new WP_REST_Response([
+                'message' => 'Font not found',
+            ], 404, []);
+        }
+
+        // TODO:
+        return new WP_REST_Response([
+            'id' => $row->id,
+            'type' => $row->type,
+            'title' => $row->title,
+            'slug' => $row->slug,
+            'family' => $row->family,
+            'metadata' => json_decode($row->metadata),
+            'font_faces' => json_decode($row->font_faces),
+            'font_faces' => $this->attach_font_files(json_decode($row->font_faces)),
+            'status' => (bool) $row->status,
+            'created_at' => strtotime($row->created_at),
+            'updated_at' => strtotime($row->updated_at),
+            'deleted_at' => $row->deleted_at ? strtotime($row->deleted_at) : null,
+        ], 200, []);
     }
 
     public function store(WP_REST_Request $request): WP_REST_Response
