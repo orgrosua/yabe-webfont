@@ -182,7 +182,7 @@ import { __ } from '@wordpress/i18n';
 import { useApi } from '../../library/api';
 import { useNotifier } from '../../library/notifier';
 import { useBusy } from '../../stores/busy';
-import { useLocalFontStore } from '../../stores/font/localFont.js';
+import { useLocalFontStore } from '../../stores/font/localFont';
 import { useWordpressNotice } from '../../stores/wordpressNotice';
 
 import draggable from 'zhyswan-vuedraggable';

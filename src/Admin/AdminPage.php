@@ -75,6 +75,9 @@ class AdminPage
                 'namespace' => YABE_WEBFONT_REST_NAMESPACE,
                 'url' => esc_url_raw(rest_url(YABE_WEBFONT_REST_NAMESPACE)),
             ],
+            'assets' => [
+                'url' => plugin_dir_url(YABE_WEBFONT_FILE),
+            ],
             // 'postUrl' => admin_url('post.php'),
             // 'hostedWakufont' => Font::hosted_wakufont(),
         ]);

@@ -169,11 +169,11 @@ import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
-import { useApi } from '../../library/api.js';
+import { useApi } from '../../library/api';
 import { useBusy } from '../../stores/busy';
-import { useNotifier } from '../../library/notifier.js';
-import { useLocalFontStore } from '../../stores/font/localFont.js';
-import { useWordpressNotice } from '../../stores/wordpressNotice.js';
+import { useNotifier } from '../../library/notifier';
+import { useLocalFontStore } from '../../stores/font/localFont';
+import { useWordpressNotice } from '../../stores/wordpressNotice';
 
 import draggable from 'zhyswan-vuedraggable';
 import TheFontFace from '../../components/fonts/local/TheFontFace.vue';

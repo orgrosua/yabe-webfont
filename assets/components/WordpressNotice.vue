@@ -11,11 +11,25 @@
 
 <script setup>
 import { storeToRefs } from 'pinia';
+import { assetPath } from '../library/assetsHelper';
+import { useWordpressNotice } from '../stores/wordpressNotice';
 
-import { useWordpressNotice } from '../stores/wordpressNotice.js';
+import xmarkLightSvg from '../images/icons/xmark-light.svg';
+import circleCheckSolidSvg from '../images/icons/circle-check-solid.svg';
+import circleInfoSolidSvg from '../images/icons/circle-info-solid.svg';
+import triangleExclamationSolidSvg from '../images/icons/triangle-exclamation-solid.svg';
+import hexagonExclamationSolidSvg from '../images/icons/hexagon-exclamation-solid.svg';
 
 const store = useWordpressNotice();
 const { notices } = storeToRefs(store);
+
+const icon = {
+    xmarkLight: `url('${assetPath(xmarkLightSvg)}')`,
+    circleCheckSolid: `url('${assetPath(circleCheckSolidSvg)}')`,
+    circleInfoSolid: `url('${assetPath(circleInfoSolidSvg)}')`,
+    triangleExclamationSolid: `url('${assetPath(triangleExclamationSolidSvg)}')`,
+    hexagonExclamationSolid: `url('${assetPath(hexagonExclamationSolidSvg)}')`,
+};
 </script>
 
 <style scoped>
@@ -140,7 +154,7 @@ const { notices } = storeToRefs(store);
                 mask-size: contain;
                 mask-repeat: no-repeat;
                 mask-position: center;
-                mask-image: url('../images/icons/xmark-light.svg');
+                mask-image: v-bind('icon.xmarkLight');
             }
 
             &:hover::before {
@@ -165,7 +179,7 @@ const { notices } = storeToRefs(store);
             mask-size: contain;
             mask-repeat: no-repeat;
             mask-position: center;
-            mask-image: url('../images/icons/circle-info-solid.svg');
+            mask-image: v-bind('icon.circleInfoSolid');
         }
 
         &:after {
@@ -199,7 +213,7 @@ const { notices } = storeToRefs(store);
         border-color: #B6DEB9;
 
         &:before {
-            mask-image: url('../images/icons/circle-check-solid.svg');
+            mask-image: v-bind('icon.circleCheckSolid');
         }
 
         &:after {
@@ -214,7 +228,7 @@ const { notices } = storeToRefs(store);
         border-color: #e9c45d;
 
         &:before {
-            mask-image: url('../images/icons/triangle-exclamation-solid.svg');
+            mask-image: v-bind('icon.triangleExclamationSolid');
         }
 
         &:after {
@@ -229,7 +243,7 @@ const { notices } = storeToRefs(store);
         border-color: #F1B6B3;
 
         &:before {
-            mask-image: url('../images/icons/hexagon-exclamation-solid.svg');
+            mask-image: v-bind('icon.hexagonExclamationSolid');
         }
 
         &:after {

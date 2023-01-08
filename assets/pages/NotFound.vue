@@ -1,9 +1,6 @@
 <template>
     <div class="">
         <main class="tw-mx-auto tw-max-w-7xl tw-px-6 lg:tw-px-8">
-            <!-- <div class="tw-flex-shrink-0 tw-pt-16">
-                <img class="tw-mx-auto tw-h-12 tw-w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=sky&shade=600" alt="Your Company">
-            </div> -->
             <div class="tw-mx-auto tw-max-w-xl tw-py-16 sm:tw-py-24">
                 <div class="tw-text-center">
                     <p class="tw-text-base tw-font-semibold tw-text-sky-600">404</p>

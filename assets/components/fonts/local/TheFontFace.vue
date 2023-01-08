@@ -103,7 +103,7 @@ import { reactive, ref } from 'vue';
 import { nanoid } from 'nanoid';
 import prettyBytes from 'pretty-bytes';
 
-import { useLocalFontStore } from '../../../stores/font/localFont.js';
+import { useLocalFontStore } from '../../../stores/font/localFont';
 
 import 'vue-select/dist/vue-select.css';
 import VueSelect from 'vue-select';
