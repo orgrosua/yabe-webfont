@@ -100,6 +100,16 @@ class Font extends AbstractApi implements ApiInterface
                 'permission_callback' => [$this, 'permission_callback'],
             ]
         );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/update/(?P<id>\d+)',
+            [
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update'],
+                'permission_callback' => [$this, 'permission_callback'],
+            ]
+        );
     }
 
     public function permission_callback(WP_REST_Request $request): bool
@@ -213,10 +223,8 @@ class Font extends AbstractApi implements ApiInterface
         global $wpdb;
 
         $url_params = $request->get_url_params();
-        $payload = $request->get_json_params();
 
         $id = (int) $url_params['id'];
-        $status = (bool) $payload['status'];
 
         $sql = "
             SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
@@ -233,7 +241,6 @@ class Font extends AbstractApi implements ApiInterface
             ], 404, []);
         }
 
-        // TODO:
         return new WP_REST_Response([
             'id' => $row->id,
             'type' => $row->type,
@@ -262,25 +269,17 @@ class Font extends AbstractApi implements ApiInterface
         $slug = Common::random_slug(10);
         $family = sanitize_text_field($payload['family']);
         $status = (bool) $payload['status'];
-        $metadata = [
-            'selector' => $payload['selector'],
-            'display' => sanitize_text_field($payload['display']),
-            'preload' => (bool) $payload['preload'],
-        ];
+        $metadata = $payload['metadata'];
         $font_faces = $payload['font_faces'];
-
-        if (array_key_exists('metadata', $payload)) {
-            $metadata = array_merge($metadata, $payload['metadata']);
-        }
 
         $sql = "
             INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
-            (type, title, slug, family, status, metadata, font_faces, created_at)
+            (type, title, slug, family, status, metadata, font_faces)
             VALUES
-            (%s, %s, %s, %s, %d, %s, %s, %s)
+            (%s, %s, %s, %s, %d, %s, %s)
         ";
 
-        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, json_encode($metadata), json_encode($font_faces), current_time('mysql'));
+        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, json_encode($metadata), json_encode($font_faces));
 
         $wpdb->query($sql);
 
@@ -408,6 +407,56 @@ class Font extends AbstractApi implements ApiInterface
         ";
 
         $sql = $wpdb->prepare($sql, $id);
+
+        $wpdb->query($sql);
+
+        return new WP_REST_Response([
+            'id' => $id,
+        ], 200, []);
+    }
+
+    public function update(WP_REST_Request $request): WP_REST_Response
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $request->get_url_params();
+        $payload = $request->get_json_params();
+
+        $id = (int) $url_params['id'];
+
+        $sql = "
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $count = (int) $wpdb->get_var($sql);
+
+        if ($count === 0) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        $title = sanitize_text_field($payload['title']);
+        $family = sanitize_text_field($payload['family']);
+        $status = (bool) $payload['status'];
+        $metadata = $payload['metadata'];
+        $font_faces = $payload['font_faces'];
+
+        $sql = "
+            UPDATE {$wpdb->prefix}yabe_webfont_fonts
+            SET title = %s,
+                family = %s,
+                status = %d,
+                metadata = %s,
+                font_faces = %s
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $title, $family, $status, json_encode($metadata), json_encode($font_faces), $id);
 
         $wpdb->query($sql);
 

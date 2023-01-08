@@ -124,13 +124,9 @@
                                 </div>
 
                                 <div id="major-publishing-actions">
-                                    <!-- <div id="delete-action">
-                                        <a class="submitdelete deletion tw-underline">Delete</a>
-                                    </div> -->
-
                                     <div id="publishing-action">
                                         <span class="spinner"></span>
-                                        <button type="submit" name="save" id="save" class="button button-primary button-large" value="save">Save</button>
+                                        <button type="submit" name="save" id="save" :disabled="busy.isBusy" class="button button-primary button-large" value="save">Save</button>
                                     </div>
                                     <div class="clear"></div>
                                 </div>
@@ -173,7 +169,9 @@ import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
-
+import { useApi } from '../../library/api.js';
+import { useBusy } from '../../stores/busy';
+import { useNotifier } from '../../library/notifier.js';
 import { useLocalFontStore } from '../../stores/font/localFont.js';
 import { useWordpressNotice } from '../../stores/wordpressNotice.js';
 
@@ -181,11 +179,14 @@ import draggable from 'zhyswan-vuedraggable';
 import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
-import { useApi } from '../../library/api.js';
-import { useNotifier } from '../../library/notifier.js';
-
 const api = useApi();
 const router = useRouter();
+const notifier = useNotifier();
+const busy = useBusy();
+const wordpressNotice = useWordpressNotice();
+const store = useLocalFontStore();
+
+const { fontFaces } = storeToRefs(store);
 
 const title = ref('');
 const family = ref('');
@@ -199,14 +200,6 @@ watch(family, (newFamily, oldFamily) => {
         title.value = newFamily;
     }
 });
-
-const notifier = useNotifier();
-
-const wordpressNotice = useWordpressNotice();
-
-const store = useLocalFontStore();
-
-const { fontFaces } = storeToRefs(store);
 
 const createNewFontFace = () => {
     store.add();
@@ -365,11 +358,13 @@ function sendForm(e) {
             data: {
                 title: title.value,
                 family: family.value,
-                selector: selector.value,
-                display: display.value,
-                font_faces: fontFaces.value,
-                preload: preload.value,
                 status: status.value,
+                font_faces: fontFaces.value,
+                metadata: {
+                    selector: selector.value,
+                    display: display.value,
+                    preload: preload.value,
+                }
             },
         })
         .then(response => {
@@ -390,7 +385,7 @@ function sendForm(e) {
 
     notifier.async(
         promise,
-        'Font saved successfully.',
+        'Font stored successfully.',
         undefined,
         'Storing font...'
     );

@@ -15,7 +15,7 @@
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
             <td v-if="item.deleted_at == null" width="1%" class="manage-column tw-align-middle">
-                <Switch :checked="item.status" @click="$emit('updateStatus')" @keyup="handleKeyUp" :class="[item.status ? 'tw-bg-sky-600' : 'tw-opacity-50 tw-bg-gray-200']" class="tw-relative tw-inline-flex tw-p-0 tw-h-6 tw-w-11 tw-flex-shrink-0 tw-cursor-pointer tw-rounded-full tw-border-2 tw-border-transparent tw-transition-colors tw-duration-200 tw-ease-in-out focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-sky-500 focus:tw-ring-offset-2">
+                <Switch :aria-disabled="busy.isBusy" :checked="item.status" @click="$emit('updateStatus')" @keyup="handleKeyUp" :class="[item.status ? 'tw-bg-sky-600' : 'tw-opacity-50 tw-bg-gray-200']" class="tw-relative tw-inline-flex tw-p-0 tw-h-6 tw-w-11 tw-flex-shrink-0 tw-cursor-pointer tw-rounded-full tw-border-2 tw-border-transparent tw-transition-colors tw-duration-200 tw-ease-in-out focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-sky-500 focus:tw-ring-offset-2">
                     <span :class="[item.status ? 'tw-translate-x-5' : 'tw-translate-x-0']" class="tw-pointer-events-none tw-relative tw-inline-block tw-h-5 tw-w-5 tw-transform tw-rounded-full tw-bg-white tw-shadow tw-ring-0 tw-transition tw-duration-200 tw-ease-in-out">
                         <span aria-hidden="true" :class="[item.status ? 'tw-opacity-0 tw-ease-out tw-duration-100' : 'tw-opacity-100 tw-ease-in tw-duration-200']" class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-transition-opacity">
                             <svg v-if="!item.isUpdatingStatus" class="tw-h-3 tw-w-3 tw-text-gray-400" fill="none" viewBox="0 0 12 12">
@@ -37,12 +37,17 @@
                 </Switch>
             </td>
             <td width="20%" class="tw-align-middle">
-                <router-link :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
+                <router-link v-if="item.deleted_at == null" :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
                     'tw-font-semibold': item.status
                 }">
                     {{ item.title }}
                     <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal">ID: {{ item.id }}</span>
                 </router-link>
+                <template v-else>
+                    {{ item.title }}
+                    <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal">ID: {{ item.id }}</span>
+                </template>
+
                 <div class="row-actions visible">
                     <template v-if="item.deleted_at == null">
                         <router-link :to="{ name: getRouteName(), params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>

@@ -13,10 +13,14 @@ export const useWordpressNotice = defineStore('wordpressNotice', {
          * @param {object} notice.options
          */
         add(notice) {
+            let id = nanoid(10);
             this.notices.unshift({
-                id: nanoid(10),
+                id,
+                timestamp: Date.now(),
                 ...notice,
             });
+
+            return id;
         },
         remove(id) {
             this.notices = this.notices.filter((notice) => notice.id !== id);
