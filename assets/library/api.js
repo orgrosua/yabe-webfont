@@ -5,6 +5,7 @@ export function useApi(config = {}) {
         baseURL: yabeWebfont.rest_api.url,
         headers: {
             'content-type': 'application/json',
+            'accept': 'application/json',
             'X-WP-Nonce': yabeWebfont.rest_api.nonce,
         },
     }, config));

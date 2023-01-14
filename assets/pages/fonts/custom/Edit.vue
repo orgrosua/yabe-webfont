@@ -63,13 +63,13 @@
 
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
-                                <draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{ name: 'font-face' }" ghost-class="dragged-placeholder" animation="200">
+                                <Draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{ name: 'font-face' }" ghost-class="dragged-placeholder" animation="200">
                                     <template #item="{ element }">
                                         <div>
                                             <TheFontFace :item="element" :preview="preview" :font-family="family" />
                                         </div>
                                     </template>
-                                </draggable>
+                                </Draggable>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
 
             <!-- /post-body-content -->
             <div id="postbox-container-1" class="postbox-container">
-                <div id="side-sortables" class="meta-box-sortables ui-sortable" style="">
+                <div>
                     <div id="submitdiv" class="postbox ">
                         <div class="postbox-header">
                             <h2 class="">Publish</h2>
@@ -131,7 +131,6 @@
                                     </div>
 
                                     <div id="publishing-action">
-                                        <span class="spinner"></span>
                                         <button type="submit" name="save" id="save" :disabled="busy.isBusy" class="button button-primary button-large" value="save">Save</button>
                                     </div>
                                     <div class="clear"></div>
@@ -179,14 +178,13 @@ import isEqual from 'lodash-es/isEqual';
 import cloneDeep from 'lodash-es/cloneDeep';
 import ago from 's-ago';
 import { __ } from '@wordpress/i18n';
-import { useApi } from '../../library/api';
-import { useNotifier } from '../../library/notifier';
-import { useBusy } from '../../stores/busy';
-import { useLocalFontStore } from '../../stores/font/localFont';
-import { useWordpressNotice } from '../../stores/wordpressNotice';
+import { useApi } from '../../../library/api';
+import { useNotifier } from '../../../library/notifier';
+import { useBusy } from '../../../stores/busy';
+import { useLocalFontStore } from '../../../stores/font/localFont';
+import { useWordpressNotice } from '../../../stores/wordpressNotice';
 
-import draggable from 'zhyswan-vuedraggable';
-import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
+import TheFontFace from '../../../components/fonts/local/TheFontFace.vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
 const route = useRoute();
@@ -405,6 +403,7 @@ function sendForm(e) {
 
 onBeforeMount(async () => {
     busy.add('fonts.edit.custom:fetch-item');
+    
     let promise = api
         .request({
             method: 'GET',

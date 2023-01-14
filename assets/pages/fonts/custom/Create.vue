@@ -63,13 +63,13 @@
 
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
-                                <draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{ name: 'font-face' }" ghost-class="dragged-placeholder" animation="200">
+                                <Draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{ name: 'font-face' }" ghost-class="dragged-placeholder" animation="200">
                                     <template #item="{ element }">
                                         <div>
                                             <TheFontFace :item="element" :preview="preview" :font-family="family" />
                                         </div>
                                     </template>
-                                </draggable>
+                                </Draggable>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
 
             <!-- /post-body-content -->
             <div id="postbox-container-1" class="postbox-container">
-                <div id="side-sortables" class="meta-box-sortables ui-sortable" style="">
+                <div>
                     <div id="submitdiv" class="postbox ">
                         <div class="postbox-header">
                             <h2 class="">Publish</h2>
@@ -125,7 +125,6 @@
 
                                 <div id="major-publishing-actions">
                                     <div id="publishing-action">
-                                        <span class="spinner"></span>
                                         <button type="submit" name="save" id="save" :disabled="busy.isBusy" class="button button-primary button-large" value="save">Save</button>
                                     </div>
                                     <div class="clear"></div>
@@ -143,22 +142,6 @@
                         <highlightjs language="css" :code="cssPreviewStylesheet" />
                     </div>
                 </Transition>
-
-                <!-- <div>
-                    <table id="post-status-info" class="tw-border tw-border-solid tw-border-[#c3c4c7]">
-                        <tbody>
-                            <tr>
-                                <td class="tw-pl-2">
-                                    Word count: <span class="word-count">16</span> </td>
-                                <td class="autosave-info">
-                                    <span class="autosave-message">&nbsp;</span>
-                                    <span>Last edited on November 11, 2022 at 4:40 pm</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> -->
-
             </div>
         </form>
     </div>
@@ -169,14 +152,13 @@ import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
-import { useApi } from '../../library/api';
-import { useBusy } from '../../stores/busy';
-import { useNotifier } from '../../library/notifier';
-import { useLocalFontStore } from '../../stores/font/localFont';
-import { useWordpressNotice } from '../../stores/wordpressNotice';
+import { useApi } from '../../../library/api';
+import { useBusy } from '../../../stores/busy';
+import { useNotifier } from '../../../library/notifier';
+import { useLocalFontStore } from '../../../stores/font/localFont';
+import { useWordpressNotice } from '../../../stores/wordpressNotice';
 
-import draggable from 'zhyswan-vuedraggable';
-import TheFontFace from '../../components/fonts/local/TheFontFace.vue';
+import TheFontFace from '../../../components/fonts/local/TheFontFace.vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
 const api = useApi();
@@ -351,6 +333,8 @@ onBeforeMount(() => {
 function sendForm(e) {
     e.preventDefault();
 
+    busy.add('fonts.create.custom:send-form');
+
     let promise = api
         .request({
             method: 'POST',
@@ -381,6 +365,9 @@ function sendForm(e) {
             });
 
             resetForm();
+        })
+        .finally(() => {
+            busy.remove('fonts.create.custom:send-form');
         });
 
     notifier.async(
@@ -392,90 +379,7 @@ function sendForm(e) {
 }
 </script>
 
-<style>
-.v-select {
-    box-shadow: 0 0 0 transparent;
-    border-radius: 4px;
-    border: 1px solid #8c8f94;
-    background-color: #fff;
-    color: #2c3338;
-}
-
-.v-select.vs--open {
-    box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-    ;
-    --tw-ring-color: theme('colors.sky.600');
-}
-
-input[type=search].vs__search {
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    line-height: normal;
-    margin: 0;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    width: theme('width.full');
-    font-size: theme('fontSize.sm');
-}
-
-input[type=search].vs__search::placeholder {
-    color: #646970;
-}
-
-span.vs__selected {
-    font-size: theme('fontSize.sm');
-    margin: 0 2px;
-    width: theme('width.full');
-}
-
-.vs__dropdown-toggle {
-    border: none;
-    padding: 0;
-}
-
-.vs__dropdown-menu {
-    padding: 0;
-}
-
-.vs__selected-options {
-    flex-grow: 0;
-    flex-wrap: nowrap;
-}
-
-.vs__selected-options:has(>span.vs__selected) input[type=search].vs__search {
-    width: 1px;
-}
-
-.vs--single.vs--open .vs__selected,
-.vs--single.vs--loading .vs__selected {
-    position: initial;
-    opacity: .4
-}
-
-.vs__actions {
-    --vs-actions-padding: 0px 6px 0 3px;
-    padding-top: 0;
-}
-
-.vs__actions svg {
-    transform: scale(0.7);
-    fill: #7a7a7a;
-}
-
-.vs--open .vs__actions svg {
-    transform: rotate(180deg) scale(0.7);
-}
-
-.vs__clear {
-    display: none;
-}
-
-.vs__open-indicator {
-    position: absolute;
-    right: 4px;
-}
-
+<style lang="scss">
 
 /* Transition for <TheFontFace/> list */
 .font-face-list-move,

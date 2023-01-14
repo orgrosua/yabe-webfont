@@ -71,7 +71,7 @@
                     <div class="tw-flex tw-col-span-12 tw-flex-col tw-gap-1.5 tw-p-3">
                         <button type="button" @click="uploadFont" v-ripple class="button">Upload Fonts</button>
                     </div>
-                    <draggable v-model="item.files" tag="transition-group" item-key="attachment_id" :component-data="{
+                    <Draggable v-model="item.files" tag="transition-group" item-key="attachment_id" :component-data="{
                         name: 'font-file'
                     }" ghost-class="dragged-placeholder" animation="200">
                         <template #item="{ element }">
@@ -90,7 +90,7 @@
                                 </button>
                             </div>
                         </template>
-                    </draggable>
+                    </Draggable>
                 </div>
             </div>
         </div>
@@ -99,17 +99,13 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
-// import { storeToRefs } from 'pinia';
 import { nanoid } from 'nanoid';
 import prettyBytes from 'pretty-bytes';
 
 import { useLocalFontStore } from '../../../stores/font/localFont';
 
-import 'vue-select/dist/vue-select.css';
-import VueSelect from 'vue-select';
 import ContentEditable from 'vue-contenteditable';
 import TheTooltip from '../../../components/TheTooltip.vue';
-import draggable from 'zhyswan-vuedraggable';
 
 const props = defineProps({
     item: {

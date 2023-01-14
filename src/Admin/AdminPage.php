@@ -24,11 +24,6 @@ class AdminPage
         add_filter('upload_mimes', fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
 
         add_action('admin_menu', [$this, 'add_admin_menu']);
-
-        // \Yabe\Webfont\Utils\Notice::info('<p>info Plugin version: ' . Plugin::VERSION, 'version_info</p>');
-        // \Yabe\Webfont\Utils\Notice::success('success Plugin version: ' . Plugin::VERSION, 'version_success');
-        // \Yabe\Webfont\Utils\Notice::warning('warning Plugin version: ' . Plugin::VERSION, 'version_warning');
-        // \Yabe\Webfont\Utils\Notice::error('error Plugin version: ' . Plugin::VERSION, 'version_error');
     }
 
     public function add_admin_menu()
@@ -45,17 +40,18 @@ class AdminPage
         add_action('load-' . $hook, fn () => $this->init_hooks());
     }
 
-    public function render()
+    private function render()
     {
+        add_filter('admin_footer_text', fn ($text) => $this->admin_footer_text($text), 10001);
         echo '<div id="yabe-webfont-app" class=""></div>';
     }
 
-    public function init_hooks()
+    private function init_hooks()
     {
         add_action('admin_enqueue_scripts', fn () => $this->enqueue_scripts());
     }
 
-    public function enqueue_scripts()
+    private function enqueue_scripts()
     {
         wp_enqueue_media();
 
@@ -78,8 +74,16 @@ class AdminPage
             'assets' => [
                 'url' => plugin_dir_url(YABE_WEBFONT_FILE),
             ],
+            'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', defined('YABE_SELF_HOSTED_WAKUFONT') ? constant('YABE_SELF_HOSTED_WAKUFONT') : YABE_WEBFONT_HOSTED_WAKUFONT), '/'),
             // 'postUrl' => admin_url('post.php'),
-            // 'hostedWakufont' => Font::hosted_wakufont(),
         ]);
+    }
+
+    private function admin_footer_text($text)
+    {
+        return sprintf(
+            __('Thank you for using <b>Yabe Webfont</b>! Join us on the <a href="%s" target="_blank">Facebook Group</a>.', 'yabe-webfont'),
+            'https://l.suabahasa.dev/YkV8t'
+        );
     }
 }
