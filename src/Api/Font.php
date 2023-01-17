@@ -675,7 +675,10 @@ class Font extends AbstractApi implements ApiInterface
     {
         foreach ($font_faces as $i => $font_face) {
             foreach ($font_face->files as $j => $file) {
-                $font_faces[$i]->files[$j]->attachment_url = wp_get_attachment_url($file->attachment_id);
+                $attachment_url = wp_get_attachment_url($file->attachment_id);
+                if ($attachment_url) {
+                    $font_faces[$i]->files[$j]->attachment_url = $attachment_url;
+                }
             }
         }
 
