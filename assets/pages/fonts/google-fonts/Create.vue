@@ -261,6 +261,7 @@ import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from '
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
 import isEqual from 'lodash-es/isEqual';
+import uniq from 'lodash-es/uniq';
 import sortBy from 'lodash-es/sortBy';
 import { useApi } from '../../../library/api';
 import { useBusy } from '../../../stores/busy';
@@ -351,7 +352,7 @@ watch(format, (newValue, oldValue) => {
 });
 
 watch([subsets, family], ([newSubsets, newFamily, newVariable], [oldSubsets, oldFamily, oldVariable]) => {
-    if (isEqual(newSubsets, oldSubsets) && newFamily === oldFamily && newVariable === oldVariable) {
+    if (isEqual(newSubsets.sort(), oldSubsets.sort()) && newFamily === oldFamily && newVariable === oldVariable) {
         return;
     }
 
@@ -507,9 +508,9 @@ const cssFontFaceRule = computed(() => {
                         css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
                     }
 
-                    if (variable.value && fontFace.weight === 0) {
-                        css += `\tfont-stretch: 100%;\n`;
-                    }
+                    // if (variable.value && fontFace.weight === 0) {
+                    //     css += `\tfont-stretch: 100%;\n`;
+                    // }
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -541,9 +542,9 @@ const cssFontFaceRule = computed(() => {
                 css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
             }
 
-            if (variable.value && fontFace.weight === 0) {
-                css += `\tfont-stretch: 100%;\n`;
-            }
+            // if (variable.value && fontFace.weight === 0) {
+            //     css += `\tfont-stretch: 100%;\n`;
+            // }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -558,7 +559,7 @@ const cssFontFaceRule = computed(() => {
             let files = fontFiles.value.filter(
                 f => f.weight == fontFace.weight
                     && f.style === fontFace.style
-                    && isEqual(f.subsets, subsets.value)
+                    && isEqual(uniq(f.subsets).sort(), uniq(subsets.value).sort())
                     && format.value.includes(f.format)
             );
 
@@ -627,9 +628,9 @@ const cssFontFaceRuleFiltered = computed(() => {
                         css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
                     }
 
-                    if (variable.value && fontFace.weight === 0) {
-                        css += `\tfont-stretch: 100%;\n`;
-                    }
+                    // if (variable.value && fontFace.weight === 0) {
+                    //     css += `\tfont-stretch: 100%;\n`;
+                    // }
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -665,9 +666,9 @@ const cssFontFaceRuleFiltered = computed(() => {
                 css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
             }
 
-            if (variable.value && fontFace.weight === 0) {
-                css += `\tfont-stretch: 100%;\n`;
-            }
+            // if (variable.value && fontFace.weight === 0) {
+            //     css += `\tfont-stretch: 100%;\n`;
+            // }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -682,7 +683,7 @@ const cssFontFaceRuleFiltered = computed(() => {
             let files = fontFiles.value.filter(
                 f => f.weight == fontFace.weight
                     && f.style === fontFace.style
-                    && isEqual(f.subsets, subsets.value)
+                    && isEqual(uniq(f.subsets).sort(), uniq(subsets.value).sort())
                     && format.value.includes(f.format)
             );
 

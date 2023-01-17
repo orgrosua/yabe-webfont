@@ -267,9 +267,9 @@ const cssFontFaceRule = computed(() => {
                 css += `\tfont-weight: ${fontFace.weight};\n`;
             }
 
-            if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
-                css += `\tfont-stretch: 100%;\n`;
-            }
+            // if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
+            //     css += `\tfont-stretch: 100%;\n`;
+            // }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
