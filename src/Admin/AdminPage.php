@@ -28,13 +28,12 @@ class AdminPage
 
     public function add_admin_menu()
     {
-        $hook = add_menu_page(
+        $hook = add_theme_page(
             __('Yabe Webfont', 'yabe-webfont'),
             __('Yabe Webfont', 'yabe-webfont'),
             'manage_options',
             YABE_WEBFONT_OPTION_NAMESPACE,
-            fn () => $this->render(),
-            'dashicons-editor-textcolor'
+            fn () => $this->render()
         );
 
         add_action('load-' . $hook, fn () => $this->init_hooks());

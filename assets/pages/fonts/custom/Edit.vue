@@ -430,33 +430,7 @@ function sendForm(e) {
 }
 
 onBeforeMount(async () => {
-    // busy.add('fonts.edit.custom:fetch-item');
-
-    // let promise = api
-    //     .request({
-    //         method: 'GET',
-    //         url: `/fonts/detail/${route.params.id}`,
-    //     })
-    //     .then((response) => {
-    //         return response.data;
-    //     })
-    //     .then(data => {
-    //         family.value = data.family;
-    //         title.value = data.title;
-    //         display.value = data.metadata.display;
-    //         selector.value = data.metadata.selector;
-    //         preload.value = data.metadata.preload;
-    //         status.value = data.status;
-    //         fontFaces.value = cloneDeep(data.font_faces);
-
-    //         item.value = data;
-    //     })
-    //     .finally(() => {
-    //         busy.remove('fonts.edit.custom:fetch-item');
-    //     });
-
     let promise = fetchItem();
-
 
     notifier.async(
         promise,
@@ -471,6 +445,13 @@ onBeforeMount(async () => {
         },
         'Fetching font details...'
     );
+
+    fontPreviewStylesheetEl = document.querySelector('#yabe-webfont-preview');
+    if (!fontPreviewStylesheetEl) {
+        fontPreviewStylesheetEl = document.createElement('style');
+        fontPreviewStylesheetEl.setAttribute('id', 'yabe-webfont-preview');
+        document.head.appendChild(fontPreviewStylesheetEl);
+    }
 });
 
 const isHaveUnsavedChanges = computed(() => {
@@ -523,6 +504,9 @@ onBeforeUnmount(() => {
     window.onbeforeunload = null;
     if (unsavedNoticeId.value) {
         wordpressNotice.remove(unsavedNoticeId.value);
+    }
+    if (fontPreviewStylesheetEl) {
+        document.head.removeChild(fontPreviewStylesheetEl);
     }
 });
 </script>
