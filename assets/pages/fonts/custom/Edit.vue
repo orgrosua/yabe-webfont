@@ -362,9 +362,35 @@ function doDelete() {
         });
 }
 
+const fetchItem = async () => {
+    busy.add('fonts.edit.custom:fetch-item');
+    return api
+        .request({
+            method: 'GET',
+            url: `/fonts/detail/${route.params.id}`,
+        })
+        .then((response) => {
+            return response.data;
+        })
+        .then(data => {
+            family.value = data.family;
+            title.value = data.title;
+            display.value = data.metadata.display;
+            selector.value = data.metadata.selector;
+            preload.value = data.metadata.preload;
+            status.value = data.status;
+            fontFaces.value = cloneDeep(data.font_faces);
+
+            item.value = data;
+        })
+        .finally(() => {
+            busy.remove('fonts.edit.custom:fetch-item');
+        });
+};
+
 function sendForm(e) {
     e.preventDefault();
-    
+
     busy.add('fonts.edit.custom:sendForm');
 
     let promise = api
@@ -388,6 +414,8 @@ function sendForm(e) {
                 type: 'success',
                 message: `<p>Font updated successfully.</p>`,
             });
+
+            fetchItem();
         })
         .finally(() => {
             busy.remove('fonts.edit.custom:sendForm');
@@ -402,30 +430,32 @@ function sendForm(e) {
 }
 
 onBeforeMount(async () => {
-    busy.add('fonts.edit.custom:fetch-item');
-    
-    let promise = api
-        .request({
-            method: 'GET',
-            url: `/fonts/detail/${route.params.id}`,
-        })
-        .then((response) => {
-            return response.data;
-        })
-        .then(data => {
-            family.value = data.family;
-            title.value = data.title;
-            display.value = data.metadata.display;
-            selector.value = data.metadata.selector;
-            preload.value = data.metadata.preload;
-            status.value = data.status;
-            fontFaces.value = cloneDeep(data.font_faces);
+    // busy.add('fonts.edit.custom:fetch-item');
 
-            item.value = data;
-        })
-        .finally(() => {
-            busy.remove('fonts.edit.custom:fetch-item');
-        });
+    // let promise = api
+    //     .request({
+    //         method: 'GET',
+    //         url: `/fonts/detail/${route.params.id}`,
+    //     })
+    //     .then((response) => {
+    //         return response.data;
+    //     })
+    //     .then(data => {
+    //         family.value = data.family;
+    //         title.value = data.title;
+    //         display.value = data.metadata.display;
+    //         selector.value = data.metadata.selector;
+    //         preload.value = data.metadata.preload;
+    //         status.value = data.status;
+    //         fontFaces.value = cloneDeep(data.font_faces);
+
+    //         item.value = data;
+    //     })
+    //     .finally(() => {
+    //         busy.remove('fonts.edit.custom:fetch-item');
+    //     });
+
+    let promise = fetchItem();
 
 
     notifier.async(
@@ -459,7 +489,7 @@ const isHaveUnsavedChanges = computed(() => {
     );
 });
 
-const unsavedNoticeId = ref(null); 
+const unsavedNoticeId = ref(null);
 
 watch(isHaveUnsavedChanges, (newVal, oldVal) => {
     if (newVal && !unsavedNoticeId.value) {
