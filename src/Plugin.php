@@ -16,7 +16,6 @@ namespace Yabe\Webfont;
 use Exception;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Api\Router as ApiRouter;
-use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Notice;
 
 /**
@@ -26,11 +25,34 @@ use Yabe\Webfont\Utils\Notice;
  */
 final class Plugin
 {
+    /**
+     * @var string
+     */
     public const VERSION = '2.0.0-DEV';
+
+    /**
+     * @var int
+     */
     public const VERSION_ID = 20000;
+
+    /**
+     * @var int
+     */
     public const MAJOR_VERSION = 2;
+
+    /**
+     * @var int
+     */
     public const MINOR_VERSION = 0;
+
+    /**
+     * @var int
+     */
     public const RELEASE_VERSION = 0;
+
+    /**
+     * @var string
+     */
     public const EXTRA_VERSION = 'DEV';
 
     /**
@@ -72,7 +94,7 @@ final class Plugin
     public static function get_instance(): self
     {
         $cls = static::class;
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -155,6 +177,7 @@ final class Plugin
         // TODO: Add deactivation logic here.
         do_action('a!yabe/webfont/plugins:deactivate_plugin_end');
     }
+
     /**
      * Handle the plugin's upgrade
      */

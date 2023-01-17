@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
-use function current_user_can;
-use function wp_check_filetype;
+use Exception;
+use Throwable;
+use WP_Error;
 
 /**
  * Upload utility functions for the plugin.
@@ -32,8 +33,8 @@ class Upload
     public static function upload_mimes(array $mimes, bool $manual_upload = false): array
     {
         if (
-            !$manual_upload
-            && (!current_user_can('manage_options') || !isset($_POST['yabe_webfont_font_upload']))
+            ! $manual_upload
+            && (! current_user_can('manage_options') || ! isset($_POST['yabe_webfont_font_upload']))
         ) {
             return $mimes;
         }
@@ -45,13 +46,13 @@ class Upload
             'otf' => 'font/otf',
             'eot' => 'font/eot',
         ];
-        
+
         foreach ($exts as $ext => $ext_mime) {
-            if (!isset($mimes[$ext])) {
+            if (! isset($mimes[$ext])) {
                 $mimes[$ext] = $ext_mime;
             }
         }
-        
+
         return $mimes;
     }
 
@@ -66,9 +67,78 @@ class Upload
         $filetype = wp_check_filetype($filename, $mimes);
 
         return [
-            'ext'             => $filetype['ext'],
-            'type'            => $filetype['type'],
-            'proper_filename' => $data['proper_filename']
+            'ext' => $filetype['ext'],
+            'type' => $filetype['type'],
+            'proper_filename' => $data['proper_filename'],
         ];
+    }
+
+    /**
+     * Remote upload file to WordPress media library.
+     * The implementation is based on the https://rudrastyh.com/wordpress/how-to-add-images-to-media-library-from-uploaded-files-programmatically.html#upload-image-from-url
+     *
+     * @param string $file_url URL of the remote file
+     * @param string $file_name Name of the remote file to be stored in the media library
+     * @param string $mime_type Mime type of the remote file
+     * @return int|WP_Error|false Attachment ID on success, WP_Error or false on failure
+     * @throws Exception
+     */
+    public static function remote_upload_media(string $file_url, string $file_name, string $mime_type)
+    {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+
+        $temp_file = download_url($file_url);
+
+        if (is_wp_error($temp_file)) {
+            return $temp_file;
+        }
+
+        $file = [
+            'name' => $file_name,
+            'type' => $mime_type,
+            'tmp_name' => $temp_file,
+            'size' => filesize($temp_file),
+        ];
+
+        $sideload = wp_handle_sideload($file, [
+            'test_form' => false,
+            'test_size' => false,
+        ]);
+
+        if (! empty($sideload['error'])) {
+            // you may return error message if you want
+
+            return false;
+        }
+
+        // it is time to add our uploaded image into WordPress media library
+        $attachment_id = wp_insert_attachment(
+            [
+                'guid' => $sideload['url'],
+                'post_mime_type' => $sideload['type'],
+                'post_title' => basename($sideload['file']),
+                'post_content' => '',
+                'post_status' => 'inherit',
+            ],
+            $sideload['file']
+        );
+
+        if (is_wp_error($attachment_id)) {
+            return $attachment_id;
+        }
+
+        if (! $attachment_id) {
+            return false;
+        }
+
+        try {
+            if (file_exists($temp_file)) {
+                unlink($temp_file);
+            }
+        } catch (Throwable $throwable) {
+            throw $throwable;
+        }
+
+        return $attachment_id;
     }
 }

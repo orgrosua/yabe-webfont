@@ -51,7 +51,7 @@
     "highlight.js": "^11.7.0",
     "lodash-es": "^4.17.21",
     "nanoid": "^4.0.0",
-    "pinia": "^2.0.28",
+    "pinia": "^2.0.29",
     "pretty-bytes": "^6.0.0",
     "s-ago": "^2.2.0",
     "slug": "^8.2.2",

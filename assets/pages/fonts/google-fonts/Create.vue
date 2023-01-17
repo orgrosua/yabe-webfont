@@ -257,7 +257,7 @@
 import ago from 's-ago';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
-import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
+import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
 import isEqual from 'lodash-es/isEqual';
@@ -428,7 +428,12 @@ function fetchFontFiles() {
             },
         })
         .then(response => {
-            fontFiles.value = Object.values(response.data.files);
+            const files = Object.values(response.data.files);
+
+            fontFiles.value = files.map(file => {
+                file.uid = nanoid(10);
+                return file;
+            });
 
             reComputeFontFiles();
         })
@@ -439,26 +444,6 @@ function fetchFontFiles() {
             busy.remove('fonts.create.google-fonts:fetch-font-files');
         });
 }
-
-
-// TODO: SCENARIO:
-// 1. saved fetched font files to fontFiles.value
-// 2. on the interface, display all from subsets.value
-// 3. generate stylesheet by matching the fontFiles.value with the subsets.value
-// 4. combine the same font faces file (e.g. woff2, woff, ttf, etc.)
-// 5. send to the server, keep the raw data on `metadata` columns, and map the data which can be remote downloaded and stored on wp media library and store to `font_faces` column.
-// 6. save the data to the database
-
-
-
-// FONTFACE INTERFACE:
-// 1. toggle the enabled status
-// 2. remove Trash icon
-// 3. keep the Font Display, CSS Selector, and comment.
-
-// FOR VARIABLE FONT, keep an item for regular style, and another item for italic style.
-// show the font weight interface on the left side of Preview size interface.
-
 function fontFormatMap(ext) {
     // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
     switch (ext) {
@@ -483,6 +468,126 @@ function fontFormatMap(ext) {
 };
 
 const cssFontFaceRule = computed(() => {
+    let css = ``;
+
+    if (!family.value) {
+        return css;
+    }
+
+    if (variable.value) {
+        fontFaces.value.forEach(fontFace => {
+            if (fontFace.weight !== 0) {
+                return;
+            }
+
+            subsets.value.forEach(subset => {
+                let files = fontFiles.value.filter(
+                    f => f.weight == fontFace.weight
+                        && f.style === fontFace.style
+                        && f.subsets.includes(subset)
+                        && format.value.includes(f.format)
+                );
+
+                files.forEach(file => {
+                    if (fontFace.comment) {
+                        css += `/* ${fontFace.comment} */\n`;
+                    }
+
+                    css += `/* ${subset} */\n`;
+
+                    css += `@font-face {\n`;
+
+                    css += `\tfont-family: '${family.value}';\n`;
+
+                    css += `\tfont-style: ${fontFace.style};\n`;
+
+                    if (!variable.value && fontFace.weight !== 0) {
+                        css += `\tfont-weight: ${fontFace.weight};\n`;
+                    } else {
+                        css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+                    }
+
+                    if (variable.value && fontFace.weight === 0) {
+                        css += `\tfont-stretch: 100%;\n`;
+                    }
+
+                    css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+                    css += `\tsrc: url('${file.url}') format(${fontFormatMap(file.format)});\n`;
+
+                    if (file.unicodeRange) {
+                        css += `\tunicode-range: ${file.unicodeRange};\n`;
+                    }
+
+                    css += `}\n\n`;
+                });
+            });
+        });
+    } else {
+        fontFaces.value.forEach(fontFace => {
+            if (fontFace.comment) {
+                css += `/* ${fontFace.comment} */\n`;
+            }
+
+            css += `@font-face {\n`;
+
+            css += `\tfont-family: '${family.value}';\n`;
+
+            css += `\tfont-style: ${fontFace.style};\n`;
+
+            if (!variable.value && fontFace.weight !== 0) {
+                css += `\tfont-weight: ${fontFace.weight};\n`;
+            } else {
+                css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+            }
+
+            if (variable.value && fontFace.weight === 0) {
+                css += `\tfont-stretch: 100%;\n`;
+            }
+
+            css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+            const formatPrecedence = {
+                'woff2': 1,
+                'woff': 2,
+                'ttf': 3,
+                'otf': 4,
+                'eot': 5,
+            };
+
+            let files = fontFiles.value.filter(
+                f => f.weight == fontFace.weight
+                    && f.style === fontFace.style
+                    && isEqual(f.subsets, subsets.value)
+                    && format.value.includes(f.format)
+            );
+
+            if (files.length) {
+                files = sortBy(files, (f) => formatPrecedence[f.format]);
+
+                css += `\tsrc: `;
+
+                let fileSrc = files.map(f => {
+                    return `url('${f.url}') format(${fontFormatMap(f.format)})`;
+                });
+
+                css += fileSrc.join(',\n\t\t');
+
+                css += `;\n`;
+            }
+
+            if (fontFace.unicodeRange) {
+                css += `\tunicode-range: ${fontFace.unicodeRange};\n`;
+            }
+
+            css += `}\n\n`;
+        });
+    }
+
+    return css;
+});
+
+const cssFontFaceRuleFiltered = computed(() => {
     let css = ``;
 
     if (!family.value) {
@@ -613,7 +718,7 @@ const cssPreviewStylesheet = computed(() => {
         return css;
     }
 
-    css += cssFontFaceRule.value;
+    css += cssFontFaceRuleFiltered.value;
 
     if (selector.value) {
         css += `${selector.value} {\n\tfont-family: '${family.value}';\n}\n\n`;
@@ -638,23 +743,32 @@ const cssPreviewStylesheet = computed(() => {
     // replace <family> placeholder
     css = css.replace(/<family>/g, family.value);
 
+    // remove content between REDACTED>>> and <<<REDACTED
+    css = css.replace(/\/\*\*\s*REDACTED>>>\s*\*\/[\s\S]*\/\*\*\s*<<<REDACTED\s*\*\//g, '');
+
     return css;
 });
 
 let fontPreviewStylesheetEl;
 
-// watch(cssFontFaceRule, debounce((newCss, oldCss) => {
-//     if (fontPreviewStylesheetEl) {
-//         // replace tabs with 2 spaces and assign
-//         fontPreviewStylesheetEl.innerHTML = newCss.replace(/\t/g, '  ');
-//     }
-// }, 1000));
+watch(cssFontFaceRule, debounce((newCss, oldCss) => {
+    if (fontPreviewStylesheetEl) {
+        // replace tabs with 2 spaces and assign
+        fontPreviewStylesheetEl.innerHTML = newCss.replace(/\t/g, '  ');
+    }
+}, 1000));
 
 function resetForm() {
+    fontData.value = null;
     title.value = '';
-    selector.value = '';
     display.value = 'auto';
+    selector.value = '';
     preload.value = false;
+    subsets.value = [];
+    format.value = ['woff2'];
+    variable.value = false;
+    fontFiles.value = [];
+    fontFaces.value = [];
 
     preview.text = `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`;
     preview.fontSize = 18;
@@ -697,36 +811,11 @@ onBeforeMount(() => {
     }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+onBeforeUnmount(() => {
+    if (fontPreviewStylesheetEl) {
+        document.head.removeChild(fontPreviewStylesheetEl);
+    }
+});
 
 function sendForm(e) {
     e.preventDefault();
@@ -734,22 +823,28 @@ function sendForm(e) {
     let promise = api
         .request({
             method: 'POST',
-            url: '/fonts/store',
+            url: '/fonts/google-fonts/store',
             data: {
                 title: title.value,
-                family: family.value,
                 status: status.value,
-                font_faces: fontFaces.value,
                 metadata: {
+                    preload: preload.value,
                     selector: selector.value,
                     display: display.value,
-                    preload: preload.value,
+                    google_fonts: {
+                        variable: variable.value,
+                        formats: format.value,
+                        font_data: fontData.value,
+                        subsets: subsets.value,
+                        font_files: fontFiles.value,
+                        font_faces: fontFaces.value,
+                    }
                 }
             },
         })
         .then(response => {
             const editUrl = router.resolve({
-                name: 'fonts.edit.custom',
+                name: 'fonts.edit.google-fonts',
                 params: {
                     id: response.data.id,
                 },
@@ -757,7 +852,7 @@ function sendForm(e) {
 
             wordpressNotice.add({
                 type: 'success',
-                message: `<p>Font saved successfully. <a href="${editUrl}">Edit Font</a></p>`,
+                message: `<p>Google Fonts imported successfully. <a href="${editUrl}">Edit Font</a></p>`,
             });
 
             resetForm();
@@ -765,9 +860,9 @@ function sendForm(e) {
 
     notifier.async(
         promise,
-        'Font stored successfully.',
+        'Google Fonts imported successfully.',
         undefined,
-        'Storing font...'
+        'Importing Google Fonts...'
     );
 }
 </script>

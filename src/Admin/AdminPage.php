@@ -20,10 +20,10 @@ class AdminPage
 {
     public function __construct()
     {
-        add_filter('wp_check_filetype_and_ext', fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
+        add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
 
-        add_action('admin_menu', [$this, 'add_admin_menu']);
+        add_action('admin_menu', fn () => $this->add_admin_menu());
     }
 
     public function add_admin_menu()
@@ -62,7 +62,7 @@ class AdminPage
         wp_localize_script(YABE_WEBFONT_OPTION_NAMESPACE . '-app', 'yabeWebfont', [
             '_version' => Plugin::VERSION,
             '_wpnonce' => wp_create_nonce(YABE_WEBFONT_OPTION_NAMESPACE),
-            'web_history'  => add_query_arg([
+            'web_history' => add_query_arg([
                 'page' => YABE_WEBFONT_OPTION_NAMESPACE,
             ], admin_url('admin.php')),
             'rest_api' => [
@@ -79,7 +79,7 @@ class AdminPage
         ]);
     }
 
-    private function admin_footer_text($text)
+    private function admin_footer_text($text): string
     {
         return sprintf(
             __('Thank you for using <b>Yabe Webfont</b>! Join us on the <a href="%s" target="_blank">Facebook Group</a>.', 'yabe-webfont'),

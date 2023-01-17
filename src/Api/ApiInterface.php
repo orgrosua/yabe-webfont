@@ -17,16 +17,13 @@ interface ApiInterface
 {
     /**
      * Get the API endpoint prefix.
-     *
-     * @return string
      */
     public function get_prefix(): string;
 
     /**
      * Register custom REST API endpoints as described in the [WordPress REST API Handbook](https://developer.wordpress.org/rest-api/extending-the-rest-api/adding-custom-endpoints/).
-     * 
+     *
      * @see https://developer.wordpress.org/reference/functions/register_rest_route/
-     * @return void
      */
     public function register_custom_endpoints(): void;
 }

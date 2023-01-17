@@ -370,16 +370,16 @@ function sendForm(e) {
     let promise = api
         .request({
             method: 'PUT',
-            url: `/fonts/update/${item.value.id}`,
+            url: `/fonts/custom/update/${item.value.id}`,
             data: {
                 title: title.value,
                 family: family.value,
                 status: status.value,
                 font_faces: fontFaces.value,
                 metadata: {
+                    preload: preload.value,
                     selector: selector.value,
                     display: display.value,
-                    preload: preload.value,
                 }
             },
         })

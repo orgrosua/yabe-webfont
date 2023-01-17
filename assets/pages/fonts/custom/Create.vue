@@ -148,7 +148,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onBeforeMount, computed } from 'vue';
+import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
@@ -330,6 +330,12 @@ onBeforeMount(() => {
     }
 });
 
+onBeforeUnmount(() => {
+    if (fontPreviewStylesheetEl) {
+        document.head.removeChild(fontPreviewStylesheetEl);
+    }
+});
+
 function sendForm(e) {
     e.preventDefault();
 
@@ -338,16 +344,16 @@ function sendForm(e) {
     let promise = api
         .request({
             method: 'POST',
-            url: '/fonts/store',
+            url: '/fonts/custom/store',
             data: {
                 title: title.value,
                 family: family.value,
                 status: status.value,
                 font_faces: fontFaces.value,
                 metadata: {
+                    preload: preload.value,
                     selector: selector.value,
                     display: display.value,
-                    preload: preload.value,
                 }
             },
         })

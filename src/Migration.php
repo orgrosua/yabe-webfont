@@ -34,8 +34,8 @@ final class Migration
             'commandNamespace' => 'yabe-webfont migrations',
         ]);
 
-        add_action('a!yabe/webfont/plugins:activate_plugin_start', [$this, 'install']);
-        add_action('a!yabe/webfont/plugins:upgrade_plugin_start', [$this, 'upgrade']);
+        add_action('a!yabe/webfont/plugins:activate_plugin_start', fn () => $this->install());
+        add_action('a!yabe/webfont/plugins:upgrade_plugin_start', fn () => $this->upgrade());
 
         $this->migrator->boot();
     }

@@ -22,7 +22,7 @@ specifiers:
   highlight.js: ^11.7.0
   lodash-es: ^4.17.21
   nanoid: ^4.0.0
-  pinia: ^2.0.28
+  pinia: ^2.0.29
   postcss: ^8.4.21
   postcss-advanced-variables: ^3.0.1
   postcss-import: ^15.1.0
@@ -58,7 +58,7 @@ dependencies:
   highlight.js: 11.7.0
   lodash-es: 4.17.21
   nanoid: 4.0.0
-  pinia: 2.0.28_vue@3.2.45
+  pinia: 2.0.29_vue@3.2.45
   pretty-bytes: 6.0.0
   s-ago: 2.2.0
   slug: 8.2.2
@@ -2204,7 +2204,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001443
+      caniuse-lite: 1.0.30001445
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -2346,7 +2346,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001443
+      caniuse-lite: 1.0.30001445
       electron-to-chromium: 1.4.284
       node-releases: 2.0.8
       update-browserslist-db: 1.0.10_browserslist@4.21.4
@@ -2392,13 +2392,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001443
+      caniuse-lite: 1.0.30001445
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
 
-  /caniuse-lite/1.0.30001443:
-    resolution: {integrity: sha512-jUo8svymO8+Mkj3qbUbVjR8zv8LUGpGkUM/jKvc9SO2BvjCI980dp9fQbf/dyLs6RascPzgR4nhAKFA4OHeSaA==}
+  /caniuse-lite/1.0.30001445:
+    resolution: {integrity: sha512-8sdQIdMztYmzfTMO6KfLny878Ln9c2M0fc7EH60IjlP4Dc4PiCy7K2Vl3ITmWgOyPgVQKa5x+UP/KqFsxj4mBg==}
     dev: true
 
   /chalk/2.4.2:
@@ -2666,7 +2666,7 @@ packages:
       jest-worker: 29.3.1
       postcss: 8.4.21
       schema-utils: 4.0.0
-      serialize-javascript: 6.0.0
+      serialize-javascript: 6.0.1
       source-map: 0.6.1
       webpack: 5.75.0_webpack-cli@5.0.1
     dev: true
@@ -4127,8 +4127,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /pinia/2.0.28_vue@3.2.45:
-    resolution: {integrity: sha512-YClq9DkqCblq9rlyUual7ezMu/iICWdBtfJrDt4oWU9Zxpijyz7xB2xTwx57DaBQ96UGvvTMORzALr+iO5PVMw==}
+  /pinia/2.0.29_vue@3.2.45:
+    resolution: {integrity: sha512-5z/KpFecq/cIgfeTnulJXldiLcTITRkTe3N58RKYSj0Pc1EdR6oyCdnf5A9jLoVwBqX5LtHhd0kGlpzWvk9oiQ==}
     peerDependencies:
       '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
@@ -4993,8 +4993,8 @@ packages:
       - supports-color
     dev: true
 
-  /serialize-javascript/6.0.0:
-    resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==}
+  /serialize-javascript/6.0.1:
+    resolution: {integrity: sha512-owoXEFjWRllis8/M1Q+Cw5k8ZH40e3zhp/ovX+Xr/vi1qj6QesbyXXViFbpNvWvPNAD62SutwEXavefrLJWj7w==}
     dependencies:
       randombytes: 2.1.0
     dev: true
@@ -5317,7 +5317,7 @@ packages:
       '@jridgewell/trace-mapping': 0.3.17
       jest-worker: 27.5.1
       schema-utils: 3.1.1
-      serialize-javascript: 6.0.0
+      serialize-javascript: 6.0.1
       terser: 5.16.1
       webpack: 5.75.0_webpack-cli@5.0.1
     dev: true

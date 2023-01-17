@@ -20,7 +20,7 @@ class Router
 {
     /**
      * List of APIs services.
-     * 
+     *
      * @var ApiInterface[]
      */
     private array $apis = [];
@@ -28,25 +28,27 @@ class Router
     public function __construct()
     {
         $this->scan_apis();
-        add_action('rest_api_init', [$this, 'register_apis']);
+        add_action('rest_api_init', function () {
+            $this->register_apis();
+        });
     }
 
     public function scan_apis()
     {
         $finder = new Finder();
-        $finder->files()->in(dirname(__FILE__))->name('*.php');
+        $finder->files()->in(__DIR__)->name('*.php');
 
         /**
          * Add additional places to scan for APIs.
-         * 
-         * @param Finder &$finder The Finder instance.
+         *
+         * @param Finder $finder The Finder instance.
          */
         do_action('a!yabe/webfont/api/router:before_scan', $finder);
 
         foreach ($finder as $file) {
             $api_file = $file->getPathname();
 
-            if (!is_readable($api_file)) {
+            if (! is_readable($api_file)) {
                 continue;
             }
 
@@ -57,13 +59,13 @@ class Router
         $declared_classes = get_declared_classes();
 
         foreach ($declared_classes as $declared_class) {
-            if (!class_exists($declared_class)) {
+            if (! class_exists($declared_class)) {
                 continue;
             }
 
             $reflector = new ReflectionClass($declared_class);
 
-            if (!$reflector->isSubclassOf(ApiInterface::class)) {
+            if (! $reflector->isSubclassOf(ApiInterface::class)) {
                 continue;
             }
 
@@ -86,7 +88,7 @@ class Router
     {
         /**
          * Filter the APIs before register to WP Rest.
-         * 
+         *
          * @param ApiInterface[] $apis
          * @return ApiInterface[]
          */
