@@ -123,7 +123,6 @@ const weightName = computed(() => {
 });
 </script>
 
-
 <style>
 /* Transition for font file list */
 .font-file-list-move,

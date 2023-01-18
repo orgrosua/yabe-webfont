@@ -272,6 +272,8 @@ const cssPreviewStylesheet = computed(() => {
         return css;
     }
 
+    css += `\n`;
+
     css += cssFontFaceRule.value;
 
     if (selector.value) {
@@ -316,7 +318,7 @@ function resetForm() {
     createNewFontFace();
 
     preview.text = `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`;
-    preview.fontSize = 18;
+    preview.fontSize = 16;
 }
 
 onBeforeMount(() => {
@@ -386,7 +388,6 @@ function sendForm(e) {
 </script>
 
 <style lang="scss">
-
 /* Transition for <TheFontFace/> list */
 .font-face-list-move,
 .font-face-move,

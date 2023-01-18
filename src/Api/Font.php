@@ -120,18 +120,32 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/google-fonts/update/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => [$this, 'google_fonts_update'],
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_update($wprestRequest),
                 'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
     }
 
-    public function permission_callback(WP_REST_Request $wprestRequest): bool
+    private function permission_callback(WP_REST_Request $wprestRequest): bool
     {
         return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 
-    public function index(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function attach_font_files(array $font_faces): array
+    {
+        foreach ($font_faces as $i => $font_face) {
+            foreach ($font_face->files as $j => $file) {
+                $attachment_url = wp_get_attachment_url($file->attachment_id);
+                if ($attachment_url) {
+                    $font_faces[$i]->files[$j]->attachment_url = $attachment_url;
+                }
+            }
+        }
+
+        return $font_faces;
+    }
+
+    private function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -219,7 +233,7 @@ class Font extends AbstractApi implements ApiInterface
         ]);
     }
 
-    public function detail(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function detail(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -237,7 +251,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $row = $wpdb->get_row($sql);
 
-        if (! $row) {
+        if (!$row) {
             return new WP_REST_Response([
                 'message' => 'Font not found',
             ], 404, []);
@@ -258,7 +272,7 @@ class Font extends AbstractApi implements ApiInterface
         ], 200, []);
     }
 
-    public function custom_store(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function custom_store(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -291,7 +305,7 @@ class Font extends AbstractApi implements ApiInterface
         ], 200, []);
     }
 
-    public function update_status(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function update_status(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -333,7 +347,7 @@ class Font extends AbstractApi implements ApiInterface
         ], 200, []);
     }
 
-    public function destroy(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function destroy(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -351,7 +365,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $item = $wpdb->get_row($sql);
 
-        if (! $item) {
+        if (!$item) {
             return new WP_REST_Response([
                 'message' => __('Font not found', 'yabe-webfont'),
             ], 404, []);
@@ -377,7 +391,7 @@ class Font extends AbstractApi implements ApiInterface
         return new WP_REST_Response(null, 200, []);
     }
 
-    public function restore(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function restore(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -416,7 +430,7 @@ class Font extends AbstractApi implements ApiInterface
         ], 200, []);
     }
 
-    public function custom_update(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function custom_update(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -466,7 +480,7 @@ class Font extends AbstractApi implements ApiInterface
         ], 200, []);
     }
 
-    public function google_fonts_store(WP_REST_Request $wprestRequest): WP_REST_Response
+    private function google_fonts_store(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
         global $wpdb;
@@ -494,7 +508,7 @@ class Font extends AbstractApi implements ApiInterface
         $m_font_files = $metadata['google_fonts']['font_files'];
 
         foreach ($m_font_faces as $k => $m_face) {
-            if (! $m_face['isEnabled']) {
+            if (!$m_face['isEnabled']) {
                 continue;
             }
 
@@ -540,7 +554,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (! $attachment_id) {
+                            if (!$attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {
@@ -623,7 +637,7 @@ class Font extends AbstractApi implements ApiInterface
                     try {
                         $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                        if (! $attachment_id) {
+                        if (!$attachment_id) {
                             continue;
                         }
                     } catch (\Throwable $throwable) {
@@ -679,17 +693,240 @@ class Font extends AbstractApi implements ApiInterface
         return new WP_REST_Response(null, 200, []);
     }
 
-    private function attach_font_files(array $font_faces): array
+    private function google_fonts_update(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        foreach ($font_faces as $i => $font_face) {
-            foreach ($font_face->files as $j => $file) {
-                $attachment_url = wp_get_attachment_url($file->attachment_id);
-                if ($attachment_url) {
-                    $font_faces[$i]->files[$j]->attachment_url = $attachment_url;
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $url_params = $wprestRequest->get_url_params();
+        $payload = $wprestRequest->get_json_params();
+
+        $id = (int) $url_params['id'];
+
+        $sql = "
+            SELECT COUNT(*) FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $id);
+
+        $count = (int) $wpdb->get_var($sql);
+
+        if ($count === 0) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        $title = sanitize_text_field($payload['title']);
+        $status = (bool) $payload['status'];
+
+        $metadata = $payload['metadata'];
+        $font_faces = [];
+
+        add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 10002);
+
+        $font_mime_types = [
+            'woff2' => 'font/woff2',
+            'woff' => 'font/woff',
+            'ttf' => 'font/ttf',
+        ];
+
+        $m_font_faces = $metadata['google_fonts']['font_faces'];
+        $m_font_files = $metadata['google_fonts']['font_files'];
+
+        foreach ($m_font_faces as $k => $m_face) {
+            $metadata['google_fonts']['font_faces'][$k]['attached_font_files'] = [];
+
+            if (!$m_face['isEnabled']) {
+                continue;
+            }
+
+            if ($metadata['google_fonts']['variable']) {
+                if ($m_face['weight'] !== 0) {
+                    continue;
                 }
+
+                foreach ($metadata['google_fonts']['subsets'] as $subset) {
+                    $filtered_m_font_files = array_filter(
+                        $m_font_files,
+                        static fn ($f) => $f['weight'] === $m_face['weight']
+                            && $f['style'] === $m_face['style']
+                            && in_array($subset, $f['subsets'], true)
+                            && in_array($f['format'], $metadata['google_fonts']['formats'], true)
+                    );
+
+                    foreach ($filtered_m_font_files as $filtered_m_font_file) {
+                        $wght = array_filter(
+                            $metadata['google_fonts']['font_data']['axes'],
+                            static fn ($a) => $a['tag'] === 'wght'
+                        )[0];
+
+                        $font_face = [
+                            'id' => Common::random_slug(10),
+                            'weight' => sprintf('%s %s', $wght['min'], $wght['max']),
+                            'style' => $m_face['style'],
+                            'display' => $m_face['display'],
+                            'selector' => $m_face['selector'],
+                            'comment' => $m_face['comment'],
+                        ];
+
+                        if (array_key_exists('file', $filtered_m_font_file)) {
+                            $file = $filtered_m_font_file['file'];
+                        } else {
+                            $file_name = sanitize_title_with_dashes(sprintf(
+                                'google-fonts-%s-%s-%s-%s-%s-%s',
+                                $metadata['google_fonts']['font_data']['slug'], // family
+                                $metadata['google_fonts']['font_data']['version'],
+                                $subset,
+                                $filtered_m_font_file['weight'],
+                                $filtered_m_font_file['style'],
+                                time()
+                            )) . '.' . $filtered_m_font_file['format'];
+
+                            try {
+                                $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+
+                                if (!$attachment_id) {
+                                    continue;
+                                }
+                            } catch (\Throwable $throwable) {
+                                //throw $th;
+                                continue;
+                            }
+
+                            $file = [
+                                'uid' => Common::random_slug(10),
+                                'attachment_id' => $attachment_id,
+                                'attachment_url' => wp_get_attachment_url($attachment_id),
+                                'extension' => $filtered_m_font_file['format'],
+                                'mime' => $font_mime_types[$filtered_m_font_file['format']],
+                                'file_size' => filesize(get_attached_file($attachment_id)),
+                                'name' => substr($file_name, 0, strrpos($file_name, '.')),
+                            ];
+
+                            $metadata['google_fonts']['font_files'] = array_map(
+                                static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                                    'file' => $file,
+                                ]) : $f,
+                                $metadata['google_fonts']['font_files']
+                            );
+                        }
+
+                        $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
+
+                        $font_face['files'] = [$file];
+
+                        $font_face['unicodeRange'] = $filtered_m_font_file['unicodeRange'];
+
+                        $font_faces[] = $font_face;
+                    }
+                }
+            } else {
+                if ($m_face['weight'] === 0) {
+                    continue;
+                }
+
+                $font_face = [
+                    'id' => Common::random_slug(10),
+                    'weight' => $m_face['weight'],
+                    'style' => $m_face['style'],
+                    'display' => $m_face['display'],
+                    'selector' => $m_face['selector'],
+                    'comment' => $m_face['comment'],
+                    'unicodeRange' => '',
+                ];
+
+                $files = [];
+
+                $filtered_m_font_files = array_filter(
+                    $m_font_files,
+                    static fn ($f) => $f['weight'] === $m_face['weight']
+                        && $f['style'] === $m_face['style']
+                        && array_diff($metadata['google_fonts']['subsets'], $f['subsets']) === array_diff($f['subsets'], $metadata['google_fonts']['subsets'])
+                        && in_array($f['format'], $metadata['google_fonts']['formats'], true)
+                );
+
+                $format_precedence = [
+                    'woff2' => 1,
+                    'woff' => 2,
+                    'ttf' => 3,
+                    'otf' => 4,
+                    'eot' => 5,
+                ];
+
+                usort($filtered_m_font_files, static fn ($a, $b) => $format_precedence[$a['format']] <=> $format_precedence[$b['format']]);
+
+                foreach ($filtered_m_font_files as $filtered_m_font_file) {
+                    if (array_key_exists('file', $filtered_m_font_file)) {
+                        $file = $filtered_m_font_file['file'];
+                    } else {
+                        $file_name = sanitize_title_with_dashes(sprintf(
+                            'google-fonts-%s-%s-%s-%s-%s-%s',
+                            $metadata['google_fonts']['font_data']['slug'], // family
+                            $metadata['google_fonts']['font_data']['version'],
+                            implode('-', $metadata['google_fonts']['subsets']),
+                            $filtered_m_font_file['weight'],
+                            $filtered_m_font_file['style'],
+                            time()
+                        )) . '.' . $filtered_m_font_file['format'];
+
+                        try {
+                            $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+
+                            if (!$attachment_id) {
+                                continue;
+                            }
+                        } catch (\Throwable $throwable) {
+                            //throw $th;
+                            continue;
+                        }
+
+                        $file = [
+                            'uid' => Common::random_slug(10),
+                            'attachment_id' => $attachment_id,
+                            'attachment_url' => wp_get_attachment_url($attachment_id),
+                            'extension' => $filtered_m_font_file['format'],
+                            'mime' => $font_mime_types[$filtered_m_font_file['format']],
+                            'file_size' => filesize(get_attached_file($attachment_id)),
+                            'name' => substr($file_name, 0, strrpos($file_name, '.')),
+                        ];
+
+                        $metadata['google_fonts']['font_files'] = array_map(
+                            static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                                'file' => $file,
+                            ]) : $f,
+                            $metadata['google_fonts']['font_files']
+                        );
+                    }
+
+                    $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
+
+                    $files[] = $file;
+                }
+
+                $font_face['files'] = $files;
+
+                $font_faces[] = $font_face;
             }
         }
 
-        return $font_faces;
+        $sql = "
+            UPDATE {$wpdb->prefix}yabe_webfont_fonts
+            SET title = %s,
+                status = %d,
+                metadata = %s,
+                font_faces = %s
+            WHERE id = %d
+        ";
+
+        $sql = $wpdb->prepare($sql, $title, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR), $id);
+
+        $wpdb->query($sql);
+
+        return new WP_REST_Response([
+            'id' => $id,
+        ], 200, []);
     }
 }

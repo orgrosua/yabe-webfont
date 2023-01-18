@@ -220,7 +220,7 @@ const createNewFontFace = () => {
 
 const preview = reactive({
     text: `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`,
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 1.5,
     fontFamily: family,
 });
@@ -303,6 +303,8 @@ const cssPreviewStylesheet = computed(() => {
         return css;
     }
 
+    css += `\n`;
+
     css += cssFontFaceRule.value;
 
     if (selector.value) {
@@ -362,7 +364,7 @@ function doDelete() {
         });
 }
 
-const fetchItem = async () => {
+async function fetchItem() {
     busy.add('fonts.edit.custom:fetch-item');
     return api
         .request({
@@ -391,7 +393,7 @@ const fetchItem = async () => {
 function sendForm(e) {
     e.preventDefault();
 
-    busy.add('fonts.edit.custom:sendForm');
+    busy.add('fonts.edit.custom:send-form');
 
     let promise = api
         .request({
@@ -418,7 +420,7 @@ function sendForm(e) {
             fetchItem();
         })
         .finally(() => {
-            busy.remove('fonts.edit.custom:sendForm');
+            busy.remove('fonts.edit.custom:send-form');
         })
 
     notifier.async(
@@ -460,13 +462,13 @@ const isHaveUnsavedChanges = computed(() => {
     }
 
     return (
-        title.value !== item.value.title ||
-        family.value !== item.value.family ||
-        status.value !== item.value.status ||
-        display.value !== item.value.metadata.display ||
-        selector.value !== item.value.metadata.selector ||
-        preload.value !== item.value.metadata.preload ||
-        !isEqual(fontFaces.value, item.value.font_faces)
+        title.value !== item.value.title
+        || family.value !== item.value.family
+        || status.value !== item.value.status
+        || display.value !== item.value.metadata.display
+        || selector.value !== item.value.metadata.selector
+        || preload.value !== item.value.metadata.preload
+        || !isEqual(fontFaces.value, item.value.font_faces)
     );
 });
 

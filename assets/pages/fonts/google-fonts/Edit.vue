@@ -1,5 +1,5 @@
 <template>
-    <span class="tw-mr-2 tw-text-2xl">» {{ __('Import Google Fonts', 'yabe-webfont') }} </span>
+    <span class="tw-mr-2 tw-text-2xl">» {{ __('Edit Google Fonts', 'yabe-webfont') }} </span>
 
     <div id="poststuff">
         <form id="post-body" @submit="sendForm" class="metabox-holder columns-2">
@@ -18,7 +18,7 @@
                         <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                             <div class="tw-col-span-4 tw-flex tw-flex-col tw-gap-1.5">
                                 <label class="tw-text-sm tw-font-semibold">Font Family</label>
-                                <TheSearchFamily :catalog="catalog" v-model="fontData"></TheSearchFamily>
+                                <TheSearchFamily disabled :catalog="catalog" v-model="fontData"></TheSearchFamily>
                             </div>
 
                             <div class="tw-col-span-2 tw-flex tw-flex-col tw-gap-1.5">
@@ -48,7 +48,7 @@
                             <!-- TODO: 2nd row -->
                             <div class="tw-col-span-7 tw-flex tw-flex-col tw-gap-1.5">
                                 <span class="tw-text-sm tw-font-semibold">Subsets</span>
-                                <VueSelect multiple :options="fontData?.subsets.filter((item) => !subsets.includes(item))" v-model="subsets" :searchable="false" placeholder="Choose subsets">
+                                <VueSelect disabled multiple :options="fontData?.subsets.filter((item) => !subsets.includes(item))" v-model="subsets" :searchable="false" placeholder="Choose subsets">
                                     <template v-slot:no-options="{ search, searching }">
                                         <template v-if="!subsets.length">
                                             Please choose a font family first.
@@ -65,7 +65,7 @@
                                 <span class="tw-text-sm tw-font-semibold">Variable Fonts</span>
                                 <div class="tw-flex-1 tw-flex tw-items-center">
                                     <label for="variable" class="tw-text-sm">
-                                        <input :disabled="!fontData?.isSupportVariable" type="checkbox" name="variable" id="variable" v-model="variable">
+                                        <input disabled type="checkbox" name="variable" id="variable" v-model="variable">
                                         Enable
                                     </label>
                                 </div>
@@ -152,6 +152,12 @@
                                 </div>
 
                                 <div id="major-publishing-actions">
+                                    <div id="delete-action">
+                                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-underline tw-cursor-pointer hover:tw-text-red-800" @click="doDelete">
+                                            {{ isDeleting? 'Deleting...': 'Trash' }}
+                                        </a>
+                                    </div>
+
                                     <div id="publishing-action">
                                         <button type="submit" name="save" id="save" :disabled="busy.isBusy" class="button button-primary button-large" value="save">Save</button>
                                     </div>
@@ -255,14 +261,14 @@
 
 <script setup>
 import ago from 's-ago';
-import { nanoid } from 'nanoid';
-import axios from 'axios';
+import { __ } from '@wordpress/i18n';
 import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import debounce from 'lodash-es/debounce';
 import isEqual from 'lodash-es/isEqual';
 import uniq from 'lodash-es/uniq';
 import sortBy from 'lodash-es/sortBy';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { useApi } from '../../../library/api';
 import { useBusy } from '../../../stores/busy';
 import { useNotifier } from '../../../library/notifier';
@@ -273,6 +279,7 @@ import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 import TheSearchFamily from '../../../components/fonts/google-fonts/TheSearchFamily.vue';
 
 const api = useApi();
+const route = useRoute();
 const router = useRouter();
 const notifier = useNotifier();
 const busy = useBusy();
@@ -292,8 +299,12 @@ const variable = ref(false);
 const fontFiles = ref([]);
 const fontFaces = ref([]);
 
+const item = ref({});
+
+const isDeleting = ref(false);
+
 const preview = reactive({
-    text: ``,
+    text: `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`,
     fontSize: 16,
     lineHeight: 1.5,
     fontFamily: family,
@@ -304,147 +315,12 @@ const preview = reactive({
     }
 });
 
-watch(family, (newFamily, oldFamily) => {
-    if (title.value === '' || title.value === oldFamily) {
-        title.value = newFamily;
-    }
-});
-
-watch(fontData, (newValue, oldValue) => {
-    if (newValue?.isSupportVariable !== oldValue?.isSupportVariable) {
-        variable.value = false;
-    }
-
-    if (newValue && Array.isArray(newValue.subsets) && newValue.subsets.length) {
-        subsets.value = newValue.subsets.includes('latin') ? ['latin'] : [newValue.subsets[0]];
-    } else {
-        subsets.value = [];
-    }
-});
-
-watch(variable, (newValue, oldValue) => {
-    format.value = ['woff2'];
-    reComputeFontFiles();
-});
-
-watch([variable, family], ([newVariable, newFamily], [oldVariable, oldFamily]) => {
-    if (newVariable) {
-        fontData.value?.axes.find(axis => {
-            if (axis.tag === 'wght') {
-                preview.weight.current = axis.defaultValue;
-                preview.weight.min = axis.min;
-                preview.weight.max = axis.max;
-            }
-        });
-    }
-});
-
-watch(subsets, (newValue, oldValue) => {
-    if (newValue.length === 0 && Array.isArray(fontData.value?.subsets) && fontData.value?.subsets?.length) {
-        subsets.value = fontData.value.subsets.includes('latin') ? ['latin'] : [fontData.value.subsets[0]];
-    }
-});
-
 watch(format, (newValue, oldValue) => {
     if (newValue.length === 0) {
         format.value = ['woff2'];
     }
 });
 
-watch([subsets, family], ([newSubsets, newFamily, newVariable], [oldSubsets, oldFamily, oldVariable]) => {
-    if (isEqual(newSubsets.sort(), oldSubsets.sort()) && newFamily === oldFamily && newVariable === oldVariable) {
-        return;
-    }
-
-    if (newFamily !== '') {
-        fetchFontFiles();
-    }
-});
-
-function reComputeFontFiles() {
-    if (variable.value) {
-        fontFaces.value = [];
-        if (fontFiles.value.some(file => file.weight === 0 && file.style === 'normal')) {
-            fontFaces.value.push({
-                id: nanoid(10),
-                key: '0',
-                weight: 0,
-                style: 'normal',
-                isEnabled: true,
-                display: '',
-                selector: '',
-                comment: '',
-            });
-        }
-        if (fontFiles.value.some(file => file.weight === 0 && file.style === 'italic')) {
-            fontFaces.value.push({
-                id: nanoid(10),
-                key: '0i',
-                weight: 0,
-                style: 'italic',
-                isEnabled: true,
-                display: '',
-                selector: '',
-                comment: '',
-            });
-        }
-    } else {
-        fontFaces.value = fontData.value.variants.map(v => {
-            let fWeight = Number.parseInt(v);
-            let fStyle = 'normal';
-            switch (v.replace('regular', '').replace(/[0-9]/g, '').trim()) {
-                case 'i':
-                    fStyle = 'italic';
-                    break;
-                case 'o':
-                    fStyle = 'oblique';
-                    break;
-                default:
-                    break;
-            }
-
-            return {
-                id: nanoid(10),
-                key: v,
-                weight: !isNaN(fWeight) ? fWeight : 400,
-                style: fStyle,
-                isEnabled: fWeight === 400 || fWeight === 0,
-                display: '',
-                selector: '',
-                comment: '',
-            };
-        });
-    }
-}
-
-function fetchFontFiles() {
-    busy.add('fonts.create.google-fonts:fetch-font-files');
-
-    axios
-        .request({
-            method: 'GET',
-            url: `${yabeWebfont.hostedWakufont}/api/fonts/${fontData.value.slug}`,
-            params: {
-                subsets: subsets.value.join(','),
-            },
-        })
-        .then(response => {
-            const files = Object.values(response.data.files);
-
-            fontFiles.value = files.map(file => {
-                file.uid = nanoid(10);
-                return file;
-            });
-
-            reComputeFontFiles();
-        })
-        .catch(error => {
-            notifier.alert(error.message);
-        })
-        .finally(() => {
-            busy.remove('fonts.create.google-fonts:fetch-font-files');
-        });
-}
 function fontFormatMap(ext) {
     // https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
     switch (ext) {
@@ -466,6 +342,46 @@ function fontFormatMap(ext) {
         default:
             return 'woff2';
     }
+};
+
+async function fetchItem() {
+    busy.add('fonts.edit.google-fonts:fetch-item');
+    return api
+        .request({
+            method: 'GET',
+            url: `/fonts/detail/${route.params.id}`,
+        })
+        .then((response) => {
+            return response.data;
+        })
+        .then(data => {
+            title.value = data.title;
+            display.value = data.metadata.display;
+            selector.value = data.metadata.selector;
+            preload.value = data.metadata.preload;
+            status.value = data.status;
+            fontData.value = data.metadata.google_fonts.font_data;
+            subsets.value = data.metadata.google_fonts.subsets;
+            fontFaces.value = cloneDeep(data.metadata.google_fonts.font_faces);
+            fontFiles.value = cloneDeep(data.metadata.google_fonts.font_files);
+            format.value = cloneDeep(data.metadata.google_fonts.formats);
+            variable.value = data.metadata.google_fonts.variable;
+
+            item.value = data;
+
+            if (variable.value) {
+                fontData.value?.axes.find(axis => {
+                    if (axis.tag === 'wght') {
+                        preview.weight.current = axis.defaultValue;
+                        preview.weight.min = axis.min;
+                        preview.weight.max = axis.max;
+                    }
+                });
+            }
+        })
+        .finally(() => {
+            busy.remove('fonts.edit.google-fonts:fetch-item');
+        });
 };
 
 const cssFontFaceRule = computed(() => {
@@ -514,7 +430,9 @@ const cssFontFaceRule = computed(() => {
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
-                    css += `\tsrc: url('${file.url}') format(${fontFormatMap(file.format)});\n`;
+                    let file_url = file.file?.attachment_url || file.url;
+
+                    css += `\tsrc: url('${file_url}') format(${fontFormatMap(file.format)});\n`;
 
                     if (file.unicodeRange) {
                         css += `\tunicode-range: ${file.unicodeRange};\n`;
@@ -569,7 +487,9 @@ const cssFontFaceRule = computed(() => {
                 css += `\tsrc: `;
 
                 let fileSrc = files.map(f => {
-                    return `url('${f.url}') format(${fontFormatMap(f.format)})`;
+                    let file_url = f.file?.attachment_url || f.url;
+
+                    return `url('${file_url}') format(${fontFormatMap(f.format)})`;
                 });
 
                 css += fileSrc.join(',\n\t\t');
@@ -634,7 +554,9 @@ const cssFontFaceRuleFiltered = computed(() => {
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
-                    css += `\tsrc: url('${file.url}') format(${fontFormatMap(file.format)});\n`;
+                    let file_url = file.file?.attachment_url || file.url;
+
+                    css += `\tsrc: url('${file_url}') format(${fontFormatMap(file.format)});\n`;
 
                     if (file.unicodeRange) {
                         css += `\tunicode-range: ${file.unicodeRange};\n`;
@@ -693,7 +615,9 @@ const cssFontFaceRuleFiltered = computed(() => {
                 css += `\tsrc: `;
 
                 let fileSrc = files.map(f => {
-                    return `url('${f.url}') format(${fontFormatMap(f.format)})`;
+                    let file_url = f.file?.attachment_url || f.url;
+
+                    return `url('${file_url}') format(${fontFormatMap(f.format)})`;
                 });
 
                 css += fileSrc.join(',\n\t\t');
@@ -741,7 +665,7 @@ const cssPreviewStylesheet = computed(() => {
     css = css.replace(/\t/g, '  ');
 
     // replace url with placeholder
-    css = css.replace(/url\(\'.*\'\)/g, `url('FONT_FILE_URL')`);
+    css = css.replace(/url\(\'.*fonts.gstatic.com.*\'\)/g, `url('FONT_FILE_URL')`);
 
     // replace <family> placeholder
     css = css.replace(/<family>/g, family.value);
@@ -761,50 +685,22 @@ watch(cssFontFaceRule, debounce((newCss, oldCss) => {
     }
 }, 1000));
 
-function resetForm() {
-    fontData.value = null;
-    title.value = '';
-    display.value = 'auto';
-    selector.value = '';
-    preload.value = false;
-    subsets.value = [];
-    format.value = ['woff2'];
-    variable.value = false;
-    fontFiles.value = [];
-    fontFaces.value = [];
-
-    preview.text = `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`;
-    preview.fontSize = 16;
-    preview.weight = {
-        current: 0,
-        min: 0,
-        max: 0,
-    };
-}
-
 onBeforeMount(() => {
-    busy.add('fonts.create.google-fonts:on-before-mount');
+    let promise = fetchItem();
 
-    axios
-        .request({
-            method: 'GET',
-            url: `${yabeWebfont.hostedWakufont}/api/fonts`,
-        })
-        .then(response => {
-            catalog.value = response.data.fonts;
-            catalog.value.forEach(font => {
-                font.subsets = font.subsets.filter(subset => subset !== 'menu');
-            });
-        })
-        .catch(error => {
-            notifier.alert(error.message);
-        })
-        .finally(() => {
-            busy.remove('fonts.create.google-fonts:on-before-mount');
-        });
-
-
-    resetForm();
+    notifier.async(
+        promise,
+        'Font details loaded.',
+        err => {
+            notifier.alert(
+                err.response && err.response.status === 404
+                    ? 'Font not found.'
+                    : 'Failed to load font details.'
+            );
+            router.go(-1);
+        },
+        'Fetching font details...'
+    );
 
     fontPreviewStylesheetEl = document.querySelector('#yabe-webfont-preview');
     if (!fontPreviewStylesheetEl) {
@@ -814,7 +710,82 @@ onBeforeMount(() => {
     }
 });
 
+function doDelete() {
+    if (!confirm(__(`Are you sure you want to delete the font?`, 'yabe-webfont'))) {
+        return;
+    }
+
+    isDeleting.value = true;
+    busy.add('fonts.edit.google-fonts:delete');
+
+    api
+        .request({
+            method: 'DELETE',
+            url: `/fonts/delete/${item.value.id}`,
+        })
+        .then((response) => {
+            router.push({ name: 'fonts.index' });
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            isDeleting.value = false;
+            busy.remove('fonts.edit.google-fonts:delete');
+        });
+}
+
+const unsavedNoticeId = ref(null);
+
+const isHaveUnsavedChanges = computed(() => {
+    if (!item.value) {
+        return false;
+    }
+
+    return (
+        title.value !== item.value.title
+        || status.value !== item.value.status
+        || display.value !== item.value.metadata.display
+        || selector.value !== item.value.metadata.selector
+        || preload.value !== item.value.metadata.preload
+        || !isEqual(fontFaces.value, item.value.metadata.google_fonts.font_faces)
+        || !isEqual(format.value, item.value.metadata.google_fonts.formats)
+    );
+});
+
+watch(isHaveUnsavedChanges, (newVal, oldVal) => {
+    if (newVal && !unsavedNoticeId.value) {
+        unsavedNoticeId.value = wordpressNotice.add({
+            type: 'warning',
+            message: `<p>You have unsaved changes.</p>`,
+        });
+    } else {
+        wordpressNotice.remove(unsavedNoticeId.value);
+        unsavedNoticeId.value = null;
+    }
+});
+
+onBeforeRouteLeave((to, from, next) => {
+    if (isHaveUnsavedChanges.value) {
+        if (!confirm(__(`You have unsaved changes. Are you sure you want to leave?`, 'yabe-webfont'))) {
+            return;
+        }
+    }
+
+    next();
+});
+
+window.onbeforeunload = function (e) {
+    if (isHaveUnsavedChanges.value) {
+        return __(`You have unsaved changes. Are you sure you want to leave?`, 'yabe-webfont');
+    }
+};
+
 onBeforeUnmount(() => {
+    window.onbeforeunload = null;
+    if (unsavedNoticeId.value) {
+        wordpressNotice.remove(unsavedNoticeId.value);
+    }
     if (fontPreviewStylesheetEl) {
         document.head.removeChild(fontPreviewStylesheetEl);
     }
@@ -823,12 +794,12 @@ onBeforeUnmount(() => {
 function sendForm(e) {
     e.preventDefault();
 
-    busy.add('fonts.create.google-fonts:send-form');
+    busy.add('fonts.edit.google-fonts:send-form');
 
     let promise = api
         .request({
-            method: 'POST',
-            url: '/fonts/google-fonts/store',
+            method: 'PUT',
+            url: `/fonts/google-fonts/update/${item.value.id}`,
             data: {
                 title: title.value,
                 status: status.value,
@@ -848,29 +819,22 @@ function sendForm(e) {
             },
         })
         .then(response => {
-            const editUrl = router.resolve({
-                name: 'fonts.edit.google-fonts',
-                params: {
-                    id: response.data.id,
-                },
-            }).href;
-
             wordpressNotice.add({
                 type: 'success',
-                message: `<p>Google Fonts imported successfully. <a href="${editUrl}">Edit Font</a></p>`,
+                message: `<p>Google Fonts updated successfully.</p>`,
             });
 
-            resetForm();
+            fetchItem();
         })
         .finally(() => {
-            busy.remove('fonts.create.google-fonts:send-form');
+            busy.remove('fonts.edit.google-fonts:send-form');
         });
 
     notifier.async(
         promise,
-        'Google Fonts imported successfully.',
+        'Google Fonts updated successfully.',
         undefined,
-        'Importing Google Fonts...'
+        'Updating Google Fonts...'
     );
 }
 </script>
