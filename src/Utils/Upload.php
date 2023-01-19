@@ -141,4 +141,31 @@ class Upload
 
         return $attachment_id;
     }
+
+    /**
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
+     * @param string $mime file extension or mime type
+     */
+    public static function mime_keyword(string $mime): string
+    {
+        switch ($mime) {
+            case 'woff2':
+            case 'font/woff2':
+                return 'woff2';
+            case 'woff':
+            case 'font/woff':
+                return 'woff';
+            case 'ttf':
+            case 'font/ttf':
+                return 'truetype';
+            case 'otf':
+            case 'font/otf':
+                return 'opentype';
+            case 'eot':
+            case 'font/eot':
+                return 'embedded-opentype';
+            default:
+                return 'woff2';
+        }
+    }
 }

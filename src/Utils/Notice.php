@@ -40,15 +40,17 @@ class Notice
      */
     public const INFO = 'info';
 
+    public const OPTION_NAME = YABE_WEBFONT_OPTION_NAMESPACE . '_notices';
+
     /**
      * Get lists of notices.
      */
     public static function get_lists(?bool $purge = true): array
     {
-        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+        $notices = get_option(self::OPTION_NAME, []);
 
         if ($purge) {
-            update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+            update_option(self::OPTION_NAME, []);
         }
 
         return $notices;
@@ -56,7 +58,7 @@ class Notice
 
     public static function add(string $status, string $message, ?string $key = null, bool $unique = false): void
     {
-        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+        $notices = get_option(self::OPTION_NAME, []);
 
         $payload = [
             'status' => $status,
@@ -82,7 +84,7 @@ class Notice
             $notices[] = $payload;
         }
 
-        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', $notices);
+        update_option(self::OPTION_NAME, $notices);
     }
 
     /**

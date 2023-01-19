@@ -17,6 +17,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use wpdb;
+use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Upload;
 
@@ -131,20 +132,6 @@ class Font extends AbstractApi implements ApiInterface
         return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 
-    private function attach_font_files(array $font_faces): array
-    {
-        foreach ($font_faces as $i => $font_face) {
-            foreach ($font_face->files as $j => $file) {
-                $attachment_url = wp_get_attachment_url($file->attachment_id);
-                if ($attachment_url) {
-                    $font_faces[$i]->files[$j]->attachment_url = $attachment_url;
-                }
-            }
-        }
-
-        return $font_faces;
-    }
-
     private function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         /** @var wpdb $wpdb */
@@ -187,7 +174,7 @@ class Font extends AbstractApi implements ApiInterface
                 'slug' => $row->slug,
                 'family' => $row->family,
                 'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-                'font_faces' => $this->attach_font_files(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+                'font_faces' => Runtime::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
                 'status' => (bool) $row->status,
                 'created_at' => strtotime($row->created_at),
                 'updated_at' => strtotime($row->updated_at),
@@ -251,7 +238,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $row = $wpdb->get_row($sql);
 
-        if (!$row) {
+        if (! $row) {
             return new WP_REST_Response([
                 'message' => 'Font not found',
             ], 404, []);
@@ -264,7 +251,7 @@ class Font extends AbstractApi implements ApiInterface
             'slug' => $row->slug,
             'family' => $row->family,
             'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-            'font_faces' => $this->attach_font_files(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+            'font_faces' => Runtime::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
             'status' => (bool) $row->status,
             'created_at' => strtotime($row->created_at),
             'updated_at' => strtotime($row->updated_at),
@@ -299,6 +286,8 @@ class Font extends AbstractApi implements ApiInterface
         $wpdb->query($sql);
 
         $id = $wpdb->insert_id;
+
+        do_action('a!yabe/webfont/api/font:custom_store', $id);
 
         return new WP_REST_Response([
             'id' => $id,
@@ -341,6 +330,8 @@ class Font extends AbstractApi implements ApiInterface
 
         $wpdb->query($sql);
 
+        do_action('a!yabe/webfont/api/font:update_status', $id, $status);
+
         return new WP_REST_Response([
             'id' => $id,
             'status' => $status,
@@ -365,7 +356,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $item = $wpdb->get_row($sql);
 
-        if (!$item) {
+        if (! $item) {
             return new WP_REST_Response([
                 'message' => __('Font not found', 'yabe-webfont'),
             ], 404, []);
@@ -387,6 +378,8 @@ class Font extends AbstractApi implements ApiInterface
         }
 
         $wpdb->query($sql);
+
+        do_action('a!yabe/webfont/api/font:destroy', $item);
 
         return new WP_REST_Response(null, 200, []);
     }
@@ -424,6 +417,8 @@ class Font extends AbstractApi implements ApiInterface
         $sql = $wpdb->prepare($sql, $id);
 
         $wpdb->query($sql);
+
+        do_action('a!yabe/webfont/api/font:restore', $id);
 
         return new WP_REST_Response([
             'id' => $id,
@@ -475,6 +470,8 @@ class Font extends AbstractApi implements ApiInterface
 
         $wpdb->query($sql);
 
+        do_action('a!yabe/webfont/api/font:custom_update', $id);
+
         return new WP_REST_Response([
             'id' => $id,
         ], 200, []);
@@ -508,7 +505,7 @@ class Font extends AbstractApi implements ApiInterface
         $m_font_files = $metadata['google_fonts']['font_files'];
 
         foreach ($m_font_faces as $k => $m_face) {
-            if (!$m_face['isEnabled']) {
+            if (! $m_face['isEnabled']) {
                 continue;
             }
 
@@ -554,7 +551,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (!$attachment_id) {
+                            if (! $attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {
@@ -637,7 +634,7 @@ class Font extends AbstractApi implements ApiInterface
                     try {
                         $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                        if (!$attachment_id) {
+                        if (! $attachment_id) {
                             continue;
                         }
                     } catch (\Throwable $throwable) {
@@ -686,11 +683,11 @@ class Font extends AbstractApi implements ApiInterface
 
         $id = $wpdb->insert_id;
 
+        do_action('a!yabe/webfont/api/font:google_fonts_store', $id);
+
         return new WP_REST_Response([
             'id' => $id,
         ], 200, []);
-
-        return new WP_REST_Response(null, 200, []);
     }
 
     private function google_fonts_update(WP_REST_Request $wprestRequest): WP_REST_Response
@@ -739,7 +736,7 @@ class Font extends AbstractApi implements ApiInterface
         foreach ($m_font_faces as $k => $m_face) {
             $metadata['google_fonts']['font_faces'][$k]['attached_font_files'] = [];
 
-            if (!$m_face['isEnabled']) {
+            if (! $m_face['isEnabled']) {
                 continue;
             }
 
@@ -788,7 +785,7 @@ class Font extends AbstractApi implements ApiInterface
                             try {
                                 $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                                if (!$attachment_id) {
+                                if (! $attachment_id) {
                                     continue;
                                 }
                             } catch (\Throwable $throwable) {
@@ -875,7 +872,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (!$attachment_id) {
+                            if (! $attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {
@@ -924,6 +921,8 @@ class Font extends AbstractApi implements ApiInterface
         $sql = $wpdb->prepare($sql, $title, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR), $id);
 
         $wpdb->query($sql);
+
+        do_action('a!yabe/webfont/api/font:google_fonts_update', $id);
 
         return new WP_REST_Response([
             'id' => $id,
