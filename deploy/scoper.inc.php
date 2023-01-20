@@ -91,6 +91,8 @@ return [
         $wp_classes,
         [
             // 'ReflectionClassConstant',
+
+            'ECF_Plugin',
         ]
     ),
     'exclude-functions' => array_merge(
@@ -123,7 +125,7 @@ return [
             'YABE_WEBFONT_SENTRY_DSN',
             'YABE_WEBFONT_ERROR_REPORTING',
 
-            'BRICKS_DB_CUSTOM_FONTS',
+            'SHOW_CT_BUILDER',
         ]
     ),
 

@@ -16,6 +16,7 @@ namespace Yabe\Webfont;
 use Exception;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Api\Router as ApiRouter;
+use Yabe\Webfont\Builder\Integration as BuilderIntegration;
 use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Utils\Notice;
@@ -145,6 +146,7 @@ final class Plugin
         new ApiRouter();
         new Cache();
         new Runtime();
+        new BuilderIntegration();
 
         // admin hooks.
         if (is_admin()) {

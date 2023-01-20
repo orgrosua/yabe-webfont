@@ -34,19 +34,8 @@ class Cache
 
         add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
 
-        // listen to some hooks for cache build
-        $hooks = [
-            'a!yabe/webfont/api/font:custom_store',
-            'a!yabe/webfont/api/font:update_status',
-            'a!yabe/webfont/api/font:destroy',
-            'a!yabe/webfont/api/font:restore',
-            'a!yabe/webfont/api/font:custom_update',
-            'a!yabe/webfont/api/font:google_fonts_store',
-            'a!yabe/webfont/api/font:google_fonts_update',
-        ];
-        foreach ($hooks as $hook) {
-            add_action($hook, fn () => $this->schedule_cache(), 10, 1);
-        }
+        // listen to fonts event for cache build
+        add_action('a!yabe/webfont/api/font:fonts_event', fn () => $this->schedule_cache(), 10, 1);
     }
 
     public function filter_cron_schedules($schedules)

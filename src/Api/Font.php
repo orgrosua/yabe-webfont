@@ -23,6 +23,30 @@ use Yabe\Webfont\Utils\Upload;
 
 class Font extends AbstractApi implements ApiInterface
 {
+    public function __construct() {
+        $hooks = [
+            'a!yabe/webfont/api/font:custom_store',
+            'a!yabe/webfont/api/font:update_status',
+            'a!yabe/webfont/api/font:destroy',
+            'a!yabe/webfont/api/font:restore',
+            'a!yabe/webfont/api/font:custom_update',
+            'a!yabe/webfont/api/font:google_fonts_store',
+            'a!yabe/webfont/api/font:google_fonts_update',
+        ];
+        foreach ($hooks as $hook) {
+            add_action($hook, function ($f) use ($hook) {
+                /**
+                 * Listen to several font events and emit a wrapper event
+                 * 
+                 * @param string $hook Hook name
+                 * @param Object|int $f Font ID or Font Object
+                 */
+                do_action('a!yabe/webfont/api/font:fonts_event', $hook, $f);
+            }
+            , 10, 1);
+        }
+    }
+
     public function get_prefix(): string
     {
         return 'fonts';
@@ -330,7 +354,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $wpdb->query($sql);
 
-        do_action('a!yabe/webfont/api/font:update_status', $id, $status);
+        do_action('a!yabe/webfont/api/font:update_status', $id);
 
         return new WP_REST_Response([
             'id' => $id,
