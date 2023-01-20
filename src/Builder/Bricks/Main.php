@@ -28,6 +28,6 @@ class Main implements BuilderInterface
 
     public function __construct()
     {
-        add_filter('bricks/builder/standard_fonts', fn ($fonts) => array_merge($fonts, Runtime::get_font_families()));
+        add_filter('bricks/builder/standard_fonts', fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')));
     }
 }

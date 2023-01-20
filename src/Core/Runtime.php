@@ -180,7 +180,7 @@ class Runtime
         $families = [];
 
         $sql = "
-            SELECT family FROM {$wpdb->prefix}yabe_webfont_fonts 
+            SELECT title, family FROM {$wpdb->prefix}yabe_webfont_fonts 
             WHERE status = 1
                 AND deleted_at IS NULL
         ";
@@ -188,7 +188,10 @@ class Runtime
         $result = $wpdb->get_results($sql);
 
         foreach ($result as $row) {
-            $families[] = $row->family;
+            $families[] = [
+                'title' => $row->title,
+                'family' => $row->family,
+            ];
         }
 
         return $families;

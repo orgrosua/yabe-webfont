@@ -16,6 +16,7 @@ namespace Yabe\Webfont\Builder\Gutenberg;
 use WP_Theme_JSON_Data;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Frontpage;
+use Yabe\Webfont\Core\Runtime;
 
 /**
  * Gutenberg integration.
@@ -55,25 +56,16 @@ class Main implements BuilderInterface
             ? $theme_json_data['settings']['typography']['fontFamilies']
             : [];
 
-        /** @var wpdb $wpdb */
-        global $wpdb;
+        $font_families = Runtime::get_font_families();
 
-        $sql = "
-            SELECT title, family FROM {$wpdb->prefix}yabe_webfont_fonts 
-            WHERE status = 1
-                AND deleted_at IS NULL
-        ";
-
-        $result = $wpdb->get_results($sql);
-
-        foreach ($result as $row) {
+        foreach ($font_families as $row) {
             /**
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
-                'name' => "[Yabe] {$row->title}",
-                'slug' => preg_replace('/[^a-zA-Z0-9\-_]+/', '-', $row->family),
-                'fontFamily' => $row->family,
+                'name' => "[Yabe] {$row['title']}",
+                'slug' => preg_replace('/[^a-zA-Z0-9\-_]+/', '-', $row['family']),
+                'fontFamily' => $row['family'],
             ];
         }
 

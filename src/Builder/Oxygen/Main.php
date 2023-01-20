@@ -36,7 +36,7 @@ class Main implements BuilderInterface
 
     public function elegant_custom_fonts()
     {
-        $output = json_encode(Runtime::get_font_families());
+        $output = json_encode(array_column(Runtime::get_font_families(), 'family'));
         $output = htmlspecialchars($output, ENT_QUOTES);
         echo sprintf('elegantCustomFonts=%s;', $output);
     }
