@@ -172,7 +172,7 @@ class Runtime
         return $html;
     }
 
-    public static function get_fonts_family(): array
+    public static function get_font_families(): array
     {
         /** @var wpdb $wpdb */
         global $wpdb;

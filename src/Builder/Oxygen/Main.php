@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Oxygen;
 
-use ECF_Plugin;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Plugin;
@@ -37,7 +36,7 @@ class Main implements BuilderInterface
 
     public function elegant_custom_fonts()
     {
-        $output = json_encode(Runtime::get_fonts_family());
+        $output = json_encode(Runtime::get_font_families());
         $output = htmlspecialchars($output, ENT_QUOTES);
         echo sprintf('elegantCustomFonts=%s;', $output);
     }

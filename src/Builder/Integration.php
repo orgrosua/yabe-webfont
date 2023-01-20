@@ -28,7 +28,6 @@ class Integration
     public function __construct()
     {
         $this->scan_builders();
-        // var_dump($this->builders);exit;
         $this->register_builders();
     }
 
@@ -45,13 +44,13 @@ class Integration
         do_action('a!yabe/webfont/builder/integration:before_scan', $finder);
 
         foreach ($finder as $file) {
-            $api_file = $file->getPathname();
+            $builder_file = $file->getPathname();
 
-            if (!is_readable($api_file)) {
+            if (!is_readable($builder_file)) {
                 continue;
             }
 
-            require_once $api_file;
+            require_once $builder_file;
         }
 
         // Find any Builders integration that extends BuilderInterface class

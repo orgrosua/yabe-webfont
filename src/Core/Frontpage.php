@@ -26,7 +26,7 @@ final class Frontpage
     public function __construct()
     {
         add_action('wp_head', fn () => $this->preload(), 1000001);
-        add_action('wp_head', fn () => $this->enqueue_css_cache(), 1000001);
+        add_action('wp_head', fn () => self::enqueue_css_cache(), 1000001);
     }
 
     /**
@@ -48,7 +48,7 @@ final class Frontpage
         define('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED', true);
     }
 
-    private function enqueue_css_cache()
+    public static function enqueue_css_cache()
     {
         if (defined('YABE_WEBFONT_CSS_CACHE_WAS_LOADED')) {
             return;
