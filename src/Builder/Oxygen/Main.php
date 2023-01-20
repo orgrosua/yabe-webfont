@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder\Oxygen;
 
 use ECF_Plugin;
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Plugin;
 
 /**
@@ -36,31 +37,9 @@ class Main implements BuilderInterface
 
     public function elegant_custom_fonts()
     {
-        $output = json_encode($this->get_fonts_family([]));
+        $output = json_encode(Runtime::get_fonts_family());
         $output = htmlspecialchars($output, ENT_QUOTES);
         echo sprintf('elegantCustomFonts=%s;', $output);
-    }
-
-    public function get_fonts_family($fonts)
-    {
-        /** @var wpdb $wpdb */
-        global $wpdb;
-
-        $families = [];
-
-        $sql = "
-            SELECT family FROM {$wpdb->prefix}yabe_webfont_fonts 
-            WHERE status = 1
-                AND deleted_at IS NULL
-        ";
-
-        $result = $wpdb->get_results($sql);
-
-        foreach ($result as $row) {
-            $families[] = $row->family;
-        }
-
-        return array_merge($fonts, $families);
     }
 
     public function enqueue_editor_style()

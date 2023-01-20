@@ -171,4 +171,26 @@ class Runtime
 
         return $html;
     }
+
+    public static function get_fonts_family(): array
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $families = [];
+
+        $sql = "
+            SELECT family FROM {$wpdb->prefix}yabe_webfont_fonts 
+            WHERE status = 1
+                AND deleted_at IS NULL
+        ";
+
+        $result = $wpdb->get_results($sql);
+
+        foreach ($result as $row) {
+            $families[] = $row->family;
+        }
+
+        return $families;
+    }
 }
