@@ -7,6 +7,7 @@ export const useLocalFontStore = defineStore('localFont', {
          * @type {{
          *   id: string, // nanoid
          *   weight: number, // 100, 200, 300, 400, 500, 600, 700, 800, 900, range<number number>
+         *   width: number|string, // number, range<number number>
          *   style: string, // normal, italic, oblique
          *   display: ?string, // null, auto, block, swap, fallback, optional
          *   selector: ?string, // css selector
@@ -30,6 +31,7 @@ export const useLocalFontStore = defineStore('localFont', {
             this.fontFaces.unshift({
                 id: nanoid(10),
                 weight: 400,
+                width: 'normal',
                 style: 'normal',
                 display: '',
                 selector: '',

@@ -556,11 +556,22 @@ class Font extends AbstractApi implements ApiInterface
                         $font_face = [
                             'id' => Common::random_slug(10),
                             'weight' => sprintf('%s %s', $wght['min'], $wght['max']),
+                            'width' => 'normal',
                             'style' => $m_face['style'],
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
                         ];
+
+                        $wdth = array_filter(
+                            $metadata['google_fonts']['font_data']['axes'],
+                            static fn ($a) => $a['tag'] === 'wdth'
+                        );
+
+                        if ($wdth !== []) {
+                            $wdth = $wdth[0];
+                            $font_face['width'] = sprintf('%s% %s%', $wdth['min'], $wdth['max']);
+                        }
 
                         $file_name = sanitize_title_with_dashes(sprintf(
                             'google-fonts-%s-%s-%s-%s-%s-%s',
@@ -617,6 +628,7 @@ class Font extends AbstractApi implements ApiInterface
                 $font_face = [
                     'id' => Common::random_slug(10),
                     'weight' => $m_face['weight'],
+                    'width' => 'normal',
                     'style' => $m_face['style'],
                     'display' => $m_face['display'],
                     'selector' => $m_face['selector'],
@@ -788,10 +800,21 @@ class Font extends AbstractApi implements ApiInterface
                             'id' => Common::random_slug(10),
                             'weight' => sprintf('%s %s', $wght['min'], $wght['max']),
                             'style' => $m_face['style'],
+                            'width' => 'normal',
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
                         ];
+
+                        $wdth = array_filter(
+                            $metadata['google_fonts']['font_data']['axes'],
+                            static fn ($a) => $a['tag'] === 'wdth'
+                        );
+
+                        if ($wdth !== []) {
+                            $wdth = $wdth[0];
+                            $font_face['width'] = sprintf('%s% %s%', $wdth['min'], $wdth['max']);
+                        }
 
                         if (array_key_exists('file', $filtered_m_font_file)) {
                             $file = $filtered_m_font_file['file'];
@@ -852,6 +875,7 @@ class Font extends AbstractApi implements ApiInterface
                 $font_face = [
                     'id' => Common::random_slug(10),
                     'weight' => $m_face['weight'],
+                    'width' => 'normal',
                     'style' => $m_face['style'],
                     'display' => $m_face['display'],
                     'selector' => $m_face['selector'],
