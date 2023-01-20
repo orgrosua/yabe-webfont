@@ -29,16 +29,19 @@ class Main implements BuilderInterface
 
     public function __construct()
     {
-        add_filter('f!yabe/webfont/builder/oxygen/main:get_font_families', fn ($fonts) => $this->filter_register_fonts($fonts));
-
-        global $ECF_Plugin;
-        require_once __DIR__ . '/ECF_Plugin.php';
-        $ECF_Plugin = new ECF_Plugin();
-
         add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1000001);
+        // remove_action('ct_builder_ng_init', 'ct_init_elegant_custom_fonts');
+        add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1000001);
     }
 
-    public function filter_register_fonts($fonts)
+    public function elegant_custom_fonts()
+    {
+        $output = json_encode($this->get_fonts_family([]));
+        $output = htmlspecialchars($output, ENT_QUOTES);
+        echo sprintf('elegantCustomFonts=%s;', $output);
+    }
+
+    public function get_fonts_family($fonts)
     {
         /** @var wpdb $wpdb */
         global $wpdb;
