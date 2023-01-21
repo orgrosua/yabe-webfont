@@ -25,7 +25,8 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_action('elementor/controls/controls_registered', fn ($controls_manager) => $this->controls_registered($controls_manager), 100001);
+        add_filter('elementor/fonts/groups', fn ($groups) => array_merge(['yabe-webfont' => 'Yabe Webfont',], $groups), 100001);
+        add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 100001);
     }
 
     public function get_name(): string
@@ -33,29 +34,14 @@ class Main implements BuilderInterface
         return 'elementor';
     }
 
-    public function controls_registered($controls_manager)
+    public function filter_elementor_fonts($fonts)
     {
-        // $elementor_fonts = $controls_manager->get_control('font')->get_settings('options');
-
-        /**
-         * @see \Elementor\Fonts::get_native_fonts()
-         */
-        $elementor_fonts = [
-            'Arial' => 'system',
-            'Tahoma' => 'system',
-            'Verdana' => 'system',
-            'Helvetica' => 'system',
-            'Times New Roman' => 'system',
-            'Trebuchet MS' => 'system',
-            'Georgia' => 'system',
-        ];
-
         $font_families = Runtime::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $elementor_fonts[$font_family['family']] = 'system';
+            $fonts[$font_family['family']] = 'yabe-webfont';
         }
 
-        $controls_manager->get_control('font')->set_settings('options', $elementor_fonts);
+        return $fonts;
     }
 }
