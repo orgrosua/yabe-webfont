@@ -126,6 +126,7 @@ return [
             'YABE_WEBFONT_ERROR_REPORTING',
 
             'SHOW_CT_BUILDER',
+            'CWICLY_VERSION',
         ]
     ),
 

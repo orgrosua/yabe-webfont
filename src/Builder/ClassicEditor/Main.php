@@ -13,10 +13,8 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\ClassicEditor;
 
-use WP_Theme_JSON_Data;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Cache;
-use Yabe\Webfont\Core\Frontpage;
 use Yabe\Webfont\Core\Runtime;
 
 /**
