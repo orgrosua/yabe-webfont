@@ -38,9 +38,6 @@ class Main implements BuilderInterface
 
     public function filter_tiny_mce($mceInit, $editor_id)
     {
-        /** @var wpdb $wpdb */
-        global $wpdb;
-
         $theme_advanced_fonts = '';
 
         $font_families = Runtime::get_font_families();

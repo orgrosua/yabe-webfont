@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Core;
 
 use Yabe\Webfont\Core\Cache;
-use Yabe\Webfont\Utils\Common;
 
 /**
  * Serve the font on the frontpage.

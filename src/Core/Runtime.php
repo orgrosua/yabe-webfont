@@ -121,6 +121,22 @@ class Runtime
             }
         }
 
+        if ($result !== []) {
+            $css .= "body{\n";
+
+            foreach ($result as $row) {
+                $value = "'{$row->family}'";
+                $name = sprintf('--yabe-webfont--family--%s', preg_replace('/[^a-zA-Z0-9\-_]+/', '-', strtolower($row->family)));
+
+                $css .= "\t{$name}: {$value};\n";
+            }
+
+            $css .= "}\n\n";
+        }
+
+        // replace tabs with 2 spaces
+        $css = preg_replace('/\t/', '  ', $css);
+
         return $css;
     }
 

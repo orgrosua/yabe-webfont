@@ -26,8 +26,8 @@ final class Version20221121114557 extends AbstractMigration
 
         $sql[] = "CREATE TABLE `{$wpdb->prefix}yabe_webfont_fonts` (
             `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `type` VARCHAR(50) NOT NULL DEFAULT 'custom' COMMENT 'Type of font (custom, google)',
-            `status` INT(1) NOT NULL DEFAULT 0 COMMENT 'Status of published font (1 = published, 0 = draft)',
+            `type` VARCHAR(50) NOT NULL DEFAULT 'custom',
+            `status` INT(1) NOT NULL DEFAULT 0,
             `title` VARCHAR(255) NOT NULL,
             `slug` VARCHAR(255) NOT NULL,
             `family` VARCHAR(255),
