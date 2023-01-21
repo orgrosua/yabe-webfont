@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Yabe\Webfont\Builder\Elementor;
+namespace Yabe\Webfont\Builder\Beaver;
 
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 
 /**
- * Elementor integration.
+ * Beaver integration.
  *
  * @author Joshua <joshua@rosua.org>
  */
@@ -25,23 +25,24 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('elementor/fonts/groups', static fn ($groups) => array_merge([
-            'yabe-webfont' => 'Yabe Webfont',
-        ], $groups), 100001);
-        add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 100001);
+        add_filter('fl_theme_system_fonts', fn ($fonts) => $this->custom_fonts($fonts), 100001);
+        add_filter('fl_builder_font_families_system', fn ($fonts) => $this->custom_fonts($fonts), 100001);
     }
 
     public function get_name(): string
     {
-        return 'elementor';
+        return 'beaver';
     }
 
-    public function filter_elementor_fonts($fonts)
+    public function custom_fonts($fonts)
     {
         $font_families = Runtime::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $fonts[$font_family['family']] = 'yabe-webfont';
+            $fonts[$font_family['family']] = [
+                'fallback' => 'Verdana, Arial, sans-serif',
+                'weights' => ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+            ];
         }
 
         return $fonts;

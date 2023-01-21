@@ -125,7 +125,7 @@ class Runtime
             $css .= "body{\n";
 
             foreach ($result as $row) {
-                $value = sprintf('\'%s\'', $row->family);
+                $value = sprintf("'%s'", $row->family);
                 $name = sprintf('--yabe-webfont--family--%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
 
                 $css .= "\t{$name}: {$value};\n";
