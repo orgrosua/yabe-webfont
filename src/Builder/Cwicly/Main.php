@@ -18,31 +18,31 @@ use Yabe\Webfont\Core\Runtime;
 
 /**
  * Cwicly integration.
- * 
+ *
  * @author Joshua <joshua@rosua.org>
  */
 class Main implements BuilderInterface
 {
-    public function get_name(): string
-    {
-        return 'cwicly';
-    }
-
     public function __construct()
     {
         add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
     }
 
+    public function get_name(): string
+    {
+        return 'cwicly';
+    }
+
     public function build_cache()
     {
-        if (!defined('CWICLY_VERSION')) {
+        if (! defined('CWICLY_VERSION')) {
             return;
         }
 
         $font_cols = get_option('cwicly_font_cols', []);
 
-        if (!is_array($font_cols)) {
-            $font_cols = json_decode($font_cols, true);
+        if (! is_array($font_cols)) {
+            $font_cols = json_decode($font_cols, true, 512, JSON_THROW_ON_ERROR);
         }
 
         $font_families = Runtime::get_font_families();
@@ -54,14 +54,13 @@ class Main implements BuilderInterface
         }
 
         foreach ($font_families as $font_family) {
-            if (!array_key_exists($font_family['family'], $font_cols)) {
+            if (! array_key_exists($font_family['family'], $font_cols)) {
                 $font_cols[$font_family['family']] = [];
             }
         }
 
-        $font_cols = $font_cols !== [] ? json_encode($font_cols) : '{}';
+        $font_cols = $font_cols !== [] ? json_encode($font_cols, JSON_THROW_ON_ERROR) : '{}';
 
         update_option('cwicly_font_cols', $font_cols);
     }
-
 }

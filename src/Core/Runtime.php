@@ -67,8 +67,8 @@ class Runtime
         ];
 
         foreach ($result as $row) {
-            $metadata = json_decode($row->metadata);
-            $font_faces = self::refresh_font_faces_attachment_url(json_decode($row->font_faces));
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            $font_faces = self::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
 
             foreach ($font_faces as $font_face) {
                 if ($font_face->comment) {
@@ -125,8 +125,8 @@ class Runtime
             $css .= "body{\n";
 
             foreach ($result as $row) {
-                $value = "'{$row->family}'";
-                $name = sprintf('--yabe-webfont--family--%s', preg_replace('/[^a-zA-Z0-9\-_]+/', '-', strtolower($row->family)));
+                $value = sprintf('\'%s\'', $row->family);
+                $name = sprintf('--yabe-webfont--family--%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
 
                 $css .= "\t{$name}: {$value};\n";
             }
@@ -135,7 +135,7 @@ class Runtime
         }
 
         // replace tabs with 2 spaces
-        $css = preg_replace('/\t/', '  ', $css);
+        $css = preg_replace('#\t#', '  ', $css);
 
         return $css;
     }

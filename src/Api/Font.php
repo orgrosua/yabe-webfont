@@ -23,7 +23,8 @@ use Yabe\Webfont\Utils\Upload;
 
 class Font extends AbstractApi implements ApiInterface
 {
-    public function __construct() {
+    public function __construct()
+    {
         $hooks = [
             'a!yabe/webfont/api/font:custom_store',
             'a!yabe/webfont/api/font:update_status',
@@ -34,16 +35,15 @@ class Font extends AbstractApi implements ApiInterface
             'a!yabe/webfont/api/font:google_fonts_update',
         ];
         foreach ($hooks as $hook) {
-            add_action($hook, function ($f) use ($hook) {
+            add_action($hook, static function ($f) use ($hook) {
                 /**
                  * Listen to several font events and emit a wrapper event
-                 * 
+                 *
                  * @param string $hook Hook name
-                 * @param Object|int $f Font ID or Font Object
+                 * @param object|int $f Font ID or Font Object
                  */
                 do_action('a!yabe/webfont/api/font:fonts_event', $hook, $f);
-            }
-            , 10, 1);
+            }, 10, 1);
         }
     }
 

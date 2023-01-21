@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Core;
 
-use Yabe\Webfont\Core\Cache;
-
 /**
  * Serve the font on the frontpage.
  *
@@ -24,27 +22,8 @@ final class Frontpage
 {
     public function __construct()
     {
-        add_action('wp_head', fn () => $this->preload(), 1000001);
-        add_action('wp_head', fn () => self::enqueue_css_cache(), 1000001);
-    }
-
-    /**
-     * Preload the fonts file on the frontpage.
-     */
-    private function preload()
-    {
-        if (defined('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED')) {
-            return;
-        }
-
-        if (file_exists(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE))) {
-            $preload_html = file_get_contents(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE));
-            if (false !== $preload_html) {
-                echo $preload_html;
-            }
-        }
-
-        define('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED', true);
+        add_action('wp_head', fn () => $this->preload(), 1_000_001);
+        add_action('wp_head', static fn () => self::enqueue_css_cache(), 1_000_001);
     }
 
     public static function enqueue_css_cache()
@@ -67,5 +46,24 @@ final class Frontpage
         }
 
         define('YABE_WEBFONT_CSS_CACHE_WAS_LOADED', true);
+    }
+
+    /**
+     * Preload the fonts file on the frontpage.
+     */
+    private function preload()
+    {
+        if (defined('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED')) {
+            return;
+        }
+
+        if (file_exists(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE))) {
+            $preload_html = file_get_contents(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE));
+            if ($preload_html !== false) {
+                echo $preload_html;
+            }
+        }
+
+        define('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED', true);
     }
 }

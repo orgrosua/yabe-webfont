@@ -46,7 +46,7 @@ class Integration
         foreach ($finder as $file) {
             $builder_file = $file->getPathname();
 
-            if (!is_readable($builder_file)) {
+            if (! is_readable($builder_file)) {
                 continue;
             }
 
@@ -57,13 +57,13 @@ class Integration
         $declared_classes = get_declared_classes();
 
         foreach ($declared_classes as $declared_class) {
-            if (!class_exists($declared_class)) {
+            if (! class_exists($declared_class)) {
                 continue;
             }
 
             $reflector = new ReflectionClass($declared_class);
 
-            if (!$reflector->isSubclassOf(BuilderInterface::class)) {
+            if (! $reflector->isSubclassOf(BuilderInterface::class)) {
                 continue;
             }
 

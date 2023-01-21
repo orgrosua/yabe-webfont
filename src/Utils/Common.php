@@ -53,14 +53,14 @@ class Common
 
     /**
      * Save the worker result into the file.
-     * 
+     *
      * @param string $content The content of the file.
      * @param string $file_path The file path.
      * @throws Exception
      */
     public static function save_file($content, $file_path): void
     {
-        if (!file_exists($file_path)) {
+        if (! file_exists($file_path)) {
             wp_mkdir_p(dirname($file_path));
         }
 

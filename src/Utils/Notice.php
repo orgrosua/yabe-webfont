@@ -40,6 +40,9 @@ class Notice
      */
     public const INFO = 'info';
 
+    /**
+     * @var string
+     */
     public const OPTION_NAME = YABE_WEBFONT_OPTION_NAMESPACE . '_notices';
 
     /**

@@ -19,18 +19,29 @@ use Yabe\Webfont\Utils\Notice;
 
 /**
  * Manage the cache of fonts for the frontpage.
- * 
+ *
  * @author Joshua <joshua@rosua.org>
  */
 class Cache
 {
+    /**
+     * @var string
+     */
     public const CSS_CACHE_FILE = 'fonts.css';
+
+    /**
+     * @var string
+     */
     public const PRELOAD_HTML_FILE = 'preload.html';
+
+    /**
+     * @var string
+     */
     public const CACHE_DIR = '/yabe-webfont/cache/';
 
     public function __construct()
     {
-        add_filter('cron_schedules', [$this, 'filter_cron_schedules']);
+        add_filter('cron_schedules', fn ($schedules) => $this->filter_cron_schedules($schedules));
 
         add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
 
@@ -50,7 +61,7 @@ class Cache
 
     public function schedule_cache()
     {
-        if (!wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
+        if (! wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
             wp_schedule_single_event(time() + 10, 'a!yabe/webfont/core/cache:build_cache');
         }
     }
@@ -73,22 +84,22 @@ class Cache
             "/*\n! %s v%s | %s\n*/\n\n%s",
             Common::plugin_data('Name'),
             Plugin::VERSION,
-            date("Y-m-d H:i:s", time()),
+            date('Y-m-d H:i:s', time()),
             $css
         );
 
         try {
             Common::save_file($payload, self::get_cache_path(self::CSS_CACHE_FILE));
-        } catch (\Throwable $th) {
-            Notice::error("Failed to build Fonts CSS cache: {$th->getMessage()}");
+        } catch (\Throwable $throwable) {
+            Notice::error(sprintf('Failed to build Fonts CSS cache: %s', $throwable->getMessage()));
         }
 
         $preload_html = Runtime::build_preload();
 
         try {
             Common::save_file($preload_html, self::get_cache_path(self::PRELOAD_HTML_FILE));
-        } catch (\Throwable $th) {
-            Notice::error("Failed to build Fonts Preload HTML cache: {$th->getMessage()}");
+        } catch (\Throwable $throwable) {
+            Notice::error(sprintf('Failed to build Fonts Preload HTML cache: %s', $throwable->getMessage()));
         }
     }
 }

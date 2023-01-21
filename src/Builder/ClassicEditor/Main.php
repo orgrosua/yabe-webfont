@@ -19,21 +19,21 @@ use Yabe\Webfont\Core\Runtime;
 
 /**
  * Classic Editor integration.
- * 
+ *
  * @author Joshua <joshua@rosua.org>
  */
 class Main implements BuilderInterface
 {
-    public function get_name(): string
-    {
-        return 'classic-editor';
-    }
-
     public function __construct()
     {
         add_filter('mce_buttons_2', fn ($buttons) => $this->filter_mce_buttons($buttons));
         add_filter('tiny_mce_before_init', fn ($mceInit, $editor_id) => $this->filter_tiny_mce($mceInit, $editor_id), 10, 2);
         add_filter('mce_css', fn ($stylesheets) => $this->filter_mce_css($stylesheets));
+    }
+
+    public function get_name(): string
+    {
+        return 'classic-editor';
     }
 
     public function filter_tiny_mce($mceInit, $editor_id)
@@ -42,8 +42,8 @@ class Main implements BuilderInterface
 
         $font_families = Runtime::get_font_families();
 
-        foreach ($font_families as $row) {
-            $theme_advanced_fonts .= "[Yabe] {$row['title']}={$row['family']};";
+        foreach ($font_families as $font_family) {
+            $theme_advanced_fonts .= sprintf('[Yabe] %s=%s;', $font_family['title'], $font_family['family']);
         }
 
         $mceInit['font_formats'] = $theme_advanced_fonts . 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats';
@@ -54,7 +54,7 @@ class Main implements BuilderInterface
     {
         return array_merge($buttons, [
             'fontsizeselect',
-            'fontselect'
+            'fontselect',
         ]);
     }
 

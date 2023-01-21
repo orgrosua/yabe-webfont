@@ -21,13 +21,13 @@ use Yabe\Webfont\Core\Runtime;
  */
 class Main implements BuilderInterface
 {
+    public function __construct()
+    {
+        add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')));
+    }
+
     public function get_name(): string
     {
         return 'bricks';
-    }
-
-    public function __construct()
-    {
-        add_filter('bricks/builder/standard_fonts', fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')));
     }
 }
