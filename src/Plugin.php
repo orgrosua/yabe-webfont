@@ -150,6 +150,8 @@ final class Plugin
 
         // admin hooks.
         if (is_admin()) {
+            add_filter('plugin_action_links_' . plugin_basename(YABE_WEBFONT_FILE), fn ($links) => $this->plugin_action_links($links));
+
             add_action('plugins_loaded', function (): void {
                 $this->plugins_loaded_admin();
             }, 100);
@@ -214,5 +216,30 @@ final class Plugin
                 }
             }
         }, 100);
+    }
+
+    /**
+     * Add plugin action links.
+     *
+     * @param array<string> $links
+     * @return array<string>
+     */
+    public function plugin_action_links(array $links): array
+    {
+        $base_url = admin_url('themes.php?page=' . YABE_WEBFONT_OPTION_NAMESPACE);
+
+        array_unshift($links, sprintf(
+            '<a href="%s">%s</a>',
+            esc_url(sprintf('%s#/settings', $base_url)),
+            esc_html__('Settings', 'yabe-webfont')
+        ));
+
+        array_unshift($links, sprintf(
+            '<a href="%s">%s</a>',
+            esc_url(sprintf('%s#/fonts/index', $base_url)),
+            esc_html__('Fonts', 'yabe-webfont')
+        ));
+
+        return $links;
     }
 }
