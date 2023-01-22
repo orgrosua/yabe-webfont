@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\Zion;
 
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Core\Frontpage;
 use Yabe\Webfont\Core\Runtime;
 
 /**
@@ -26,6 +27,7 @@ class Main implements BuilderInterface
     public function __construct()
     {
         add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $request) => $this->filter_rest_request_after_callbacks($response, $handler, $request), 100001, 3);
+        add_action('zionbuilder/editor/after_scripts', fn () => $this->enqueue_assets());
     }
 
     public function get_name(): string
@@ -53,7 +55,7 @@ class Main implements BuilderInterface
                 foreach ($font_families as $font_family) {
                     $data['fonts_list']['custom_fonts'][] = [
                         'id' => $font_family['family'],
-                        'name' => '[Yabe] ' . $font_family['family'],
+                        'name' => '[Yabe] ' . $font_family['title'],
                     ];
                 }
 
@@ -62,5 +64,10 @@ class Main implements BuilderInterface
         }
 
         return $response;
+    }
+
+    public function enqueue_assets()
+    {
+        Frontpage::enqueue_css_cache();
     }
 }
