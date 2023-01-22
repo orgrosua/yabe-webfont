@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont;
 
+use EDD_SL\PluginUpdater;
 use Exception;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Api\Router as ApiRouter;
@@ -64,6 +65,13 @@ final class Plugin
     private static self $instance;
 
     /**
+     * Easy Digital Downloads Software Licensing integration wrapper.
+     *
+     * @var PluginUpdater
+     */
+    public $plugin_updater;
+
+    /**
      * The Singleton's constructor should always be private to prevent direct
      * construction calls with the `new` operator.
      */
@@ -97,7 +105,7 @@ final class Plugin
     public static function get_instance(): self
     {
         $cls = static::class;
-        if (! isset(self::$instance)) {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -147,6 +155,8 @@ final class Plugin
         new Cache();
         new Runtime();
         new BuilderIntegration();
+
+        $this->maybe_update_plugin();
 
         // admin hooks.
         if (is_admin()) {
@@ -241,5 +251,29 @@ final class Plugin
         ));
 
         return $links;
+    }
+
+    /**
+     * Initialize the plugin updater.
+     */
+    public function maybe_update_plugin()
+    {
+        $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE.'_license', [
+            'key' => '',
+            'opt_in_pre_release' => false,
+        ]);
+
+        $this->plugin_updater = new PluginUpdater(
+            YABE_WEBFONT_OPTION_NAMESPACE,
+            [
+                'version' => self::VERSION,
+                'license' => $license['key'] ? trim($license['key']) : false,
+                'beta' => $license['opt_in_pre_release'],
+                'plugin_file' => YABE_WEBFONT_FILE,
+                'item_id' => YABE_WEBFONT_EDD_STORE['item_id'],
+                'store_url' => YABE_WEBFONT_EDD_STORE['url'],
+                'author' => YABE_WEBFONT_EDD_STORE['author'],
+            ]
+        );
     }
 }

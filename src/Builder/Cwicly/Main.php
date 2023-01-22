@@ -25,7 +25,7 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
+        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->cwicly_build_cache());
     }
 
     public function get_name(): string
@@ -33,7 +33,7 @@ class Main implements BuilderInterface
         return 'cwicly';
     }
 
-    public function build_cache()
+    public function cwicly_build_cache()
     {
         if (! defined('CWICLY_VERSION')) {
             return;

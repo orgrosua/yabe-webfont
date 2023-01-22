@@ -9,6 +9,8 @@ import FontsCustomEdit from './pages/fonts/custom/Edit.vue';
 import FontsGoogleFontsCreate from './pages/fonts/google-fonts/Create.vue';
 import FonstGoogleFontsEdit from './pages/fonts/google-fonts/Edit.vue';
 
+import SettingsIndex from './pages/settings/Index.vue';
+
 const router = createRouter({
     history: createWebHistory(`${yabeWebfont.web_history}#/`),
     scrollBehavior(_, _2, savedPosition) {
@@ -50,7 +52,7 @@ const router = createRouter({
         {
             path: '/settings',
             name: 'settings',
-            component: NotFound,
+            component: SettingsIndex,
         },
         { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ]

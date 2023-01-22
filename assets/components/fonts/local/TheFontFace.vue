@@ -218,7 +218,7 @@ const weightOptions = [
 </script>
 
 
-<style>
+<style scoped>
 /* Transition for font file list */
 .font-file-list-move,
 .font-file-move,

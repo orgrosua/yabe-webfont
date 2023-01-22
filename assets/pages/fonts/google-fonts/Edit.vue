@@ -91,13 +91,9 @@
 
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
-                                <Draggable v-model="fontFaces" tag="transition-group" item-key="id" :component-data="{ name: 'font-face' }" ghost-class="dragged-placeholder" animation="200">
-                                    <template #item="{ element }">
-                                        <div>
-                                            <TheFontFace :item="element" :preview="preview" :font-family="family" />
-                                        </div>
-                                    </template>
-                                </Draggable>
+                                <template v-for="fontFace in fontFaces">
+                                    <TheFontFace :item="fontFace" :preview="preview" :font-family="family" />
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -840,28 +836,6 @@ function sendForm(e) {
 </script>
 
 <style scoped>
-/* Transition for <TheFontFace/> list */
-.font-face-list-move,
-.font-face-move,
-
-/* apply transition to moving elements */
-.font-face-enter-active,
-.font-face-leave-active {
-    transition: all 0.5s ease;
-}
-
-.font-face-enter-from,
-.font-face-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
-}
-
-/* ensure leaving items are taken out of layout flow so that moving
-   animations can be calculated correctly. */
-/* .font-face-leave-active {
-    position: absolute;
-} */
-
 /* Transition for the CSS Preview syntax highlight */
 .css-preview-enter-active,
 .css-preview-leave-active {
@@ -871,9 +845,5 @@ function sendForm(e) {
 .css-preview-enter-from,
 .css-preview-leave-to {
     opacity: 0;
-}
-
-.dragged-placeholder {
-    opacity: 0.3;
 }
 </style>
