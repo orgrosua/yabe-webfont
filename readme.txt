@@ -3,7 +3,7 @@ Contributors: suabahasa
 Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
-Tested up to: 6.1
+Tested up to: 6.1.1
 Stable tag: 2.0.0-DEV
 Requires PHP: 7.4
 License: GPLv3
