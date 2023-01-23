@@ -40,7 +40,6 @@ jobs:
         - uses: pnpm/action-setup@v2
           with:
             version: 7
-            run_install: true
         - uses: actions/setup-node@v3
           with:
             node-version: '16'
@@ -54,7 +53,7 @@ jobs:
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
           with:
-            php-version: 7.4
+            php-version: 8.1
             coverage: none
           # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
           env:

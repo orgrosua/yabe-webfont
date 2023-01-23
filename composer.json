@@ -42,14 +42,5 @@
         "rosua/edd-sl-plugin-updater": "@dev",
         "rosua/migrations": "@dev",
         "symfony/finder": "^5.4"
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../packages/*/*",
-            "options": {
-                "symlink": true
-            }
-        }
-    ]
+    }
 }

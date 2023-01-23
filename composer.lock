@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8cd8c3b691f2e93861630f657a1ece9b",
+    "content-hash": "93dd19b1e23bb2321774dc27f3f4c02f",
     "packages": [
         {
             "name": "hidehalo/nanoid-php",
@@ -116,17 +116,25 @@
         {
             "name": "rosua/edd-sl-plugin-updater",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "../packages/rosua/edd-sl-plugin-updater",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orgrosua/edd-sl-plugin-updater.git",
                 "reference": "454d8ad673eda9dc76b91074f4d0b9e4c265cf68"
             },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orgrosua/edd-sl-plugin-updater/zipball/454d8ad673eda9dc76b91074f4d0b9e4c265cf68",
+                "reference": "454d8ad673eda9dc76b91074f4d0b9e4c265cf68",
+                "shasum": ""
+            },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "EDD_SL\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -146,18 +154,24 @@
                 "updates",
                 "wordpress"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/orgrosua/edd-sl-plugin-updater/tree/master"
+            },
+            "time": "2022-11-08T06:32:15+00:00"
         },
         {
             "name": "rosua/migrations",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "../packages/rosua/migrations",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orgrosua/migrations.git",
                 "reference": "f26ddc15d437130d8bc8cfa382c673d55e907a56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orgrosua/migrations/zipball/f26ddc15d437130d8bc8cfa382c673d55e907a56",
+                "reference": "f26ddc15d437130d8bc8cfa382c673d55e907a56",
+                "shasum": ""
             },
             "require": {
                 "symfony/finder": "^5.4"
@@ -167,30 +181,14 @@
                 "symplify/easy-coding-standard": "^11.1",
                 "wp-cli/wp-cli": "^2.7"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Rosua\\Migrations\\": "src/"
                 }
             },
-            "scripts": {
-                "complete-check": [
-                    "@check-rector",
-                    "@check-ecs"
-                ],
-                "check-ecs": [
-                    "vendor/bin/ecs check --ansi"
-                ],
-                "fix-ecs": [
-                    "vendor/bin/ecs check --fix --ansi"
-                ],
-                "check-rector": [
-                    "vendor/bin/rector process --dry-run --clear-cache --ansi"
-                ],
-                "fix-rector": [
-                    "vendor/bin/rector process --clear-cache --ansi"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -201,10 +199,11 @@
                 }
             ],
             "description": "Database Migrations tool for WordPress plugins",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/orgrosua/migrations/issues",
+                "source": "https://github.com/orgrosua/migrations/tree/master"
+            },
+            "time": "2022-11-15T11:37:04+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -423,16 +422,16 @@
     "packages-dev": [
         {
             "name": "phpstan/phpstan",
-            "version": "1.9.12",
+            "version": "1.9.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "44a338ff0d5572c13fd77dfd91addb96e48c29f8"
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/44a338ff0d5572c13fd77dfd91addb96e48c29f8",
-                "reference": "44a338ff0d5572c13fd77dfd91addb96e48c29f8",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e5fcc96289cf737304286a9b505fbed091f02e58",
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +461,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.9.12"
+                "source": "https://github.com/phpstan/phpstan/tree/1.9.14"
             },
             "funding": [
                 {
@@ -478,20 +477,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-17T10:44:04+00:00"
+            "time": "2023-01-19T10:47:09+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "0.15.7",
+            "version": "0.15.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "a43370e1f4c47aaa96c0f85bf9db73db1be7552f"
+                "reference": "000bfb6f7974449399f39e1a210458395b75c887"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/a43370e1f4c47aaa96c0f85bf9db73db1be7552f",
-                "reference": "a43370e1f4c47aaa96c0f85bf9db73db1be7552f",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/000bfb6f7974449399f39e1a210458395b75c887",
+                "reference": "000bfb6f7974449399f39e1a210458395b75c887",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +525,7 @@
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.15.7"
+                "source": "https://github.com/rectorphp/rector/tree/0.15.10"
             },
             "funding": [
                 {
@@ -534,20 +533,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-13T21:14:19+00:00"
+            "time": "2023-01-21T14:30:16+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "11.2.2.72",
+            "version": "11.2.4.72",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "efef2606b8c1b9117aeb9d547c582eb12d66bc0a"
+                "reference": "313027a266b6343479d4bb7380fd4ca449107f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/efef2606b8c1b9117aeb9d547c582eb12d66bc0a",
-                "reference": "efef2606b8c1b9117aeb9d547c582eb12d66bc0a",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/313027a266b6343479d4bb7380fd4ca449107f54",
+                "reference": "313027a266b6343479d4bb7380fd4ca449107f54",
                 "shasum": ""
             },
             "require": {
@@ -573,7 +572,7 @@
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer",
             "support": {
                 "issues": "https://github.com/symplify/easy-coding-standard/issues",
-                "source": "https://github.com/symplify/easy-coding-standard/tree/11.2.2.72"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/11.2.4.72"
             },
             "funding": [
                 {
@@ -585,7 +584,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-11T14:42:18+00:00"
+            "time": "2023-01-21T14:47:36+00:00"
         }
     ],
     "aliases": [],
