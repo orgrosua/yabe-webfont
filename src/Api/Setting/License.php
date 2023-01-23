@@ -54,16 +54,16 @@ class License extends AbstractApi implements ApiInterface
         );
     }
 
-    private function permission_callback(WP_REST_Request $wprestRequest): bool
-    {
-        return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
-    }
-
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         return new WP_REST_Response([
             'license' => $this->get_license(),
         ]);
+    }
+
+    private function permission_callback(WP_REST_Request $wprestRequest): bool
+    {
+        return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 
     private function store(WP_REST_Request $wprestRequest): WP_REST_Response
@@ -89,12 +89,12 @@ class License extends AbstractApi implements ApiInterface
             } else {
                 $response = $plugin_updater->activate($new_license_key);
 
-                if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+                if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
                     $notice['error'] = is_wp_error($response) ? $response->get_error_message() : 'An error occurred, please try again.';
                 } else {
-                    $license_data = json_decode(wp_remote_retrieve_body($response));
+                    $license_data = json_decode(wp_remote_retrieve_body($response), null, 512, JSON_THROW_ON_ERROR);
 
-                    if ($license_data->license != 'valid') {
+                    if ($license_data->license !== 'valid') {
                         $notice['error'] = $plugin_updater->error_message($license_data->error);
                     } else {
                         $notice['success'] = 'Plugin license key activated successfully';
@@ -123,7 +123,7 @@ class License extends AbstractApi implements ApiInterface
 
         try {
             $license['is_activated'] = Plugin::get_instance()->plugin_updater->is_activated();
-        } catch (\Throwable $th) {
+        } catch (\Throwable $throwable) {
             //throw $th;
             $license['is_activated'] = false;
         }

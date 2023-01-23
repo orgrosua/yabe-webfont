@@ -26,7 +26,7 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $request) => $this->filter_rest_request_after_callbacks($response, $handler, $request), 100001, 3);
+        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->filter_rest_request_after_callbacks($response, $handler, $wprestRequest), 100001, 3);
         add_action('zionbuilder/editor/after_scripts', fn () => $this->enqueue_assets());
     }
 

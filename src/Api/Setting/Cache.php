@@ -53,11 +53,6 @@ class Cache extends AbstractApi implements ApiInterface
         );
     }
 
-    private function permission_callback(WP_REST_Request $wprestRequest): bool
-    {
-        return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
-    }
-
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
         $cache_path = CoreCache::get_cache_path(CoreCache::CSS_CACHE_FILE);
@@ -87,5 +82,10 @@ class Cache extends AbstractApi implements ApiInterface
         do_action('a!yabe/webfont/core/cache:build_cache');
 
         return $this->index($wprestRequest);
+    }
+
+    private function permission_callback(WP_REST_Request $wprestRequest): bool
+    {
+        return wp_verify_nonce($wprestRequest->get_header('X-WP-Nonce'), 'wp_rest') && current_user_can('manage_options');
     }
 }

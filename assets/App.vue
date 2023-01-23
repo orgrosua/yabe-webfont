@@ -13,6 +13,13 @@
     <h2 class="nav-tab-wrapper">
         <router-link :to="{ name: 'fonts' }" class="nav-tab" activeClass="nav-tab-active">Fonts</router-link>
         <router-link :to="{ name: 'settings' }" class="nav-tab" activeClass="nav-tab-active">Settings</router-link>
+        <a class="nav-tab" href="https://webfont.yabe.land/docs" target="_blank">
+            Docs
+            <svg class="tw-w-[15px] tw-h-[15px]" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 100 100">
+                <path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path>
+                <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon>
+            </svg>
+        </a>
     </h2>
     <div class="yabe-webfont-content">
         <router-view></router-view>

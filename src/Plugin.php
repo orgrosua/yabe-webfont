@@ -60,16 +60,16 @@ final class Plugin
     public const EXTRA_VERSION = 'DEV';
 
     /**
-     * Stores the instance, implementing a Singleton pattern.
-     */
-    private static self $instance;
-
-    /**
      * Easy Digital Downloads Software Licensing integration wrapper.
      *
      * @var PluginUpdater
      */
     public $plugin_updater;
+
+    /**
+     * Stores the instance, implementing a Singleton pattern.
+     */
+    private static self $instance;
 
     /**
      * The Singleton's constructor should always be private to prevent direct
@@ -105,7 +105,7 @@ final class Plugin
     public static function get_instance(): self
     {
         $cls = static::class;
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -258,7 +258,7 @@ final class Plugin
      */
     public function maybe_update_plugin()
     {
-        $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE.'_license', [
+        $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
             'key' => '',
             'opt_in_pre_release' => false,
         ]);
