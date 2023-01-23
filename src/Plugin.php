@@ -1,44 +1,70 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <joshua@rosua.org>
+ * (c) Joshua <id@rosua.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Yabe\Webfont;
 
+use EDD_SL\PluginUpdater;
 use Exception;
-use Yabe\Webfont\Admin\ImportPage;
-use Yabe\Webfont\Admin\LicensePage;
-use Yabe\Webfont\Core\Font;
-use Yabe\Webfont\Utils\Common;
-use Yabe\Webfont\Utils\Diagnose;
+use Yabe\Webfont\Admin\AdminPage;
+use Yabe\Webfont\Api\Router as ApiRouter;
+use Yabe\Webfont\Builder\Integration as BuilderIntegration;
+use Yabe\Webfont\Core\Cache;
+use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Utils\Notice;
 
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
  *
- * @author Joshua <joshua@rosua.org>
+ * @author Joshua <id@rosua.org>
  */
 final class Plugin
 {
-    public const VERSION = '1.0.1-DEV';
+    /**
+     * @var string
+     */
+    public const VERSION = '2.0.0-DEV';
 
-    public const VERSION_ID = 10001;
+    /**
+     * @var int
+     */
+    public const VERSION_ID = 20000;
 
-    public const MAJOR_VERSION = 1;
+    /**
+     * @var int
+     */
+    public const MAJOR_VERSION = 2;
 
+    /**
+     * @var int
+     */
     public const MINOR_VERSION = 0;
 
-    public const RELEASE_VERSION = 1;
+    /**
+     * @var int
+     */
+    public const RELEASE_VERSION = 0;
 
+    /**
+     * @var string
+     */
     public const EXTRA_VERSION = 'DEV';
+
+    /**
+     * Easy Digital Downloads Software Licensing integration wrapper.
+     *
+     * @var PluginUpdater
+     */
+    public $plugin_updater;
 
     /**
      * Stores the instance, implementing a Singleton pattern.
@@ -85,21 +111,26 @@ final class Plugin
         return self::$instance;
     }
 
-    public function boot_sentry()
+    public function boot_debug()
     {
-        new Diagnose(self::VERSION);
+        // if (WP_DEBUG === true && class_exists(\Sentry\SentrySdk::class)) {
+        // }
+    }
+
+    public function boot_migration()
+    {
+        new Migration();
     }
 
     /**
-     * Entry to the Plugin.
+     * Boot to the Plugin.
      */
     public function boot(): void
     {
         do_action('a!yabe/webfont/plugins:boot_start');
 
-        if (defined('YABE_WEBFONT_ERROR_REPORTING') && constant('YABE_WEBFONT_ERROR_REPORTING') === true) {
-            $this->boot_sentry();
-        }
+        $this->boot_debug();
+        $this->boot_migration();
 
         // (de)activation hooks.
         register_activation_hook(YABE_WEBFONT_FILE, function (): void {
@@ -109,17 +140,35 @@ final class Plugin
             $this->deactivate_plugin();
         });
 
+        // upgrade hooks.
+        add_action('upgrader_process_complete', function ($upgrader, $options): void {
+            if ($options['action'] === 'update' && $options['type'] === 'plugin') {
+                foreach ($options['plugins'] as $plugin) {
+                    if ($plugin === plugin_basename(YABE_WEBFONT_FILE)) {
+                        $this->upgrade_plugin();
+                    }
+                }
+            }
+        }, 10, 2);
+
+        new ApiRouter();
+        new Cache();
+        new Runtime();
+        new BuilderIntegration();
+
+        $this->maybe_update_plugin();
+
         // admin hooks.
         if (is_admin()) {
+            add_filter('plugin_action_links_' . plugin_basename(YABE_WEBFONT_FILE), fn ($links) => $this->plugin_action_links($links));
+
             add_action('plugins_loaded', function (): void {
-                $this->plugins_loaded();
+                $this->plugins_loaded_admin();
             }, 100);
 
-            do_action('a!yabe/webfont/plugins:boot_admin');
+            new AdminPage();
 
-            new ImportPage();
-            new LicensePage();
-            new Font();
+            do_action('a!yabe/webfont/plugins:boot_admin');
         }
 
         do_action('a!yabe/webfont/plugins:boot_end');
@@ -132,7 +181,7 @@ final class Plugin
     {
         do_action('a!yabe/webfont/plugins:activate_plugin_start');
 
-        add_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
+        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
 
         do_action('a!yabe/webfont/plugins:activate_plugin_end');
     }
@@ -148,23 +197,83 @@ final class Plugin
     }
 
     /**
-     * Warm up the plugin by registering core hooks.
+     * Handle the plugin's upgrade
      */
-    public function plugins_loaded(): void
+    public function upgrade_plugin(): void
     {
-        add_action('admin_notices', function () {
-            $messages = Notice::get_lists();
+        do_action('a!yabe/webfont/plugins:upgrade_plugin_start');
+        // TODO: Add upgrade logic here.
+        do_action('a!yabe/webfont/plugins:upgrade_plugin_end');
+    }
 
+    /**
+     * Warm up the plugin for admin.
+     */
+    public function plugins_loaded_admin(): void
+    {
+        load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT_FILE)) . '/translations/');
+
+        add_action('admin_notices', static function () {
+            $messages = Notice::get_lists();
             if ($messages && is_array($messages)) {
                 foreach ($messages as $message) {
                     echo sprintf(
-                        '<div class="notice notice-%s is-dismissible"><p><b>%s:</b> %s</p></div>',
+                        '<div class="notice notice-%s is-dismissible %s">%s</div>',
                         $message['status'],
-                        Common::plugin_data('Name'),
+                        YABE_WEBFONT_OPTION_NAMESPACE,
                         $message['message']
                     );
                 }
             }
         }, 100);
+    }
+
+    /**
+     * Add plugin action links.
+     *
+     * @param array<string> $links
+     * @return array<string>
+     */
+    public function plugin_action_links(array $links): array
+    {
+        $base_url = admin_url('themes.php?page=' . YABE_WEBFONT_OPTION_NAMESPACE);
+
+        array_unshift($links, sprintf(
+            '<a href="%s">%s</a>',
+            esc_url(sprintf('%s#/settings', $base_url)),
+            esc_html__('Settings', 'yabe-webfont')
+        ));
+
+        array_unshift($links, sprintf(
+            '<a href="%s">%s</a>',
+            esc_url(sprintf('%s#/fonts/index', $base_url)),
+            esc_html__('Fonts', 'yabe-webfont')
+        ));
+
+        return $links;
+    }
+
+    /**
+     * Initialize the plugin updater.
+     */
+    public function maybe_update_plugin()
+    {
+        $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
+            'key' => '',
+            'opt_in_pre_release' => false,
+        ]);
+
+        $this->plugin_updater = new PluginUpdater(
+            YABE_WEBFONT_OPTION_NAMESPACE,
+            [
+                'version' => self::VERSION,
+                'license' => $license['key'] ? trim($license['key']) : false,
+                'beta' => $license['opt_in_pre_release'],
+                'plugin_file' => YABE_WEBFONT_FILE,
+                'item_id' => YABE_WEBFONT_EDD_STORE['item_id'],
+                'store_url' => YABE_WEBFONT_EDD_STORE['url'],
+                'author' => YABE_WEBFONT_EDD_STORE['author'],
+            ]
+        );
     }
 }

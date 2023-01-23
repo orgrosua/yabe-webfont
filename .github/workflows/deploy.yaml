@@ -1,5 +1,3 @@
-# WIP
-
 # builds the content of http://github.com/orgrosua/yabe-webfont
 # inspiration from https://github.com/rectorphp/rector-src/blob/main/.github/workflows/build_scoped_rector.yaml
 name: Build release of Yabe Webfont
@@ -38,23 +36,26 @@ jobs:
         # clean up the dev files
         - run: rm -rf ecs.php rector.php
 
-        # Use yarn to install dependencies and build the assets.
+        # Use pnpm to install dependencies and build the assets.
+        - uses: pnpm/action-setup@v2
+          with:
+            version: 7
+            run_install: true
         - uses: actions/setup-node@v3
           with:
             node-version: '16'
-            cache: 'yarn'
-        - run: yarn install
-        - run: yarn build
+            cache: 'pnpm'
+        - run: pnpm install
+        - run: pnpm build
 
-        # clean up the node_modules
-        - run: rm -rf assets node_modules package.json webpack.config.js postcss.config.js tailwind.config.js yarn.lock .yarn .yarnrc.yml
+        # clean up the assets dev files
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml postcss.config.js tailwind.config.js webpack.config.js
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
           with:
-            php-version: 8.0
+            php-version: 7.4
             coverage: none
-
           # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
           env:
             COMPOSER_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}

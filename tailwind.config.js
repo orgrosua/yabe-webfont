@@ -4,7 +4,7 @@ module.exports = {
         './assets/**/*.{js,vue}',
         './src/**/*.{js,php,html}',
     ],
-    important: false,
+    important: '#yabe-webfont-app',
     prefix: 'tw-',
     theme: {
         extend: {},
@@ -13,6 +13,5 @@ module.exports = {
         preflight: false,
     },
     plugins: [
-        // require('@tailwindcss/forms'),
     ],
 }

@@ -33,12 +33,23 @@
         ]
     },
     "require-dev": {
-        "rector/rector": "^0.14.5",
+        "rector/rector": "^0.15",
         "symplify/easy-coding-standard": "^11.1"
     },
     "require": {
-        "php": ">=8.0",
-        "rosua/edd-sl-plugin-updater": "dev-master",
-        "sentry/sdk": "^3.3"
-    }
+        "php": ">=7.4",
+        "hidehalo/nanoid-php": "^1.1",
+        "rosua/edd-sl-plugin-updater": "@dev",
+        "rosua/migrations": "@dev",
+        "symfony/finder": "^5.4"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../packages/*/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

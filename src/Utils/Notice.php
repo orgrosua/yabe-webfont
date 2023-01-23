@@ -1,42 +1,59 @@
 <?php
 
-declare(strict_types=1);
-
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <joshua@rosua.org>
+ * (c) Joshua <id@rosua.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
 /**
  * Manage the plugin's notices for the wp-admin page.
  *
- * @author Joshua <joshua@rosua.org>
+ * @author Joshua <id@rosua.org>
  */
 class Notice
 {
+    /**
+     * @var string
+     */
     public const ERROR = 'error';
 
+    /**
+     * @var string
+     */
     public const SUCCESS = 'success';
 
+    /**
+     * @var string
+     */
     public const WARNING = 'warning';
 
+    /**
+     * @var string
+     */
     public const INFO = 'info';
+
+    /**
+     * @var string
+     */
+    public const OPTION_NAME = YABE_WEBFONT_OPTION_NAMESPACE . '_notices';
 
     /**
      * Get lists of notices.
      */
     public static function get_lists(?bool $purge = true): array
     {
-        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+        $notices = get_option(self::OPTION_NAME, []);
 
         if ($purge) {
-            update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+            update_option(self::OPTION_NAME, []);
         }
 
         return $notices;
@@ -44,7 +61,7 @@ class Notice
 
     public static function add(string $status, string $message, ?string $key = null, bool $unique = false): void
     {
-        $notices = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', []);
+        $notices = get_option(self::OPTION_NAME, []);
 
         $payload = [
             'status' => $status,
@@ -70,7 +87,7 @@ class Notice
             $notices[] = $payload;
         }
 
-        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_notices', $notices);
+        update_option(self::OPTION_NAME, $notices);
     }
 
     /**
@@ -78,7 +95,7 @@ class Notice
      *
      * @param string|array $messages a message or an array of messages to add.
      */
-    public static function adds(string $status, string|array $messages): void
+    public static function adds(string $status, $messages): void
     {
         if (! is_array($messages)) {
             $messages = [$messages];

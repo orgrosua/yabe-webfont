@@ -85,7 +85,6 @@ return [
         // '',                            // Any namespace,
 
         'Yabe\Webfont',
-        'Bricks',
     ],
     'exclude-classes' => array_merge(
         $wp_classes,
@@ -120,10 +119,11 @@ return [
             'YABE_WEBFONT_FILE',
             'YABE_WEBFONT_OPTION_NAMESPACE',
             'YABE_WEBFONT_HOSTED_WAKUFONT',
-            'YABE_WEBFONT_SENTRY_DSN',
-            'YABE_WEBFONT_ERROR_REPORTING',
+            'YABE_WEBFONT_EDD_STORE',
+            'YABE_WEBFONT_REST_NAMESPACE',
 
-            'BRICKS_DB_CUSTOM_FONTS',
+            'SHOW_CT_BUILDER',
+            'CWICLY_VERSION',
         ]
     ),
 
