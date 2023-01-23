@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,7 +13,7 @@ Custom fonts management and self-host Google Fonts with seamless WordPress page 
 
 == Description ==
 
-Yabe Webfont help you to use custom fonts on the wordpress and self-hosting the Google Fonts with ease.
+Yabe Webfont helps you use custom fonts on WordPress and easily self-host the Google Fonts.
 
 Leverage Browser Cache, reduce DNS lookups/requests, reduce Cumulative Layout Shift and make your Google Fonts 100% GDPR compliant.
 
@@ -32,12 +32,12 @@ It will also reduce the Cumulative Layout Shift (CLS) and improve the Core Web V
 
 The plugin is designed to be user friendly and easy to use. It just require a few clicks!
 
-- **Custom Fonts** — Upload your custom fonts and use it on your WordPress website.
-- **Google Fonts import** — Type on the search box to find the Google Fonts you want to self-host, then click the import button.
+- **Custom Fonts** — Upload your custom fonts and use them on your WordPress website.
+- **Google Fonts Import** — Type on the search box to find the Google Fonts you want to self-host, then click the import button.
 
 ### Seamless integration with page builders
 
-The plugin is designed to be seamless integrated with the most popular page builders.
+Yabe Webfont is designed to be seamlessly integrated with the most popular page builders.
 
 - [Gutenberg](https://wordpress.org/gutenberg)
 - [Bricks](https://bricksbuilder.io/)
@@ -51,7 +51,8 @@ The plugin is designed to be seamless integrated with the most popular page buil
 
 == Changelog ==
 
-= Unreleased =
+= 2.0.1 =
+* **Improve**: Lower the minimum PHP version to 7.4
 
 = 2.0.0 =
 * **New**: Plugin rebuilt from scratch
@@ -67,8 +68,8 @@ The plugin is designed to be seamless integrated with the most popular page buil
 * **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
 * **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
 * **New**: [GeneratePress](https://generatepress.com/) integration
-* **Fix**: Some Google Fonts with variable font not loaded properly
+* **Fix**: Some Google Fonts with variable fonts are not loaded properly
 * **Change**: Plugin admin menu moved to `Appearance → Yabe Webfont`
 
 = 1.0.0 =
-🐣 Initial release.
+* 🐣 Initial release.
