@@ -68,6 +68,7 @@ The plugin is designed to be seamless integrated with the most popular page buil
 * **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
 * **New**: [GeneratePress](https://generatepress.com/) integration
 * **Fix**: Some Google Fonts with variable font not loaded properly
+* **Change**: Plugin admin menu moved to `Appearance → Yabe Webfont`
 
 = 1.0.0 =
 🐣 Initial release.
