@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <joshua@rosua.org>
+ * (c) Joshua <id@rosua.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@ use Yabe\Webfont\Utils\Notice;
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
  *
- * @author Joshua <joshua@rosua.org>
+ * @author Joshua <id@rosua.org>
  */
 final class Plugin
 {

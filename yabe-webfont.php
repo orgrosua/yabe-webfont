@@ -17,7 +17,7 @@
  * Domain Path:         /languages
  *
  * @package             Yabe
- * @author              Joshua <joshua@rosua.org>
+ * @author              Joshua <id@rosua.org>
  */
 
 declare(strict_types=1);
