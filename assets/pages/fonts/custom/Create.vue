@@ -317,7 +317,7 @@ function resetForm() {
     store.reset();
     createNewFontFace();
 
-    preview.text = `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`;
+    preview.text = `The quick brown fox jumps over a lazy dog`;
     preview.fontSize = 16;
 }
 

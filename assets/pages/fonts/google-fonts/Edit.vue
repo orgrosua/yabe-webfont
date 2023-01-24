@@ -300,7 +300,7 @@ const item = ref({});
 const isDeleting = ref(false);
 
 const preview = reactive({
-    text: `I can do all things through Christ which strengtheneth me. [Philippians 4:13]`,
+    text: `The quick brown fox jumps over a lazy dog`,
     fontSize: 16,
     lineHeight: 1.5,
     fontFamily: family,
