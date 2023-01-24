@@ -92,7 +92,7 @@
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
                                 <template v-for="fontFace in fontFaces">
-                                    <TheFontFace :item="fontFace" :preview="preview" :font-family="family" />
+                                    <TheFontFace :item="fontFace" :preview="preview"/>
                                 </template>
                             </div>
                         </div>
@@ -290,7 +290,7 @@ const fontFaces = ref([]);
 
 const preview = reactive({
     text: ``,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 1.5,
     fontFamily: family,
     weight: {
@@ -773,7 +773,7 @@ function resetForm() {
     fontFaces.value = [];
 
     preview.text = `The quick brown fox jumps over a lazy dog`;
-    preview.fontSize = 16;
+    preview.fontSize = 18;
     preview.weight = {
         current: 0,
         min: 0,

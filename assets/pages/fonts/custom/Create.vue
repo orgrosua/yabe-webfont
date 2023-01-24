@@ -189,7 +189,7 @@ const createNewFontFace = () => {
 
 const preview = reactive({
     text: ``,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 1.5,
     fontFamily: family,
 });
@@ -318,7 +318,7 @@ function resetForm() {
     createNewFontFace();
 
     preview.text = `The quick brown fox jumps over a lazy dog`;
-    preview.fontSize = 16;
+    preview.fontSize = 18;
 }
 
 onBeforeMount(() => {

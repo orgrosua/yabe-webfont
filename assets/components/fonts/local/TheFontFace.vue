@@ -197,7 +197,7 @@ const deleteTooltip = ref(null);
 
 function previewInlineStyle() {
     return {
-        fontFamily: props.preview.fontFamily,
+        fontFamily: `'${props.preview.fontFamily}'`,
         fontSize: `${props.preview.fontSize}px`,
         fontWeight: props.item.weight,
         fontStyle: props.item.style,

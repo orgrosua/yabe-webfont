@@ -220,7 +220,7 @@ const createNewFontFace = () => {
 
 const preview = reactive({
     text: `The quick brown fox jumps over a lazy dog`,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 1.5,
     fontFamily: family,
 });

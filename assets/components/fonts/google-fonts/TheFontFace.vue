@@ -97,7 +97,7 @@ const editTooltip = ref(null);
 
 function previewInlineStyle() {
     return {
-        fontFamily: props.preview.fontFamily,
+        fontFamily: `'${props.preview.fontFamily}'`,
         fontSize: `${props.preview.fontSize}px`,
         fontWeight: props.item.weight !== 0 ? props.item.weight : props.preview.weight.current,
         fontStyle: props.item.style,

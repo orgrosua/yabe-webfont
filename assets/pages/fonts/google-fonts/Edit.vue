@@ -92,7 +92,7 @@
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
                                 <template v-for="fontFace in fontFaces">
-                                    <TheFontFace :item="fontFace" :preview="preview" :font-family="family" />
+                                    <TheFontFace :item="fontFace" :preview="preview"/>
                                 </template>
                             </div>
                         </div>
@@ -301,7 +301,7 @@ const isDeleting = ref(false);
 
 const preview = reactive({
     text: `The quick brown fox jumps over a lazy dog`,
-    fontSize: 16,
+    fontSize: 18,
     lineHeight: 1.5,
     fontFamily: family,
     weight: {
