@@ -66,33 +66,55 @@
                                 <div class="tw-flex-1 tw-flex tw-items-center">
                                     <label for="variable" class="tw-text-sm">
                                         <input :disabled="!fontData?.isSupportVariable" type="checkbox" name="variable" id="variable" v-model="variable">
-                                        Enable
+                                        Yes
                                     </label>
                                 </div>
                             </div>
 
                         </div>
 
-                        <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8">
+
+
+                        <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8 tw-mb-3">
                             <h3 class="tw-flex-1">Font Files</h3>
 
-                            <div class="tw-flex tw-items-center tw-space-x-4 ">
-                                <div v-if="variable" class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview weight</span>
-                                    <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" step="50" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                </div>
+                            <div class="tw-flex tw-items-center tw-space-x-4 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
+
+                                <div class="tw-font-semibold tw-text-base">Preview :</div>
+
+                                <template v-if="variable">
+                                    <div v-if="preview.width.current !== 0" class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                        <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
+                                        <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" step="10" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                                    </div>
+
+                                    <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                        <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
+                                        <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" step="50" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                                    </div>
+                                </template>
+
                                 <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview size</span>
-                                    <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
+                                    <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
+                                        <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
+                                            <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
+                                        </div>
+                                    </div>
+                                    <input type="range" v-model="preview.fontSize" max="200" step="2" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+
                                 </div>
+
                             </div>
                         </div>
 
                         <div class="font-files">
                             <div class="tw-grid tw-gap-4">
                                 <template v-for="fontFace in fontFaces">
-                                    <TheFontFace :item="fontFace" :preview="preview"/>
+                                    <TheFontFace :item="fontFace" :preview="preview" />
                                 </template>
                             </div>
                         </div>
@@ -297,6 +319,11 @@ const preview = reactive({
         current: 0,
         min: 0,
         max: 0,
+    },
+    width: {
+        current: 0,
+        min: 0,
+        max: 0,
     }
 });
 
@@ -325,11 +352,28 @@ watch(variable, (newValue, oldValue) => {
 
 watch([variable, family], ([newVariable, newFamily], [oldVariable, oldFamily]) => {
     if (newVariable) {
-        fontData.value?.axes.find(axis => {
+        preview.weight = {
+            current: 0,
+            min: 0,
+            max: 0,
+        };
+        preview.width = {
+            current: 0,
+            min: 0,
+            max: 0,
+        };
+
+        fontData.value?.axes.forEach(axis => {
             if (axis.tag === 'wght') {
                 preview.weight.current = axis.defaultValue;
                 preview.weight.min = axis.min;
                 preview.weight.max = axis.max;
+            }
+
+            if (axis.tag === 'wdth') {
+                preview.width.current = axis.defaultValue;
+                preview.width.min = axis.min;
+                preview.width.max = axis.max;
             }
         });
     }
@@ -775,6 +819,11 @@ function resetForm() {
     preview.text = `The quick brown fox jumps over a lazy dog`;
     preview.fontSize = 18;
     preview.weight = {
+        current: 0,
+        min: 0,
+        max: 0,
+    };
+    preview.width = {
         current: 0,
         min: 0,
         max: 0,

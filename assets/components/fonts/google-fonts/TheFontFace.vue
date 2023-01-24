@@ -101,6 +101,7 @@ function previewInlineStyle() {
         fontSize: `${props.preview.fontSize}px`,
         fontWeight: props.item.weight !== 0 ? props.item.weight : props.preview.weight.current,
         fontStyle: props.item.style,
+        fontStretch: props.preview.width.current !== 0 ? `${props.preview.width.current}%` : '100%',
     };
 }
 
