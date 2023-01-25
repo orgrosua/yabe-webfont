@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -43,13 +43,18 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Bricks](https://bricksbuilder.io/)
 - [Oxygen](https://oxygenbuilder.com/)
 - [Elementor](https://elementor.com/)
-- [Cwicly](https://cwicly.com/)
+- [Cwicly](https://cwicly.com/?ref=suabahasa)
 - [Zion Builder](https://zionbuilder.io/)
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 - [Beaver Builder](https://www.wpbeaverbuilder.com/)
 - [GeneratePress](https://generatepress.com/)
 
 == Changelog ==
+
+= 2.0.2 =
+* **Improve**: Tweak the plugin interface
+* **Improve**: Support width axes for variable fonts
+* **Fix [Zion Builder]**: Font family list not showing up on the builder editor
 
 = 2.0.1 =
 * **Improve**: Lower the minimum PHP version to 7.4
@@ -63,7 +68,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 * **New**: [Bricks](https://bricksbuilder.io/) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration
 * **New**: [Elementor](https://elementor.com/) integration
-* **New**: [Cwicly](https://cwicly.com/) integration
+* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration
 * **New**: [Zion Builder](https://zionbuilder.io/) integration
 * **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
 * **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
