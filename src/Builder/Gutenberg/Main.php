@@ -33,7 +33,7 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_theme($theme_json), 100001);
+        add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_theme($theme_json), 1_000_001);
 
         add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets());
     }

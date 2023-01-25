@@ -28,7 +28,7 @@ class Main implements BuilderInterface
         /**
          * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
-        add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 100001);
+        add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
     }
 
     public function get_name(): string

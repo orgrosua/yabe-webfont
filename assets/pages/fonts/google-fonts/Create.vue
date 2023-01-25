@@ -70,28 +70,25 @@
                                     </label>
                                 </div>
                             </div>
-
                         </div>
 
+                        <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
+                            <h3 class="tw-flex-1">Variants</h3>
 
-
-                        <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8 tw-mb-3">
-                            <h3 class="tw-flex-1">Font Files</h3>
-
-                            <div class="tw-flex tw-items-center tw-space-x-4 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
+                            <div class="tw-flex tw-items-center tw-space-x-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
 
                                 <div class="tw-font-semibold tw-text-base">Preview :</div>
 
                                 <template v-if="variable">
                                     <div v-if="preview.width.current !== 0" class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
                                         <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
-                                        <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" step="10" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
                                         <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
                                     </div>
 
-                                    <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                    <div v-if="preview.weight.current !== 0" class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
                                         <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
-                                        <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" step="50" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
                                         <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
                                     </div>
                                 </template>
@@ -104,7 +101,7 @@
                                             <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
                                         </div>
                                     </div>
-                                    <input type="range" v-model="preview.fontSize" max="200" step="2" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                                    <input type="range" v-model="preview.fontSize" max="200" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
 
                                 </div>
 
@@ -404,12 +401,15 @@ watch([subsets, family], ([newSubsets, newFamily, newVariable], [oldSubsets, old
 function reComputeFontFiles() {
     if (variable.value) {
         fontFaces.value = [];
+
+        let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
+
         if (fontFiles.value.some(file => file.weight === 0 && file.style === 'normal')) {
             fontFaces.value.push({
                 id: nanoid(10),
                 key: '0',
                 weight: 0,
-                width: 'normal',
+                width: wdth ? `${wdth.min}% ${wdth.max}%` : '',
                 style: 'normal',
                 isEnabled: true,
                 display: '',
@@ -422,7 +422,7 @@ function reComputeFontFiles() {
                 id: nanoid(10),
                 key: '0i',
                 weight: 0,
-                width: 'normal',
+                width: wdth ? `${wdth.min}% ${wdth.max}%` : '',
                 style: 'italic',
                 isEnabled: true,
                 display: '',
@@ -449,7 +449,7 @@ function reComputeFontFiles() {
                 id: nanoid(10),
                 key: v,
                 weight: !isNaN(fWeight) ? fWeight : 400,
-                width: 'normal',
+                width: '',
                 style: fStyle,
                 isEnabled: fWeight === 400 || fWeight === 0,
                 display: '',
@@ -545,15 +545,19 @@ const cssFontFaceRule = computed(() => {
 
                     css += `\tfont-style: ${fontFace.style};\n`;
 
-                    if (!variable.value && fontFace.weight !== 0) {
+                    if (fontFace.weight !== 0) {
                         css += `\tfont-weight: ${fontFace.weight};\n`;
-                    } else {
+                    } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
                         css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+                    } else {
+                        css += `\tfont-weight: 400;\n`;
                     }
 
-                    // if (variable.value && fontFace.weight === 0) {
-                    //     css += `\tfont-stretch: 100%;\n`;
-                    // }
+                    let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
+
+                    if (wdth) {
+                        css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
+                    }
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -579,15 +583,11 @@ const cssFontFaceRule = computed(() => {
 
             css += `\tfont-style: ${fontFace.style};\n`;
 
-            if (!variable.value && fontFace.weight !== 0) {
+            if (fontFace.weight !== 0) {
                 css += `\tfont-weight: ${fontFace.weight};\n`;
             } else {
                 css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
             }
-
-            // if (variable.value && fontFace.weight === 0) {
-            //     css += `\tfont-stretch: 100%;\n`;
-            // }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -665,15 +665,19 @@ const cssFontFaceRuleFiltered = computed(() => {
 
                     css += `\tfont-style: ${fontFace.style};\n`;
 
-                    if (!variable.value && fontFace.weight !== 0) {
+                    if (fontFace.weight !== 0) {
                         css += `\tfont-weight: ${fontFace.weight};\n`;
-                    } else {
+                    } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
                         css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+                    } else {
+                        css += `\tfont-weight: 400;\n`;
                     }
 
-                    // if (variable.value && fontFace.weight === 0) {
-                    //     css += `\tfont-stretch: 100%;\n`;
-                    // }
+                    let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
+
+                    if (wdth) {
+                        css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
+                    }
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -703,15 +707,11 @@ const cssFontFaceRuleFiltered = computed(() => {
 
             css += `\tfont-style: ${fontFace.style};\n`;
 
-            if (!variable.value && fontFace.weight !== 0) {
+            if (fontFace.weight !== 0) {
                 css += `\tfont-weight: ${fontFace.weight};\n`;
             } else {
                 css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
             }
-
-            // if (variable.value && fontFace.weight === 0) {
-            //     css += `\tfont-stretch: 100%;\n`;
-            // }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -788,9 +788,6 @@ const cssPreviewStylesheet = computed(() => {
 
     // replace <family> placeholder
     css = css.replace(/<family>/g, family.value);
-
-    // remove content between REDACTED>>> and <<<REDACTED
-    css = css.replace(/\/\*\*\s*REDACTED>>>\s*\*\/[\s\S]*\/\*\*\s*<<<REDACTED\s*\*\//g, '');
 
     return css;
 });

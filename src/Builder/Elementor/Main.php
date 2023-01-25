@@ -27,8 +27,8 @@ class Main implements BuilderInterface
     {
         add_filter('elementor/fonts/groups', static fn ($groups) => array_merge([
             'yabe-webfont' => 'Yabe Webfont',
-        ], $groups), 100001);
-        add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 100001);
+        ], $groups), 1_000_001);
+        add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 1_000_001);
     }
 
     public function get_name(): string

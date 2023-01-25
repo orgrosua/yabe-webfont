@@ -35,14 +35,8 @@ final class Frontpage
         if (file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE))) {
             $handle = YABE_WEBFONT_OPTION_NAMESPACE . '-cache';
             $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
-            // // if load as file
             wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
             wp_print_styles($handle);
-            // // else if load as inline
-            // $css = file_get_contents(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
-            // if (false !== $css) {
-            //     echo '<style id="'.$handle.'">' . $css . '</style>';
-            // }
         }
 
         define('YABE_WEBFONT_CSS_CACHE_WAS_LOADED', true);

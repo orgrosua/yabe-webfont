@@ -25,8 +25,8 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('fl_theme_system_fonts', fn ($fonts) => $this->custom_fonts($fonts), 100001);
-        add_filter('fl_builder_font_families_system', fn ($fonts) => $this->custom_fonts($fonts), 100001);
+        add_filter('fl_theme_system_fonts', fn ($fonts) => $this->custom_fonts($fonts), 1_000_001);
+        add_filter('fl_builder_font_families_system', fn ($fonts) => $this->custom_fonts($fonts), 1_000_001);
     }
 
     public function get_name(): string

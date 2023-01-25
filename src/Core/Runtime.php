@@ -81,7 +81,12 @@ class Runtime
 
                 $css .= "\tfont-style: {$font_face->style};\n";
 
-                $css .= "\tfont-weight: {$font_face->weight};\n";
+                $wght = $font_face->weight ?: '400';
+                $wdth = $font_face->width ?: '100%';
+
+                $css .= "\tfont-weight: {$wght};\n";
+
+                $css .= "\tfont-stretch: {$wdth};\n";
 
                 $display = $font_face->display ?: $metadata->display;
 
@@ -124,9 +129,17 @@ class Runtime
         if ($result !== []) {
             $css .= "body{\n";
 
+            $families = [];
+
             foreach ($result as $row) {
-                $value = sprintf("'%s'", $row->family);
-                $name = sprintf('--yabe-webfont--family--%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
+                $families[] = $row->family;
+            }
+
+            $families = array_unique($families);
+
+            foreach ($families as $family) {
+                $value = sprintf("'%s'", $family);
+                $name = sprintf('--yabe-webfont--family--%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($family)));
 
                 $css .= "\t{$name}: {$value};\n";
             }

@@ -37,7 +37,7 @@
                     <p>
                         <span class="tw-font-medium"> Last generated: </span>
                         <template v-if="css_cache.last_generated">
-                            {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss')  }}
+                            {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                             <a :href="`${css_cache.file_url}?ver=${css_cache.last_generated}`" target="_blank">
                                 <svg class="tw-w-[15px] tw-h-[15px]" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 100 100">
                                     <path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path>
@@ -47,11 +47,21 @@
                         </template>
                     </p>
                     <p class="description">
-                        Cached CSS file for the active font files. 
+                        Serve the CSS file from the cache instead of generating it on the fly.
                     </p>
-                    <p class="description">
+                    <div class="tw-flex tw-items-center tw-my-2">
                         <button type="button" @click="doGenerateCache" class="button button-secondary"> Re-generate cache </button>
-                    </p>
+
+                        <template v-if="css_cache.pending_task">
+                            <svg class="tw-ml-3 tw-h-5 tw-w-5 tw-text-gray-400 tw-fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <path d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V75c0 42.4 16.9 83.1 46.9 113.1L146.7 256 78.9 323.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 320h10.8C285.6 480.1 256 427.5 256 368c0-27.2 6.2-53 17.2-76l-36-36 67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H320 64 32zM96 75V64H288V75c0 19-5.6 37.4-16 53H112c-10.3-15.6-16-34-16-53zM576 368c0-79.5-64.5-144-144-144s-144 64.5-144 144s64.5 144 144 144s144-64.5 144-144zM432 288c8.8 0 16 7.2 16 16v48h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H432c-8.8 0-16-7.2-16-16V304c0-8.8 7.2-16 16-16z" />
+                            </svg>
+                            <span class="tw-text-gray-400 tw-pl-1">
+                                There is a scheduled task to generate the cache.
+                            </span>
+                        </template>
+
+                    </div>
 
                 </td>
             </tr>

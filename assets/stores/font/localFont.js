@@ -31,7 +31,7 @@ export const useLocalFontStore = defineStore('localFont', {
             this.fontFaces.unshift({
                 id: nanoid(10),
                 weight: 400,
-                width: 'normal',
+                width: '',
                 style: 'normal',
                 display: '',
                 selector: '',

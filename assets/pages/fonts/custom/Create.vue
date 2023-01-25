@@ -47,18 +47,39 @@
                             </div>
                         </div>
 
-                        <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8">
-                            <h3 class="tw-flex-1">Font Files</h3>
+                        <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
+                            <h3 class="tw-flex-1">Variants</h3>
 
-                            <div class="tw-flex tw-items-center tw-space-x-4 ">
+                            <div class="tw-flex tw-items-center tw-space-x-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
+
+                                <div class="tw-font-semibold tw-text-base">Preview :</div>
+
                                 <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">Preview size</span>
-                                    <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
+                                    <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                    <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
                                 </div>
 
-                                <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add a font file</button>
+                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
+                                    <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                    <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                                </div>
+
+                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
+                                    <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
+                                        <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                        <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
+                                            <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
+                                        </div>
+                                    </div>
+                                    <input type="range" v-model="preview.fontSize" max="200" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                                </div>
+
                             </div>
+
+                            <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add variant</button>
                         </div>
 
                         <div class="font-files">
@@ -192,6 +213,16 @@ const preview = reactive({
     fontSize: 18,
     lineHeight: 1.5,
     fontFamily: family,
+    weight: {
+        current: 400,
+        min: 1,
+        max: 1000,
+    },
+    width: {
+        current: 100,
+        min: 25,
+        max: 200,
+    }
 });
 
 function fontFormatMap(ext) {
@@ -236,9 +267,11 @@ const cssFontFaceRule = computed(() => {
                 css += `\tfont-weight: ${fontFace.weight};\n`;
             }
 
-            // if (typeof fontFace.weight !== 'number' && fontFace.weight.split(' ').length > 1) {
-            //     css += `\tfont-stretch: 100%;\n`;
-            // }
+            if (fontFace.width && fontFace.width !== '') {
+                css += `\tfont-stretch: ${fontFace.width};\n`;
+            } else {
+                css += `\tfont-stretch: 100%;\n`;
+            }
 
             css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
@@ -319,6 +352,16 @@ function resetForm() {
 
     preview.text = `The quick brown fox jumps over a lazy dog`;
     preview.fontSize = 18;
+    preview.weight = {
+        current: 400,
+        min: 1,
+        max: 1000,
+    };
+    preview.width = {
+        current: 100,
+        min: 25,
+        max: 200,
+    }
 }
 
 onBeforeMount(() => {

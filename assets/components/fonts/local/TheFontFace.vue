@@ -5,7 +5,11 @@
 
             <div class="font-item__header tw-flex tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300/70">
                 <div ref="weightTooltip" class="font-item__weight tw-grow-0 tw-shrink-0 tw-flex tw-p-3 tw-items-center">
-                    <VueSelect taggable v-model="item.weight" :reduce="weight => weight.value || weight.label" :create-option="val => weightOptions.find((option) => option.value == val) || { label: val, value: val }" :options="weightOptions" class="tw-w-36" />
+                    <VueSelect taggable v-model="item.weight" :reduce="weight => weight.value || weight.label" :create-option="val => weightOptions.find((option) => option.value == val) || { label: val, value: val }" :options="weightOptions" class="tw-w-36">
+                        <template #search="{ attributes, events }">
+                            <input class="vs__search" :required="!item.weight" v-bind="attributes" v-on="events" />
+                        </template>
+                    </VueSelect>
                     <TheTooltip :target-ref="weightTooltip" :content="__('Font weight', 'yabe-webfont')" />
                 </div>
                 <div ref="styleTooltip" class="tw-flex tw-p-3 tw-items-center">
@@ -43,6 +47,10 @@
             <div v-if="isShowBody" class="font-item__body tw-divide-x-0 tw-divide-y tw-divide-solid tw-divide-gray-300/70">
                 <div class="font-item__body-meta tw-grid tw-grid-cols-12 tw-items-stretch tw-divide-x tw-divide-y-0 tw-divide-dashed tw-divide-gray-300/70">
                     <div class="tw-flex tw-col-span-2 tw-flex-col tw-gap-1.5 tw-p-3">
+                        <label :for="`width-${item.id}`" class="tw-text-sm tw-font-semibold">Width</label>
+                        <input type="text" name="width" :id="`width-${item.id}`" v-model="item.width" placeholder="25% 200%">
+                    </div>
+                    <div class="tw-flex tw-col-span-2 tw-flex-col tw-gap-1.5 tw-p-3">
                         <label :for="`display-${item.id}`" class="tw-text-sm tw-font-semibold">Font Display</label>
                         <select name="display" :id="`display-${item.id}`" v-model="item.display" class="tw-capitalize [&_option]:tw-capitalize">
                             <option></option>
@@ -54,16 +62,16 @@
                         </select>
                     </div>
                     <div class="tw-flex tw-col-span-3 tw-flex-col tw-gap-1.5 tw-p-3">
-                        <label :for="`comment-${item.id}`" class="tw-text-sm tw-font-semibold">Comment</label>
-                        <input type="text" name="comment" :id="`comment-${item.id}`" v-model="item.comment" placeholder="latin">
-                    </div>
-                    <div class="tw-flex tw-col-span-4 tw-flex-col tw-gap-1.5 tw-p-3">
                         <label :for="`unicode-${item.id}`" class="tw-text-sm tw-font-semibold">Unicode Range</label>
                         <input type="text" name="unicode" :id="`unicode-${item.id}`" v-model="item.unicodeRange" placeholder="U+0000-00FF">
                     </div>
                     <div class="tw-flex tw-col-span-3 tw-flex-col tw-gap-1.5 tw-p-3">
                         <label :for="`selector-${item.id}`" class="tw-text-sm tw-font-semibold">CSS Selector</label>
                         <input type="text" name="selector" :id="`selector-${item.id}`" v-model="item.selector" placeholder="h1, h2, .poetry, .haiku, p, span, #lyric, #description" autocomplete="off">
+                    </div>
+                    <div class="tw-flex tw-col-span-2 tw-flex-col tw-gap-1.5 tw-p-3">
+                        <label :for="`comment-${item.id}`" class="tw-text-sm tw-font-semibold">Comment</label>
+                        <input type="text" name="comment" :id="`comment-${item.id}`" v-model="item.comment" placeholder="latin">
                     </div>
                 </div>
 
@@ -196,11 +204,22 @@ const editTooltip = ref(null);
 const deleteTooltip = ref(null);
 
 function previewInlineStyle() {
+    let stretch = props.item.width;
+
+    if (props.item.width) {
+        if (props.item.width.indexOf(' ') > -1) {
+            stretch = `${props.preview.width.current}%`;
+        }
+    } else {
+        stretch = '100%';
+    }
+
     return {
         fontFamily: `'${props.preview.fontFamily}'`,
         fontSize: `${props.preview.fontSize}px`,
-        fontWeight: props.item.weight,
+        fontWeight: typeof props.item.weight === 'string' && props.item.weight.indexOf(' ') > -1 ? props.preview.weight.current : props.item.weight,
         fontStyle: props.item.style,
+        fontStretch: `${stretch}`,
     };
 }
 
