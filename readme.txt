@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.2
+Stable tag: 2.0.3-DEV
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -51,10 +51,12 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 
 == Changelog ==
 
+= 2.0.3 =
+
 = 2.0.2 =
 * **Improve**: Tweak the plugin interface
 * **Improve**: Support width axes for variable fonts
-* **Fix [Zion Builder]**: Font family list not showing up on the builder editor
+* **[Zion Builder] Fix**: Font family list not showing up on the builder editor
 
 = 2.0.1 =
 * **Improve**: Lower the minimum PHP version to 7.4
