@@ -25,7 +25,7 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->cwicly_build_cache());
+        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->cwicly_build_cache(), 1_000_001);
     }
 
     public function get_name(): string

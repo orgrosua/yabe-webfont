@@ -45,6 +45,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Elementor](https://elementor.com/)
 - [Cwicly](https://cwicly.com/?ref=suabahasa)
 - [Zion Builder](https://zionbuilder.io/)
+- [Breakdance](https://breakdance.com/ref/165/)
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 - [Beaver Builder](https://www.wpbeaverbuilder.com/)
 - [GeneratePress](https://generatepress.com/)
@@ -52,6 +53,8 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 == Changelog ==
 
 = 2.0.3 =
+* **New**: [Breakdance](https://breakdance.com/ref/165/) integration
+* **[Gutenberg] Fix**: Font CSS not loaded on the FSE editor
 
 = 2.0.2 =
 * **Improve**: Tweak the plugin interface

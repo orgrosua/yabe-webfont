@@ -85,6 +85,7 @@ return [
         // '',                            // Any namespace,
 
         'Yabe\Webfont',
+        'Breakdance',
     ],
     'exclude-classes' => array_merge(
         $wp_classes,
@@ -96,6 +97,7 @@ return [
         $wp_functions,
         [
             // 'mb_str_split',
+            'Breakdance\Fonts\registerFont'
         ]
     ),
     'exclude-constants' => array_merge(

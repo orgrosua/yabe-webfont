@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder\Gutenberg;
 
 use WP_Theme_JSON_Data;
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Frontpage;
 use Yabe\Webfont\Core\Runtime;
 
@@ -35,7 +36,8 @@ class Main implements BuilderInterface
     {
         add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_theme($theme_json), 1_000_001);
 
-        add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets());
+        add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
+        add_action('after_setup_theme', fn () => $this->after_setup_theme(), 1_000_001);
     }
 
     public function get_name(): string
@@ -85,5 +87,10 @@ class Main implements BuilderInterface
         if (is_admin() && $screen->is_block_editor()) {
             Frontpage::enqueue_css_cache();
         }
+    }
+
+    public function after_setup_theme()
+    {
+        add_editor_style(Cache::get_cache_url(Cache::CSS_CACHE_FILE));
     }
 }

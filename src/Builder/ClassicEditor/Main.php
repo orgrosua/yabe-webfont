@@ -26,9 +26,9 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('mce_buttons_2', fn ($buttons) => $this->filter_mce_buttons($buttons));
-        add_filter('tiny_mce_before_init', fn ($mceInit, $editor_id) => $this->filter_tiny_mce($mceInit, $editor_id), 10, 2);
-        add_filter('mce_css', fn ($stylesheets) => $this->filter_mce_css($stylesheets));
+        add_filter('mce_buttons_2', fn ($buttons) => $this->filter_mce_buttons($buttons), 1_000_001);
+        add_filter('tiny_mce_before_init', fn ($mceInit, $editor_id) => $this->filter_tiny_mce($mceInit, $editor_id), 1_000_001, 2);
+        add_filter('mce_css', fn ($stylesheets) => $this->filter_mce_css($stylesheets), 1_000_001);
     }
 
     public function get_name(): string
