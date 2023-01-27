@@ -81,6 +81,8 @@ class Cache extends AbstractApi implements ApiInterface
     {
         do_action('a!yabe/webfont/core/cache:build_cache');
 
+        wp_clear_scheduled_hook('a!yabe/webfont/core/cache:build_cache');
+
         return $this->index($wprestRequest);
     }
 
