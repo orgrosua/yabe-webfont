@@ -25,7 +25,7 @@ class Main implements BuilderInterface
     public function __construct()
     {
         add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
-        // remove_action('ct_builder_ng_init', 'ct_init_elegant_custom_fonts');
+        add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
         add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1_000_001);
     }
 
@@ -48,5 +48,10 @@ class Main implements BuilderInterface
         }
 
         wp_enqueue_style('yabe-webfont-for-oxygen-editor', plugin_dir_url(__FILE__) . '/assets/style/editor.css', [], Plugin::VERSION);
+    }
+
+    public function remove_ecf_action()
+    {
+        remove_action('ct_builder_ng_init', 'ct_init_elegant_custom_fonts');
     }
 }
