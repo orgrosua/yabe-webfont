@@ -26,8 +26,8 @@
                 <span v-else :title="weightName" class="tw-opacity-70 tw-text-sm tw-text-[#a7aaad] tw-px-5 tw-py-1 tw-border tw-border-solid tw-rounded-sm tw-border-[#dcdcde] tw-bg-[#f6f7f7]">
                     {{ item.weight }}
                 </span>
-                <span :class="{ 'tw-italic': item.style === 'italic' }" class="tw-opacity-70 tw-text-sm tw-capitalize tw-text-left tw-text-[#a7aaad] tw-px-2 tw-py-1 tw-w-12 tw-border tw-border-solid tw-rounded-sm tw-border-[#dcdcde] tw-bg-[#f6f7f7]">
-                    {{ item.style }}
+                <span :class="{ 'tw-italic': styleName === 'italic' }" :title="styleName" class="tw-opacity-70 tw-text-sm tw-capitalize tw-text-left tw-text-[#a7aaad] tw-whitespace-nowrap tw-text-clip tw-overflow-hidden tw-px-2 tw-py-1 tw-w-12 tw-border tw-border-solid tw-rounded-sm tw-border-[#dcdcde] tw-bg-[#f6f7f7]">
+                    {{ styleName }}
                 </span>
                 <TheTooltip :target-ref="weightStyleTooltip" content="Font weight & style" />
             </div>
@@ -86,6 +86,12 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    isVariable: {
+        type: Boolean,
+    },
+    fontData: {
+        type: Object,
+    },
 });
 
 const isShowBody = ref(false);
@@ -119,5 +125,16 @@ const weightName = computed(() => {
         case 400:
         default: return 'Regular';
     }
+});
+
+const styleName = computed(() => {
+    if (props.isVariable) {
+        let slnt = props.fontData?.axes.find(axis => axis.tag === 'slnt');
+        if (slnt !== undefined) {
+            return `oblique ${slnt.max*-1}deg ${slnt.min*-1}deg`;
+        }
+    }
+
+    return props.item.style;
 });
 </script>

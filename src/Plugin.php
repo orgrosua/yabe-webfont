@@ -151,10 +151,10 @@ final class Plugin
             }
         }, 10, 2);
 
-        new ApiRouter();
         new Cache();
         new Runtime();
         new BuilderIntegration();
+        new ApiRouter();
 
         $this->maybe_update_plugin();
 

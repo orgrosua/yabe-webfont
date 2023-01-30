@@ -262,7 +262,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $row = $wpdb->get_row($sql);
 
-        if (! $row) {
+        if (!$row) {
             return new WP_REST_Response([
                 'message' => 'Font not found',
             ], 404, []);
@@ -372,7 +372,7 @@ class Font extends AbstractApi implements ApiInterface
         $id = (int) $url_params['id'];
 
         $sql = "
-            SELECT deleted_at FROM {$wpdb->prefix}yabe_webfont_fonts
+            SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts
             WHERE id = %d
         ";
 
@@ -380,7 +380,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $item = $wpdb->get_row($sql);
 
-        if (! $item) {
+        if (!$item) {
             return new WP_REST_Response([
                 'message' => __('Font not found', 'yabe-webfont'),
             ], 404, []);
@@ -402,6 +402,18 @@ class Font extends AbstractApi implements ApiInterface
         }
 
         $wpdb->query($sql);
+
+        // delete attachment from wordpress media library
+        if ($item->deleted_at) {
+            $font_faces = json_decode($item->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            foreach ($font_faces as $font_face) {
+                if ($font_face->files !== []) {
+                    foreach ($font_face->files as $f) {
+                        wp_delete_attachment($f->attachment_id, true);
+                    }
+                }
+            }
+        }
 
         do_action('a!yabe/webfont/api/font:destroy', $item);
 
@@ -529,7 +541,7 @@ class Font extends AbstractApi implements ApiInterface
         $m_font_files = $metadata['google_fonts']['font_files'];
 
         foreach ($m_font_faces as $k => $m_face) {
-            if (! $m_face['isEnabled']) {
+            if (!$m_face['isEnabled']) {
                 continue;
             }
 
@@ -558,33 +570,38 @@ class Font extends AbstractApi implements ApiInterface
                             static fn ($a) => $a['tag'] === 'wdth'
                         );
 
+                        $slnt = array_filter(
+                            $metadata['google_fonts']['font_data']['axes'],
+                            static fn ($a) => $a['tag'] === 'slnt'
+                        );
+
                         $wdth = array_values($wdth);
                         $wght = array_values($wght);
+                        $slnt = array_values($slnt);
 
                         $font_face = [
                             'id' => Common::random_slug(10),
                             'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
                             'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
-                            'style' => $m_face['style'],
+                            'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
                         ];
 
                         $file_name = sanitize_title_with_dashes(sprintf(
-                            'google-fonts-%s-%s-%s-%s-%s-%s',
+                            'google-fonts-%s-%s-%s-var-%s-%s',
                             $metadata['google_fonts']['font_data']['slug'], // family
                             $metadata['google_fonts']['font_data']['version'],
                             $subset,
-                            $filtered_m_font_file['weight'],
-                            $filtered_m_font_file['style'],
+                            Common::random_slug(5),
                             time()
                         )) . '.' . $filtered_m_font_file['format'];
 
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (! $attachment_id) {
+                            if (!$attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {
@@ -668,7 +685,7 @@ class Font extends AbstractApi implements ApiInterface
                     try {
                         $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                        if (! $attachment_id) {
+                        if (!$attachment_id) {
                             continue;
                         }
                     } catch (\Throwable $throwable) {
@@ -770,7 +787,7 @@ class Font extends AbstractApi implements ApiInterface
         foreach ($m_font_faces as $k => $m_face) {
             $metadata['google_fonts']['font_faces'][$k]['attached_font_files'] = [];
 
-            if (! $m_face['isEnabled']) {
+            if (!$m_face['isEnabled']) {
                 continue;
             }
 
@@ -799,14 +816,20 @@ class Font extends AbstractApi implements ApiInterface
                             static fn ($a) => $a['tag'] === 'wdth'
                         );
 
+                        $slnt = array_filter(
+                            $metadata['google_fonts']['font_data']['axes'],
+                            static fn ($a) => $a['tag'] === 'slnt'
+                        );
+
                         $wdth = array_values($wdth);
                         $wght = array_values($wght);
+                        $slnt = array_values($slnt);
 
                         $font_face = [
                             'id' => Common::random_slug(10),
                             'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
                             'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
-                            'style' => $m_face['style'],
+                            'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
@@ -816,19 +839,18 @@ class Font extends AbstractApi implements ApiInterface
                             $file = $filtered_m_font_file['file'];
                         } else {
                             $file_name = sanitize_title_with_dashes(sprintf(
-                                'google-fonts-%s-%s-%s-%s-%s-%s',
+                                'google-fonts-%s-%s-%s-var-%s-%s',
                                 $metadata['google_fonts']['font_data']['slug'], // family
                                 $metadata['google_fonts']['font_data']['version'],
                                 $subset,
-                                $filtered_m_font_file['weight'],
-                                $filtered_m_font_file['style'],
+                                Common::random_slug(5),
                                 time()
                             )) . '.' . $filtered_m_font_file['format'];
 
                             try {
                                 $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                                if (! $attachment_id) {
+                                if (!$attachment_id) {
                                     continue;
                                 }
                             } catch (\Throwable $throwable) {
@@ -916,7 +938,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (! $attachment_id) {
+                            if (!$attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {

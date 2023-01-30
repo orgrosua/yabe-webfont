@@ -13,11 +13,7 @@
                     <TheTooltip :target-ref="weightTooltip" :content="__('Font weight', 'yabe-webfont')" />
                 </div>
                 <div ref="styleTooltip" class="tw-flex tw-p-3 tw-items-center">
-                    <select name="font-style" v-model="item.style" :class="{ 'tw-italic': item.style === 'italic' }" class="tw-capitalize [&_option]:tw-capitalize ">
-                        <option value="normal" class="tw-not-italic">normal</option>
-                        <option value="italic" class="tw-italic">italic</option>
-                        <option value="oblique" class="tw-not-italic">oblique</option>
-                    </select>
+                    <VueSelect taggable push-tags v-model="item.style" :options="['normal', 'italic', 'oblique']" :class="{ '[&_span]:tw-italic': item.style === 'italic' }" class="tw-w-24 [&_span]:tw-capitalize [&_li]:tw-capitalize [&_span]:tw-whitespace-nowrap [&_span]:tw-max-w-[90px] [&_span]:tw-text-clip [&_span]:tw-overflow-hidden" />
                     <TheTooltip :target-ref="styleTooltip" content="Font Style" />
                 </div>
                 <div ref="previewTextTooltip" class="tw-flex-1 tw-flex tw-p-3 tw-items-center">
