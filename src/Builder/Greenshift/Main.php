@@ -35,7 +35,7 @@ class Main implements BuilderInterface
 
     public function filter_gspb_local_font_array($localfonts)
     {
-        $localfonts = (!empty($localfont)) ? json_decode($localfont, true) : [];
+        $localfonts = (! empty($localfont)) ? json_decode($localfont, true) : [];
 
         $font_families = Runtime::get_font_families();
 
