@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Admin;
 
 use Yabe\Webfont\Plugin;
+use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Upload;
 
 class AdminPage
@@ -24,6 +25,30 @@ class AdminPage
         add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
 
         add_action('admin_menu', fn () => $this->add_admin_menu());
+    }
+
+    public static function get_page_url(): string
+    {
+        return add_query_arg([
+            'page' => YABE_WEBFONT_OPTION_NAMESPACE,
+        ], admin_url('themes.php'));
+    }
+
+    public static function redirect_to_page(): void
+    {
+        Common::redirect(self::get_page_url());
+    }
+
+    public static function add_redirect_submenu_page($root_slug)
+    {
+        add_submenu_page(
+            $root_slug,
+            __('Yabe Webfont', 'yabe-webfont'),
+            __('Yabe Webfont', 'yabe-webfont'),
+            'manage_options',
+            'yabe-webfont-builder-redirect',
+            static fn () => self::redirect_to_page()
+        );
     }
 
     public function add_admin_menu()
@@ -61,9 +86,7 @@ class AdminPage
         wp_localize_script(YABE_WEBFONT_OPTION_NAMESPACE . '-app', 'yabeWebfont', [
             '_version' => Plugin::VERSION,
             '_wpnonce' => wp_create_nonce(YABE_WEBFONT_OPTION_NAMESPACE),
-            'web_history' => add_query_arg([
-                'page' => YABE_WEBFONT_OPTION_NAMESPACE,
-            ], admin_url('admin.php')),
+            'web_history' => self::get_page_url(),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),
                 'root' => esc_url_raw(rest_url()),
@@ -74,7 +97,6 @@ class AdminPage
                 'url' => plugin_dir_url(YABE_WEBFONT_FILE),
             ],
             'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', defined('YABE_SELF_HOSTED_WAKUFONT') ? constant('YABE_SELF_HOSTED_WAKUFONT') : YABE_WEBFONT_HOSTED_WAKUFONT), '/'),
-            // 'postUrl' => admin_url('post.php'),
         ]);
     }
 

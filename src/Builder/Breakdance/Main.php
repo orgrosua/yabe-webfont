@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Breakdance;
 
+use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Runtime;
@@ -29,6 +30,7 @@ class Main implements BuilderInterface
         remove_action('init', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
 
         add_action('breakdance_loaded', fn () => $this->register_font_families(), 1_000_001);
+        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('breakdance'), 1_000_001);
     }
 
     public function get_name(): string

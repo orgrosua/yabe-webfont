@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Oxygen;
 
+use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Plugin;
@@ -27,6 +28,7 @@ class Main implements BuilderInterface
         add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
         add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
         add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1_000_001);
+        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('ct_dashboard_page'), 1_000_001);
     }
 
     public function get_name(): string

@@ -11,7 +11,7 @@
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              Rosua
- * Author URI:          https://rosua.org
+ * Author URI:          https://webfont.yabe.land
  * Donate link:         https://github.com/sponsors/suabahasa
  * Text Domain:         yabe-webfont
  * Domain Path:         /languages

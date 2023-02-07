@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Zion;
 
+use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Frontpage;
 use Yabe\Webfont\Core\Runtime;
@@ -28,6 +29,7 @@ class Main implements BuilderInterface
     {
         add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->filter_rest_request_after_callbacks($response, $handler, $wprestRequest), 1_000_001, 3);
         add_action('zionbuilder/editor/after_scripts', fn () => $this->enqueue_assets());
+        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('zionbuilder'), 1_000_001);
     }
 
     public function get_name(): string

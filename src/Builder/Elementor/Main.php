@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Elementor;
 
+use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 
@@ -29,6 +30,7 @@ class Main implements BuilderInterface
             'yabe-webfont' => 'Yabe Webfont',
         ], $groups), 1_000_001);
         add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 1_000_001);
+        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('elementor'), 1_000_001);
     }
 
     public function get_name(): string

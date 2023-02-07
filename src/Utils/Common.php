@@ -105,4 +105,24 @@ class Common
     {
         return (new \Hidehalo\Nanoid\Client())->generateId($length, \Hidehalo\Nanoid\Client::MODE_DYNAMIC);
     }
+
+    /**
+     * Redirect to the given location. If headers are already sent, use a meta refresh.
+     *
+     * @param string $location The location to redirect to.
+     * @param bool $safe Whether to use wp_safe_redirect() or not.
+     */
+    public static function redirect(string $location, bool $safe = false)
+    {
+        if (! headers_sent()) {
+            if ($safe) {
+                wp_safe_redirect($location);
+            } else {
+                wp_redirect($location);
+            }
+        } else {
+            echo '<meta http-equiv="refresh" content="0;url=' . $location . '">';
+        }
+        exit;
+    }
 }

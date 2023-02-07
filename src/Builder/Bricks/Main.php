@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Builder\Bricks;
 
+use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 
@@ -24,6 +25,7 @@ class Main implements BuilderInterface
     public function __construct()
     {
         add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('bricks'), 1_000_001);
     }
 
     public function get_name(): string
