@@ -124,8 +124,6 @@ class Main implements BuilderInterface
             $inline_css .= "}\n\n";
         }
 
-        $css .= $inline_css;
-
-        return $css;
+        return $css . $inline_css;
     }
 }
