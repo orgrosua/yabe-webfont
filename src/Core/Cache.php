@@ -45,9 +45,14 @@ class Cache
 
         add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
 
-        // listen to fonts event for cache build
+        // listen to fonts event for cache build (async/scheduled)
         // add_action('a!yabe/webfont/api/font:fonts_event', fn () => $this->schedule_cache(), 10, 1);
+        
+        // listen to fonts event for cache build (sync)
         add_action('a!yabe/webfont/api/font:fonts_event', fn () => $this->build_cache(), 10, 1);
+
+        // listen to theme switch for cache build (async/scheduled)
+        add_action('switch_theme', fn () => $this->schedule_cache(), 1_000_001);
     }
 
     public function filter_cron_schedules($schedules)
