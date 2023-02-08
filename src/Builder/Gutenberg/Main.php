@@ -35,6 +35,7 @@ class Main implements BuilderInterface
     public function __construct()
     {
         add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_theme($theme_json), 1_000_001);
+        add_filter('f!yabe/webfont/core/runtime:append_build_css_content', fn ($css, $rows) => $this->filter_append_build_css_content($css, $rows), 1_000_001, 2);
 
         add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
         add_action('after_setup_theme', fn () => $this->after_setup_theme(), 1_000_001);
@@ -92,5 +93,39 @@ class Main implements BuilderInterface
     public function after_setup_theme()
     {
         add_editor_style(Cache::get_cache_url(Cache::CSS_CACHE_FILE));
+    }
+
+    /**
+     * Support for a non block-based theme.
+     */
+    public function filter_append_build_css_content($css, $rows)
+    {
+        if (function_exists('wp_is_block_theme') && wp_is_block_theme()) {
+            return $css;
+        }
+
+        $inline_css = '';
+
+        $font_families = Runtime::get_font_families();
+
+        foreach ($font_families as $font_family) {
+            $slug = strtolower(preg_replace('#[^a-zA-Z0-9\-_]+#', '-', $font_family['family']));
+
+            $inline_css .= sprintf(
+                ".has-%s-font-family{\n",
+                $slug
+            );
+
+            $inline_css .= sprintf(
+                "\tfont-family: var(--wp--preset--font-family--%s) !important;\n",
+                $slug
+            );
+
+            $inline_css .= "}\n\n";
+        }
+
+        $css .= $inline_css;
+
+        return $css;
     }
 }

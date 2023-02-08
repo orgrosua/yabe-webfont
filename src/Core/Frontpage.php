@@ -36,6 +36,7 @@ final class Frontpage
             $handle = YABE_WEBFONT_OPTION_NAMESPACE . '-cache';
             $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
             wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
+            do_action('a!yabe/webfont/core/frontpage:before_print_style');
             wp_print_styles($handle);
         }
 

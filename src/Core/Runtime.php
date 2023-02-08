@@ -147,8 +147,21 @@ class Runtime
             $css .= "}\n\n";
         }
 
-        // replace tabs with 2 spaces
-        $css = preg_replace('#\t#', '  ', $css);
+        /**
+         * @param string $css The CSS content
+         * @param array $result The result of the SQL query
+         * @return string The CSS content
+         */
+        $css = apply_filters('f!yabe/webfont/core/runtime:append_build_css_content', $css, $result);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            // replace tabs with 2 spaces
+            $css = preg_replace('#\t#', '  ', $css);
+        } else {
+            // remove new lines and tabs
+            $css = preg_replace('#\n#', '', $css);
+            $css = preg_replace('#\t#', '', $css);
+        }
 
         return $css;
     }
