@@ -587,6 +587,7 @@ class Font extends AbstractApi implements ApiInterface
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
+                            'preload' => $m_face['preload'],
                         ];
 
                         $file_name = sanitize_title_with_dashes(sprintf(
@@ -649,6 +650,7 @@ class Font extends AbstractApi implements ApiInterface
                     'selector' => $m_face['selector'],
                     'comment' => $m_face['comment'],
                     'unicodeRange' => '',
+                    'preload' => $m_face['preload'],
                 ];
 
                 $files = [];
@@ -833,6 +835,7 @@ class Font extends AbstractApi implements ApiInterface
                             'display' => $m_face['display'],
                             'selector' => $m_face['selector'],
                             'comment' => $m_face['comment'],
+                            'preload' => $m_face['preload'],
                         ];
 
                         if (array_key_exists('file', $filtered_m_font_file)) {
@@ -899,6 +902,7 @@ class Font extends AbstractApi implements ApiInterface
                     'selector' => $m_face['selector'],
                     'comment' => $m_face['comment'],
                     'unicodeRange' => '',
+                    'preload' => $m_face['preload'],
                 ];
 
                 $files = [];

@@ -174,9 +174,8 @@ class Runtime
         $html = '';
 
         $sql = "
-            SELECT font_faces FROM {$wpdb->prefix}yabe_webfont_fonts
+            SELECT metadata, font_faces FROM {$wpdb->prefix}yabe_webfont_fonts
             WHERE status = 1
-                AND JSON_EXTRACT(metadata, '$.preload') = true
                 AND deleted_at IS NULL
         ";
 
@@ -190,13 +189,16 @@ class Runtime
 
         foreach ($result as $row) {
             $font_faces = self::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
 
             foreach ($font_faces as $font_face) {
-                foreach ($font_face->files as $file) {
-                    $preload_files[] = [
-                        'href' => $file->attachment_url,
-                        'type' => $file->mime,
-                    ];
+                if ($metadata->preload || (property_exists($font_face, 'preload') && $font_face->preload)) {
+                    foreach ($font_face->files as $file) {
+                        $preload_files[] = [
+                            'href' => $file->attachment_url,
+                            'type' => $file->mime,
+                        ];
+                    }
                 }
             }
         }

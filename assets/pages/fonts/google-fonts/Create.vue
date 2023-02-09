@@ -340,6 +340,7 @@ function reComputeFontFiles() {
                 display: '',
                 selector: '',
                 comment: '',
+                preload: false,
             });
         }
         if (fontFiles.value.some(file => file.weight === 0 && file.style === 'italic')) {
@@ -353,6 +354,7 @@ function reComputeFontFiles() {
                 display: '',
                 selector: '',
                 comment: '',
+                preload: false,
             });
         }
     } else {
@@ -380,6 +382,7 @@ function reComputeFontFiles() {
                 display: '',
                 selector: '',
                 comment: '',
+                preload: false,
             };
         });
     }

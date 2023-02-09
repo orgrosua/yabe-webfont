@@ -57,14 +57,21 @@
                         <option value="optional">optional</option>
                     </select>
                 </div>
-                <div class="tw-flex tw-col-span-5 tw-flex-col tw-gap-1.5 tw-p-3">
+                <div class="tw-flex tw-col-span-4 tw-flex-col tw-gap-1.5 tw-p-3">
                     <label :for="`comment-${item.id}`" class="tw-text-sm tw-font-semibold">Comment</label>
                     <input type="text" name="comment" :id="`comment-${item.id}`" v-model="item.comment" placeholder="">
                 </div>
-                <div class="tw-flex tw-col-span-5 tw-flex-col tw-gap-1.5 tw-p-3">
+                <div class="tw-flex tw-col-span-4 tw-flex-col tw-gap-1.5 tw-p-3">
                     <label :for="`selector-${item.id}`" class="tw-text-sm tw-font-semibold">CSS Selector</label>
                     <input type="text" name="selector" :id="`selector-${item.id}`" v-model="item.selector" placeholder="h1, h2, .poetry, .haiku, p, span, #lyric, #description" autocomplete="off">
                 </div>
+                <div class="tw-flex tw-col-span-2 tw-flex-col tw-gap-1.5 tw-p-3">
+                        <label :for="`preload-${item.id}`" class="tw-text-sm tw-font-semibold">Preload</label>
+                        <label :for="`preload-${item.id}`" class="tw-text-sm">
+                            <input type="checkbox" name="preload" :id="`preload-${item.id}`" v-model="item.preload">
+                            Preload files
+                        </label>
+                    </div>
             </div>
         </div>
     </div>

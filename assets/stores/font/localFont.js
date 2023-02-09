@@ -13,6 +13,7 @@ export const useLocalFontStore = defineStore('localFont', {
          *   selector: ?string, // css selector
          *   comment: ?string,
          *   unicodeRange: ?string,
+         *   preload: ?boolean,
          *   files: {
          *     uid: string, // nanoid
          *     attachment_id: ?number, // attachment id
@@ -37,6 +38,7 @@ export const useLocalFontStore = defineStore('localFont', {
                 selector: '',
                 comment: '',
                 unicodeRange: '',
+                preload: false,
                 files: [],
             });
         },
