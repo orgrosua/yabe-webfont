@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.5-DEV
+Stable tag: 2.0.5
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -53,12 +53,22 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 
 == Changelog ==
 
+= 2.0.5 =
+* **Improve**: Sync the cache generation
+* **Improve**: Add submenu to all page builders integration
+* **[Gutenberg] Improve**: Support non block-based theme
+* **[Elementor] Improve**: Force disable the built-in Google Fonts and override the `Elementor > Settings > Advanced: Google Fonts` setting
+* **[Bricks] Improve**: Force disable the built-in Google Fonts and override the `Bricks > Settings > Performance: Disable Google Fonts` setting
+* **[Oxygen] Improve**: Force disable the built-in Google Fonts and override the `Oxygen > Settings > Bloat Eliminator: Disable Google Fonts` setting
+* **Fix**: Issue with the plugin upgrade for the upcoming version
+* **Fix**: Revert the admin notices style to WordPress default
+
 = 2.0.4 =
 * **New**: [Greenshift](https://greenshiftwp.com/) integration
 * **Improve**: Better variable fonts support for Google Fonts
 * **Improve**: Delete all fonts file associated with the deleted font
 * **[Oxygen] Improve**: Disable Elegant Custom Fonts plugin
-* **Fix**: Scheduled cache generation not cleared properly on manual action.
+* **Fix**: Scheduled cache generation not cleared properly on manual action
 
 = 2.0.3 =
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration

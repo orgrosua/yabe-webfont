@@ -9,8 +9,7 @@
                         <div v-if="license.is_activated" class="tw-flex tw-my-2.5 tw-items-center tw-font-medium">
                             Status: <span class="tw-font-normal tw-text-white tw-bg-green-700 tw-px-1.5 tw-py-1 tw-rounded tw-ml-2.5">active</span>
                         </div>
-                        <p class="description">Enter your <a href="https://rosua.org/downloads/yabe-webfont/" target="_blank">license key</a> receive the update of the latest version.</p>
-
+                        <p v-else class="description">Enter your <a href="https://webfont.yabe.land/#pricing-plans" target="_blank">license key</a> receive the update of the latest version.</p>
                     </td>
                 </tr>
                 <tr>
