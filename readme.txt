@@ -4,7 +4,7 @@ Donate link: https://github.com/sponsors/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.6-DEV
+Stable tag: 2.0.6
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -54,6 +54,8 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 == Changelog ==
 
 = 2.0.6 =
+* **New**: Option of cache loading method, `file` or `inline`
+* **Improve**: Preload the font files
 
 = 2.0.5 =
 * **Improve**: Sync the cache generation
