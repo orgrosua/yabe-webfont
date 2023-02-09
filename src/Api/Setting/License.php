@@ -70,7 +70,7 @@ class License extends AbstractApi implements ApiInterface
     {
         $payload = $wprestRequest->get_json_params();
 
-        $new_license_key = sanitize_text_field($payload['license']['key']);
+        $new_license_key = sanitize_text_field($payload['license']);
 
         $old_license = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
             'key' => '',
@@ -105,7 +105,7 @@ class License extends AbstractApi implements ApiInterface
 
         update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
             'key' => $new_license_key,
-            'opt_in_pre_release' => (bool) $payload['license']['opt_in_pre_release'],
+            'opt_in_pre_release' => false,
         ]);
 
         return new WP_REST_Response([

@@ -53,6 +53,9 @@ class Cache
 
         // listen to theme switch for cache build (async/scheduled)
         add_action('switch_theme', fn () => $this->schedule_cache(), 1_000_001);
+
+        // listen to Config change for cache build (async/scheduled)
+        add_action('f!yabe/webfont/api/setting/option:after_store', fn () => $this->schedule_cache(), 10, 1);
     }
 
     public function filter_cron_schedules($schedules)

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Core;
 
+use Yabe\Webfont\Utils\Config;
+
 /**
  * Serve the font on the frontpage.
  *
@@ -35,9 +37,17 @@ final class Frontpage
         if (file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE))) {
             $handle = YABE_WEBFONT_OPTION_NAMESPACE . '-cache';
             $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
-            wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
-            do_action('a!yabe/webfont/core/frontpage:before_print_style');
-            wp_print_styles($handle);
+
+            if (Config::get('cache.inline_print', false)) {
+                $css = file_get_contents(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
+                if ($css !== false) {
+                    echo sprintf("<style id=\"%s-css\">\n%s\n</style>", $handle, $css);
+                }
+            } else {
+                wp_register_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
+                do_action('a!yabe/webfont/core/frontpage:before_print_style');
+                wp_print_styles($handle);
+            }
         }
 
         define('YABE_WEBFONT_CSS_CACHE_WAS_LOADED', true);

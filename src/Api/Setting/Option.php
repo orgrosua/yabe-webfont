@@ -18,9 +18,8 @@ use WP_REST_Response;
 use WP_REST_Server;
 use Yabe\Webfont\Api\AbstractApi;
 use Yabe\Webfont\Api\ApiInterface;
-use Yabe\Webfont\Core\Cache as CoreCache;
 
-class Cache extends AbstractApi implements ApiInterface
+class Option extends AbstractApi implements ApiInterface
 {
     public function __construct()
     {
@@ -28,7 +27,7 @@ class Cache extends AbstractApi implements ApiInterface
 
     public function get_prefix(): string
     {
-        return 'setting/cache';
+        return 'setting/option';
     }
 
     public function register_custom_endpoints(): void
@@ -45,10 +44,10 @@ class Cache extends AbstractApi implements ApiInterface
 
         register_rest_route(
             self::API_NAMESPACE,
-            $this->get_prefix() . '/generate',
+            $this->get_prefix() . '/store',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->generate($wprestRequest),
+                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->store($wprestRequest),
                 'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
@@ -56,33 +55,26 @@ class Cache extends AbstractApi implements ApiInterface
 
     public function index(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        $cache_path = CoreCache::get_cache_path(CoreCache::CSS_CACHE_FILE);
+        $options = json_decode(get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
 
-        $cache = [
-            'last_generated' => '',
-            'pending_task' => false,
-            'file_url' => '',
-        ];
-
-        if (file_exists($cache_path) && is_readable($cache_path)) {
-            $cache['file_url'] = CoreCache::get_cache_url(CoreCache::CSS_CACHE_FILE);
-            $cache['last_generated'] = filemtime($cache_path);
-        }
-
-        if (wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
-            $cache['pending_task'] = true;
-        }
+        $options = apply_filters('f!yabe/webfont/api/setting/option:index_options', $options);
 
         return new WP_REST_Response([
-            'cache' => $cache,
+            'options' => $options,
         ]);
     }
 
-    public function generate(WP_REST_Request $wprestRequest): WP_REST_Response
+    public function store(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        do_action('a!yabe/webfont/core/cache:build_cache');
+        $payload = $wprestRequest->get_json_params();
 
-        wp_clear_scheduled_hook('a!yabe/webfont/core/cache:build_cache');
+        $options = $payload['options'];
+
+        $options = apply_filters('f!yabe/webfont/api/setting/option:store_options', $options);
+
+        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', json_encode($options, JSON_THROW_ON_ERROR));
+
+        do_action('f!yabe/webfont/api/setting/option:after_store', $options);
 
         return $this->index($wprestRequest);
     }

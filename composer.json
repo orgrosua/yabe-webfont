@@ -41,6 +41,7 @@
         "hidehalo/nanoid-php": "^1.1",
         "rosua/edd-sl-plugin-updater": "@dev",
         "rosua/migrations": "@dev",
-        "symfony/finder": "^5.4"
+        "symfony/finder": "^5.4",
+        "symfony/property-access": "^5.4"
     }
 }
