@@ -25,8 +25,18 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
+        /**
+         * Disable Oxygen's built-in Google Fonts.
+         */
+        add_filter('pre_option_oxygen_vsb_disable_google_fonts', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
+        add_filter('pre_update_option_oxygen_vsb_disable_google_fonts', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
+        add_filter('pre_option_oxygen_vsb_enable_google_fonts_cache', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
+        add_filter('pre_update_option_oxygen_vsb_enable_google_fonts_cache', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
+        add_filter('pre_option_oxygen_vsb_google_fonts_cache', static fn ($pre_option, $option, $default) => [['family'=>'Inherit']], 1_000_001, 3);
+        add_filter('pre_update_option_oxygen_vsb_google_fonts_cache', static fn ($value, $old_value, $option) => [['family'=>'Inherit']], 1_000_001, 3);
         add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
+
+        add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
         add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1_000_001);
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('ct_dashboard_page'), 1_000_001);
     }
@@ -54,6 +64,7 @@ class Main implements BuilderInterface
 
     public function remove_ecf_action()
     {
+        remove_action('oxygen_enqueue_scripts', 'add_web_font');
         remove_action('ct_builder_ng_init', 'ct_init_elegant_custom_fonts');
     }
 }
