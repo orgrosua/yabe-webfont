@@ -28,7 +28,7 @@ class Main implements BuilderInterface
          * Prevent Google Fonts loading
          * @see https://academy.bricksbuilder.io/article/filter-bricks-assets-load_webfonts/
          */
-        add_filter( 'bricks/assets/load_webfonts', '__return_false', 1_000_001 );
+        add_filter('bricks/assets/load_webfonts', '__return_false', 1_000_001);
 
         /**
          * @see https://academy.bricksbuilder.io/article/filter-standard-fonts/

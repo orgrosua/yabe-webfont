@@ -32,7 +32,9 @@ class Main implements BuilderInterface
         add_filter('pre_option_elementor_google_font', static fn ($pre_option, $option, $default) => '0', 1_000_001, 3);
         add_filter('pre_update_option_elementor_google_font', static fn ($value, $old_value, $option) => '0', 1_000_001, 3);
 
-        add_filter('elementor/fonts/groups', static fn ($groups) => array_merge(['yabe-webfont' => 'Yabe Webfont',], $groups), 1_000_001);
+        add_filter('elementor/fonts/groups', static fn ($groups) => array_merge([
+            'yabe-webfont' => 'Yabe Webfont',
+        ], $groups), 1_000_001);
         add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 1_000_001);
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('elementor'), 1_000_001);
     }
