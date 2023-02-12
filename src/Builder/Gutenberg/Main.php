@@ -104,26 +104,23 @@ class Main implements BuilderInterface
             return $css;
         }
 
+        return $css . self::non_block_based_theme_support_classes();
+    }
+
+    public static function non_block_based_theme_support_classes(): string
+    {
         $inline_css = '';
 
         $font_families = Runtime::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = strtolower(preg_replace('#[^a-zA-Z0-9\-_]+#', '-', $font_family['family']));
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
 
-            $inline_css .= sprintf(
-                ".has-%s-font-family{\n",
-                $slug
-            );
-
-            $inline_css .= sprintf(
-                "\tfont-family: var(--wp--preset--font-family--%s) !important;\n",
-                $slug
-            );
-
+            $inline_css .= sprintf(".has-%s-font-family{\n", $slug);
+            $inline_css .= sprintf("\tfont-family: var(--yabe-webfont--family--%s) !important;\n", $slug);
             $inline_css .= "}\n\n";
         }
 
-        return $css . $inline_css;
+        return $inline_css;
     }
 }

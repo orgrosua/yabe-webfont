@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder\Oxygen;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Builder\Gutenberg\Main as GutenbergMain;
 use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Plugin;
 
@@ -39,6 +40,11 @@ class Main implements BuilderInterface
             'family' => 'Inherit',
         ]], 1_000_001, 3);
         add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
+
+        /**
+         * Add Gutenberg non block-based theme support.
+         */
+        add_filter('f!yabe/webfont/core/runtime:append_build_css_content', fn ($css, $rows) => $this->filter_append_build_css_content_for_gutenberg($css, $rows), 1_000_001, 2);
 
         add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
         add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1_000_001);
@@ -70,5 +76,17 @@ class Main implements BuilderInterface
     {
         remove_action('oxygen_enqueue_scripts', 'add_web_font');
         remove_action('ct_builder_ng_init', 'ct_init_elegant_custom_fonts');
+    }
+
+    /**
+     * Support for a non block-based theme.
+     */
+    public function filter_append_build_css_content_for_gutenberg($css, $rows)
+    {
+        if (function_exists('wp_is_block_theme') && wp_is_block_theme() && method_exists(GutenbergMain::class, 'non_block_based_theme_support_classes')) {
+            $css .= GutenbergMain::non_block_based_theme_support_classes();
+        }
+
+        return $css;
     }
 }
