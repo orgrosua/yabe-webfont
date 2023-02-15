@@ -236,7 +236,7 @@ final class Plugin
      */
     public function plugin_action_links(array $links): array
     {
-        $base_url = admin_url('themes.php?page=' . YABE_WEBFONT_OPTION_NAMESPACE);
+        $base_url = AdminPage::get_page_url();
 
         array_unshift($links, sprintf(
             '<a href="%s">%s</a>',
