@@ -6,7 +6,7 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import 'highlight.js/styles/stackoverflow-light.css'
+import 'highlight.js/styles/stackoverflow-light.css';
 import 'vue-select/dist/vue-select.css';
 import './styles/app.css';
 import './styles/custom.scss';
