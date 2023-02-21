@@ -7,12 +7,12 @@
  * Plugin Name:         Yabe Webfont
  * Plugin URI:          https://webfont.yabe.land
  * Description:         Custom fonts management and self-host Google Fonts with seamless WordPress page builders integration
- * Version:             2.0.8-DEV
+ * Version:             2.0.8
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              Rosua
  * Author URI:          https://webfont.yabe.land
- * Donate link:         https://github.com/sponsors/suabahasa
+ * Donate link:         https://ko-fi.com/suabahasa
  * Text Domain:         yabe-webfont
  * Domain Path:         /languages
  *

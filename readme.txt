@@ -1,10 +1,10 @@
 === Yabe Webfont ===
 Contributors: suabahasa
-Donate link: https://github.com/sponsors/suabahasa
+Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.8-DEV
+Stable tag: 2.0.8
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -43,6 +43,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Bricks](https://bricksbuilder.io/)
 - [Oxygen](https://oxygenbuilder.com/)
 - [Elementor](https://elementor.com/)
+- [Divi](https://www.elegantthemes.com/gallery/divi/)
 - [Cwicly](https://cwicly.com/?ref=suabahasa)
 - [Zion Builder](https://zionbuilder.io/)
 - [Breakdance](https://breakdance.com/ref/165/)
@@ -54,6 +55,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 == Changelog ==
 
 = 2.0.8 =
+* **New**: [Divi](https://www.elegantthemes.com/gallery/divi/) integration
 
 = 2.0.7 =
 * **[Oxygen] Fix**: Gutenberg editor compatibility
