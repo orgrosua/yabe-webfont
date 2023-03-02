@@ -97,7 +97,7 @@ class Runtime
 
                     $css .= "\tsrc: ";
 
-                    $files = array_map(static fn ($f) => sprintf("url('%s') format(%s)", $f->attachment_url, Upload::mime_keyword($f->extension)), $font_face->files);
+                    $files = array_map(static fn ($f) => sprintf("url('%s') format(\"%s\")", $f->attachment_url, Upload::mime_keyword($f->extension)), $font_face->files);
 
                     $css .= implode(",\n\t\t", $files);
 

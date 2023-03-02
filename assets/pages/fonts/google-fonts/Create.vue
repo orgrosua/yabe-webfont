@@ -495,7 +495,7 @@ const cssFontFaceRule = computed(() => {
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
-                    css += `\tsrc: url('${file.url}') format(${fontFormatMap(file.format)});\n`;
+                    css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
 
                     if (file.unicodeRange) {
                         css += `\tunicode-range: ${file.unicodeRange};\n`;
@@ -546,7 +546,7 @@ const cssFontFaceRule = computed(() => {
                 css += `\tsrc: `;
 
                 let fileSrc = files.map(f => {
-                    return `url('${f.url}') format(${fontFormatMap(f.format)})`;
+                    return `url('${f.url}') format("${fontFormatMap(f.format)}")`;
                 });
 
                 css += fileSrc.join(',\n\t\t');
@@ -621,7 +621,7 @@ const cssFontFaceRuleFiltered = computed(() => {
 
                     css += `\tfont-display: ${fontFace.display || display.value};\n`;
 
-                    css += `\tsrc: url('${file.url}') format(${fontFormatMap(file.format)});\n`;
+                    css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
 
                     if (file.unicodeRange) {
                         css += `\tunicode-range: ${file.unicodeRange};\n`;
@@ -676,7 +676,7 @@ const cssFontFaceRuleFiltered = computed(() => {
                 css += `\tsrc: `;
 
                 let fileSrc = files.map(f => {
-                    return `url('${f.url}') format(${fontFormatMap(f.format)})`;
+                    return `url('${f.url}') format("${fontFormatMap(f.format)}")`;
                 });
 
                 css += fileSrc.join(',\n\t\t');
