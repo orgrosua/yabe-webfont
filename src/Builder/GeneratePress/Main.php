@@ -41,7 +41,7 @@ class Main implements BuilderInterface
 
         /**
          * TODO: Add custom font to GenerateBlocks.
-         * 
+         *
          * @see https://generatepress.com/forums/topic/feature-request-custom-font-from-generatepress-in-generateblocks/#post-2556290
          */
     }

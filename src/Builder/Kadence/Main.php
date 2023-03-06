@@ -75,19 +75,52 @@ class Main implements BuilderInterface
                     'value' => $font_family['family'],
                     'google' => false,
                     'weights' => [
-                        ['value' => '100', 'label' => 'Thin 100'],
-                        ['value' => '200', 'label' => 'Extra-Light 200'],
-                        ['value' => '300', 'label' => 'Light 300'],
-                        ['value' => '400', 'label' => 'Regular'],
-                        ['value' => '500', 'label' => 'Medium 500'],
-                        ['value' => '600', 'label' => 'Semi-Bold 600'],
-                        ['value' => '700', 'label' => 'Bold 700'],
-                        ['value' => '800', 'label' => 'Extra-Bold 800'],
-                        ['value' => '900', 'label' => 'Ultra-Bold 900'],
+                        [
+                            'value' => '100',
+                            'label' => 'Thin 100',
+                        ],
+                        [
+                            'value' => '200',
+                            'label' => 'Extra-Light 200',
+                        ],
+                        [
+                            'value' => '300',
+                            'label' => 'Light 300',
+                        ],
+                        [
+                            'value' => '400',
+                            'label' => 'Regular',
+                        ],
+                        [
+                            'value' => '500',
+                            'label' => 'Medium 500',
+                        ],
+                        [
+                            'value' => '600',
+                            'label' => 'Semi-Bold 600',
+                        ],
+                        [
+                            'value' => '700',
+                            'label' => 'Bold 700',
+                        ],
+                        [
+                            'value' => '800',
+                            'label' => 'Extra-Bold 800',
+                        ],
+                        [
+                            'value' => '900',
+                            'label' => 'Ultra-Bold 900',
+                        ],
                     ],
                     'styles' => [
-                        ['value' => 'normal', 'label' => 'Normal'],
-                        ['value' => 'italic', 'label' => 'Italic'],
+                        [
+                            'value' => 'normal',
+                            'label' => 'Normal',
+                        ],
+                        [
+                            'value' => 'italic',
+                            'label' => 'Italic',
+                        ],
                     ],
                 ];
             }
