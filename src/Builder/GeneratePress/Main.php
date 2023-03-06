@@ -31,12 +31,19 @@ class Main implements BuilderInterface
         add_filter('generate_font_manager_show_google_fonts', static fn () => false, 1_000_001, 0);
 
         /**
+         * @deprecated version 2.0.11
          * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
-        add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
 
         add_filter('option_generate_settings', fn ($value, $option) => $this->generate_settings($value), 1_000_001, 2);
         add_filter('pre_update_option_generate_settings', fn ($value, $old_value, $option) => $this->generate_settings($value), 1_000_001, 3);
+
+        /**
+         * TODO: Add custom font to GenerateBlocks.
+         * 
+         * @see https://generatepress.com/forums/topic/feature-request-custom-font-from-generatepress-in-generateblocks/#post-2556290
+         */
     }
 
     public function get_name(): string
