@@ -360,7 +360,8 @@ function doDelete(item) {
 
     api
         .request({
-            method: 'DELETE',
+            // method: 'DELETE', // not working on IIS server without further configuration
+            method: 'POST',
             url: `/fonts/delete/${item.id}`,
         })
         .then((response) => {

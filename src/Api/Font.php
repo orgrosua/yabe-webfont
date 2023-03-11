@@ -94,7 +94,8 @@ class Font extends AbstractApi implements ApiInterface
             self::API_NAMESPACE,
             $this->get_prefix() . '/delete/(?P<id>\d+)',
             [
-                'methods' => WP_REST_Server::DELETABLE,
+                'methods' => WP_REST_Server::DELETABLE, // not working on IIS server without further configuration
+                'methods' => 'POST, DELETE',
                 'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->destroy($wprestRequest),
                 'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
