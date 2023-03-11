@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 2.0.12-DEV
+Stable tag: 2.0.12
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -42,18 +42,23 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Gutenberg](https://wordpress.org/gutenberg)
 - [Bricks](https://bricksbuilder.io/)
 - [Oxygen](https://oxygenbuilder.com/)
-- [Elementor](https://elementor.com/)
+- [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
 - [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
 - [GeneratePress](https://generatepress.com/?ref=7954)
-- [Kadence WP](https://kadencewp.com)
 - [Cwicly](https://cwicly.com/?ref=suabahasa)
-- [Zion Builder](https://zionbuilder.io/)
 - [Breakdance](https://breakdance.com/ref/165/)
-- [Classic Editor](https://wordpress.org/plugins/classic-editor/)
+- [Zion Builder](https://zionbuilder.io/)
+- [Kadence WP](https://kadencewp.com)
 - [Beaver Builder](https://www.wpbeaverbuilder.com/)
 - [Greenshift](https://greenshiftwp.com/)
+- [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 
 == Changelog ==
+
+= 2.0.12 =
+* **New**: Bulk file upload and auto organize the font files to the matching variants
+* **Improve**: Bulk select variants on the Google Fonts import page
+* **Fix**: Setting doesn't saved properly on the plugin settings page
 
 = 2.0.11 =
 * **New**: [Kadence WP](https://kadencewp.com) integration
@@ -111,7 +116,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
 * **New**: [Bricks](https://bricksbuilder.io/) integration
 * **New**: [Oxygen](https://oxygenbuilder.com/) integration
-* **New**: [Elementor](https://elementor.com/) integration
+* **New**: [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) integration
 * **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration
 * **New**: [Zion Builder](https://zionbuilder.io/) integration
 * **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
