@@ -48,7 +48,12 @@
                         </div>
 
                         <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
-                            <h3 class="tw-flex-1">Variants</h3>
+                            <h3 class="tw-flex-1">
+                                Variants
+                                <svg @click="sortFontFaces" title="Sort variants" class="tw-w-4 tw-h-4 tw-ml-1 tw-cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                    <path d="M410.7 38c8.3 6 13.3 15.7 13.3 26v96h16c17.7 0 32 14.3 32 32s-14.3 32-32 32H392 344c-17.7 0-32-14.3-32-32s14.3-32 32-32h16V108.4l-5.9 2c-16.8 5.6-34.9-3.5-40.5-20.2s3.5-34.9 20.2-40.5l48-16c9.8-3.3 20.5-1.6 28.8 4.4zM120 32c9 0 17.5 3.8 23.6 10.4l88 96c11.9 13 11.1 33.3-2 45.2s-33.3 11.1-45.2-2L152 146.3V448c0 17.7-14.3 32-32 32s-32-14.3-32-32V146.3L55.6 181.6c-11.9 13-32.2 13.9-45.2 2s-13.9-32.2-2-45.2l88-96C102.5 35.8 111 32 120 32zM405.7 364.9A32 32 0 1 0 378.3 307a32 32 0 1 0 27.4 57.9zm-40.7 54.9C329.6 408.4 304 375.2 304 336c0-48.6 39.4-88 88-88s88 39.4 88 88c0 23.5-7.5 46.3-21.5 65.2L409.7 467c-10.5 14.2-30.6 17.2-44.8 6.7s-17.2-30.6-6.7-44.8l6.8-9.2z" />
+                                </svg>
+                            </h3>
 
                             <TheBulkUpload :font-faces="fontFaces" :family="family"/>
                             <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add variant</button>
@@ -231,6 +236,21 @@ const preview = reactive({
 });
 
 provide('fontFamily', family);
+
+function sortFontFaces() {
+    fontFaces.value.sort((a, b) => {
+        // sort by weight first, then by style (normal before italic)
+        if (a.weight === b.weight) {
+            if (a.style === 'normal') {
+                return -1;
+            } else {
+                return 1;
+            }
+        } else {
+            return a.weight - b.weight;
+        }
+    });
+}
 
 function fontFormatMap(ext) {
     switch (ext) {

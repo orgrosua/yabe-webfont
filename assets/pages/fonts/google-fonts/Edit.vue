@@ -791,7 +791,8 @@ function sendForm(e) {
 
     let promise = api
         .request({
-            method: 'PUT',
+            // method: 'PUT', // not working on IIS server without further configuration
+            method: 'POST',
             url: `/fonts/google-fonts/update/${item.value.id}`,
             data: {
                 title: title.value,
