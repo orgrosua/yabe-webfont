@@ -32,12 +32,12 @@ final class Plugin
     /**
      * @var string
      */
-    public const VERSION = '2.0.14';
+    public const VERSION = '2.0.15-DEV';
 
     /**
      * @var int
      */
-    public const VERSION_ID = 20014;
+    public const VERSION_ID = 20015;
 
     /**
      * @var int
@@ -52,12 +52,12 @@ final class Plugin
     /**
      * @var int
      */
-    public const RELEASE_VERSION = 14;
+    public const RELEASE_VERSION = 15;
 
     /**
      * @var string
      */
-    public const EXTRA_VERSION = '';
+    public const EXTRA_VERSION = 'DEV';
 
     /**
      * Easy Digital Downloads Software Licensing integration wrapper.
