@@ -74,7 +74,7 @@
                         </div>
 
                         <div class="tw-flex tw-items-center tw-space-x-4 tw-mt-8 tw-mb-3">
-                            <h3 class="tw-flex-1">Variants</h3>
+                            <h3 class="tw-flex-1">Variants <input v-model="selectAll" class="" type="checkbox" title="(De)select All" /></h3>
 
                             <div class="tw-flex tw-items-center tw-space-x-4 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
 
@@ -157,7 +157,7 @@
                                                         </span>
                                                     </Switch>
                                                     <SwitchLabel as="span" :class="[status ? 'tw-text-black' : 'tw-text-gray-500']" class="tw-ml-2 tw-font-medium tw-cursor-pointer">
-                                                        {{ status? 'published': 'draft' }}
+                                                        {{ status ? 'published' : 'draft' }}
                                                     </SwitchLabel>
                                                 </SwitchGroup>
                                             </div>
@@ -169,7 +169,7 @@
                                 <div id="major-publishing-actions">
                                     <div id="delete-action">
                                         <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-underline tw-cursor-pointer hover:tw-text-red-800" @click="doDelete">
-                                            {{ isDeleting? 'Deleting...': 'Trash' }}
+                                            {{ isDeleting ? 'Deleting...' : 'Trash' }}
                                         </a>
                                     </div>
 
@@ -265,6 +265,27 @@ watch(format, (newValue, oldValue) => {
     if (newValue.length === 0) {
         format.value = ['woff2'];
     }
+});
+
+const selectAll = computed({
+    get() {
+        if (fontFaces.value.length > 0) {
+            let allChecked = true;
+            for (const [index, item] of fontFaces.value.entries()) {
+                if (!item.isEnabled) {
+                    allChecked = false;
+                }
+                if (!allChecked) break;
+            }
+            return allChecked;
+        }
+        return false;
+    },
+    set(value) {
+        fontFaces.value.forEach((item) => {
+            item.isEnabled = value;
+        });
+    },
 });
 
 function fontFormatMap(ext) {

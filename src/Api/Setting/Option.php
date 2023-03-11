@@ -70,6 +70,10 @@ class Option extends AbstractApi implements ApiInterface
 
         $options = $payload['options'];
 
+        if (empty($options)) {
+            $options = (object) $options;
+        }
+
         $options = apply_filters('f!yabe/webfont/api/setting/option:store_options', $options);
 
         update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', json_encode($options, JSON_THROW_ON_ERROR));

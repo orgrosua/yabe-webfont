@@ -50,35 +50,7 @@
                         <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
                             <h3 class="tw-flex-1">Variants</h3>
 
-                            <div class="tw-flex tw-items-center tw-space-x-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
-
-                                <div class="tw-font-semibold tw-text-base">Preview :</div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
-                                    <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                    <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
-                                    <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                    <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
-                                    <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
-                                        <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                        <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
-                                            <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
-                                        </div>
-                                    </div>
-                                    <input type="range" v-model="preview.fontSize" max="200" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-
-                            </div>
-
+                            <TheBulkUpload :font-faces="fontFaces" :family="family"/>
                             <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add variant</button>
                         </div>
 
@@ -135,7 +107,7 @@
                                                         </span>
                                                     </Switch>
                                                     <SwitchLabel as="span" :class="[status ? 'tw-text-black' : 'tw-text-gray-500']" class="tw-ml-2 tw-font-medium tw-cursor-pointer">
-                                                        {{ status? 'published': 'draft' }}
+                                                        {{ status ? 'published' : 'draft' }}
                                                     </SwitchLabel>
                                                 </SwitchGroup>
                                             </div>
@@ -155,6 +127,38 @@
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <div class="tw-flex tw-flex-col tw-space-y-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
+
+                        <div class="tw-font-semibold tw-text-base">Preview :</div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
+                            <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                            <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
+                            <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                            <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
+                            <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
+                                <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
+                                    <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
+                                </div>
+                            </div>
+                            <input type="range" v-model="preview.fontSize" max="200" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
             <div id="postbox-container-2" class="postbox-container tw-mt-3">
                 <Transition name="css-preview">
@@ -169,7 +173,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
+import { ref, reactive, watch, computed, provide, onBeforeMount, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import debounce from 'lodash-es/debounce';
@@ -180,6 +184,7 @@ import { useLocalFontStore } from '../../../stores/font/localFont';
 import { useWordpressNotice } from '../../../stores/wordpressNotice';
 
 import TheFontFace from '../../../components/fonts/local/TheFontFace.vue';
+import TheBulkUpload from '../../../components/fonts/local/TheBulkUpload.vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
 const api = useApi();
@@ -224,6 +229,8 @@ const preview = reactive({
         max: 200,
     }
 });
+
+provide('fontFamily', family);
 
 function fontFormatMap(ext) {
     switch (ext) {

@@ -48,35 +48,14 @@
                         </div>
 
                         <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
-                            <h3 class="tw-flex-1">Variants</h3>
+                            <h3 class="tw-flex-1">
+                                Variants
+                                <svg @click="sortFontFaces" title="Sort variants" class="tw-w-4 tw-h-4 tw-ml-1 tw-cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                    <path d="M410.7 38c8.3 6 13.3 15.7 13.3 26v96h16c17.7 0 32 14.3 32 32s-14.3 32-32 32H392 344c-17.7 0-32-14.3-32-32s14.3-32 32-32h16V108.4l-5.9 2c-16.8 5.6-34.9-3.5-40.5-20.2s3.5-34.9 20.2-40.5l48-16c9.8-3.3 20.5-1.6 28.8 4.4zM120 32c9 0 17.5 3.8 23.6 10.4l88 96c11.9 13 11.1 33.3-2 45.2s-33.3 11.1-45.2-2L152 146.3V448c0 17.7-14.3 32-32 32s-32-14.3-32-32V146.3L55.6 181.6c-11.9 13-32.2 13.9-45.2 2s-13.9-32.2-2-45.2l88-96C102.5 35.8 111 32 120 32zM405.7 364.9A32 32 0 1 0 378.3 307a32 32 0 1 0 27.4 57.9zm-40.7 54.9C329.6 408.4 304 375.2 304 336c0-48.6 39.4-88 88-88s88 39.4 88 88c0 23.5-7.5 46.3-21.5 65.2L409.7 467c-10.5 14.2-30.6 17.2-44.8 6.7s-17.2-30.6-6.7-44.8l6.8-9.2z" />
+                                </svg>
+                            </h3>
 
-                            <div class="tw-flex tw-items-center tw-space-x-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
-                                <div class="tw-font-semibold tw-text-base">Preview :</div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
-                                    <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                    <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
-                                    <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                    <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-
-                                <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                                    <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
-                                    <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
-                                        <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
-                                        <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
-                                            <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
-                                        </div>
-                                    </div>
-                                    <input type="range" v-model="preview.fontSize" max="200" class="tw-w-16 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
-                                </div>
-                            </div>
-
+                            <TheBulkUpload :font-faces="fontFaces" :family="family" />
                             <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add variant</button>
                         </div>
 
@@ -133,7 +112,7 @@
                                                         </span>
                                                     </Switch>
                                                     <SwitchLabel as="span" :class="[status ? 'tw-text-black' : 'tw-text-gray-500']" class="tw-ml-2 tw-font-medium tw-cursor-pointer">
-                                                        {{ status? 'published': 'draft' }}
+                                                        {{ status ? 'published' : 'draft' }}
                                                     </SwitchLabel>
                                                 </SwitchGroup>
                                             </div>
@@ -145,7 +124,7 @@
                                 <div id="major-publishing-actions">
                                     <div id="delete-action">
                                         <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-underline tw-cursor-pointer hover:tw-text-red-800" @click="doDelete">
-                                            {{ isDeleting? 'Deleting...': 'Trash' }}
+                                            {{ isDeleting ? 'Deleting...' : 'Trash' }}
                                         </a>
                                     </div>
 
@@ -157,6 +136,37 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="tw-flex tw-flex-col tw-space-y-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
+
+                        <div class="tw-font-semibold tw-text-base">Preview :</div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">width</span>
+                            <input type="number" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                            <input type="range" v-model="preview.width.current" :min="preview.width.min" :max="preview.width.max" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
+                            <input type="number" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                            <input type="range" v-model="preview.weight.current" :min="preview.weight.min" :max="preview.weight.max" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
+                            <div class="tw-h-fit tw-flex tw-items-stretch tw-relative tw-rounded-md tw-shadow-sm">
+                                <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 !tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                                <div class="tw-absolute tw-inset-y-0 tw-right-0 tw-flex tw-py-1 tw-pr-1.5">
+                                    <kbd class="tw-inline-flex tw-items-center tw-rounded tw-border tw-border-gray-200 tw-px-1 tw-text-gray-500">px</kbd>
+                                </div>
+                            </div>
+                            <input type="range" v-model="preview.fontSize" max="200" class="tw-flex-1 !appearance-none !tw-accent-[#0050FF] !tw-h-1 tw-self-center" />
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -189,7 +199,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed, onBeforeMount, onBeforeUnmount } from 'vue';
+import { ref, reactive, watch, computed, provide, onBeforeMount, onBeforeUnmount } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import debounce from 'lodash-es/debounce';
@@ -204,6 +214,7 @@ import { useLocalFontStore } from '../../../stores/font/localFont';
 import { useWordpressNotice } from '../../../stores/wordpressNotice';
 
 import TheFontFace from '../../../components/fonts/local/TheFontFace.vue';
+import TheBulkUpload from '../../../components/fonts/local/TheBulkUpload.vue';
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue';
 
 const route = useRoute();
@@ -254,6 +265,8 @@ const preview = reactive({
     }
 });
 
+provide('fontFamily', family);
+
 function fontFormatMap(ext) {
     switch (ext) {
         case 'woff2':
@@ -275,6 +288,21 @@ function fontFormatMap(ext) {
             return 'woff2';
     }
 };
+
+function sortFontFaces() {
+    fontFaces.value.sort((a, b) => {
+        // sort by weight first, then by style (normal before italic)
+        if (a.weight === b.weight) {
+            if (a.style === 'normal') {
+                return -1;
+            } else {
+                return 1;
+            }
+        } else {
+            return a.weight - b.weight;
+        }
+    });
+}
 
 const cssFontFaceRule = computed(() => {
     let css = ``;
