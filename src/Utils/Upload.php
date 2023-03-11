@@ -87,6 +87,8 @@ class Upload
     {
         require_once(ABSPATH . 'wp-admin/includes/file.php');
 
+        $file_url = apply_filters('f!yabe/webfont/utils/upload:remote_upload_media:file_url', $file_url);
+
         $temp_file = download_url($file_url);
 
         if (is_wp_error($temp_file)) {
