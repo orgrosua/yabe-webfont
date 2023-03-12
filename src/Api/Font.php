@@ -530,7 +530,7 @@ class Font extends AbstractApi implements ApiInterface
         $font_faces = [];
 
         add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 10002);
+        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
 
         $font_mime_types = [
             'woff2' => 'font/woff2',
@@ -776,7 +776,7 @@ class Font extends AbstractApi implements ApiInterface
         $font_faces = [];
 
         add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 10002);
+        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
 
         $font_mime_types = [
             'woff2' => 'font/woff2',

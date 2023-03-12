@@ -22,11 +22,9 @@
                 </tr> -->
             </tbody>
         </table>
-
     </div>
 
     <div class="tw-mb-6">
-
         <h2 class="title">Performance</h2>
 
         <table class="form-table" role="presentation">
@@ -71,6 +69,25 @@
                         <input id="inline-print" name="inline_print" type="checkbox" :checked="get(options, 'cache.inline_print', false)" :value="get(options, 'cache.inline_print', false)" @input="set(options, 'cache.inline_print', !options?.cache?.inline_print)">
                         <label for="inline-print"> Inline style</label>
                         <p class="description">Load font style via inline styles instead of external file.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tw-mb-6">
+        <h2 class="title">Misc.</h2>
+
+        <table class="form-table" role="presentation">
+            <tbody>
+                <tr>
+                    <th scope="row"><label>Media Library</label></th>
+                    <td>
+                        <input id="media-library" name="hide_media_library" type="checkbox" :checked="get(options, 'misc.hide_media_library', false)" :value="get(options, 'misc.hide_media_library', false)" @input="set(options, 'misc.hide_media_library', !options?.misc?.hide_media_library)">
+                        <label for="media-library"> Hide font files from Media Library </label>
+                        <p class="description">
+                            Only show items in the Media Library that satisfy the following conditions: original allowed mime types.
+                        </p>
                     </td>
                 </tr>
             </tbody>

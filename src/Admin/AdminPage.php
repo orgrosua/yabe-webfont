@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Admin;
 
+use WP_Query;
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Upload;
 
 class AdminPage
@@ -22,9 +24,17 @@ class AdminPage
     public function __construct()
     {
         add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types), 10001);
+        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types), 1_000_001);
 
         add_action('admin_menu', fn () => $this->add_admin_menu());
+
+        if (Config::get('misc.hide_media_library', false)) {
+            add_filter('ajax_query_attachments_args', fn (array $query) => $this->ajax_query_attachments_args($query), 1_000_001);
+
+            add_action('load-upload.php', function () {
+                add_action('pre_get_posts', fn (WP_Query $wpQuery) => $this->load_upload_pre_get_posts($wpQuery), 1_000_001);
+            });
+        }
     }
 
     public static function get_page_url(): string
@@ -98,6 +108,30 @@ class AdminPage
             ],
             'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', defined('YABE_SELF_HOSTED_WAKUFONT') ? constant('YABE_SELF_HOSTED_WAKUFONT') : YABE_WEBFONT_HOSTED_WAKUFONT), '/'),
         ]);
+    }
+
+    private function ajax_query_attachments_args(array $query): array
+    {
+        if ($query['post_type'] !== 'attachment') {
+            return $query;
+        }
+
+        if (! isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
+            $all_mimes = get_allowed_mime_types();
+
+            $query['post_mime_type'] = $all_mimes;
+        }
+
+        return $query;
+    }
+
+    private function load_upload_pre_get_posts(WP_Query $wpQuery): void
+    {
+        if (! isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
+            $all_mimes = get_allowed_mime_types();
+
+            $wpQuery->set('post_mime_type', $all_mimes);
+        }
     }
 
     private function admin_footer_text($text): string
