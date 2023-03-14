@@ -33,13 +33,29 @@ class Main implements BuilderInterface
         /**
          * @see https://academy.bricksbuilder.io/article/filter-standard-fonts/
          */
-        add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        // add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
 
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('bricks'), 1_000_001);
+
+        add_action('wp_enqueue_scripts', fn () => $this->enqueue_scripts(), 1_000_001);
     }
 
     public function get_name(): string
     {
         return 'bricks';
+    }
+
+    public function enqueue_scripts()
+    {
+        if (wp_script_is('bricks-builder', 'registered') && bricks_is_builder()) {
+            $yabeOptions = [];
+            $font_families = Runtime::get_font_families();
+            foreach ($font_families as $font_family) {
+                $yabeOptions[$font_family['family']] = $font_family['title'];
+            }
+            wp_add_inline_script('bricks-builder', 'var yabeOptions = ' . json_encode($yabeOptions, JSON_THROW_ON_ERROR), 'before');
+            wp_add_inline_script('bricks-builder', 'bricksData.loadData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+            wp_add_inline_script('bricks-builder', "bricksData.loadData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.loadData.fonts.options};", 'before');
+        }
     }
 }

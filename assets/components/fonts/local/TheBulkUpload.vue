@@ -31,17 +31,17 @@ const formatPrecedence = {
 
 const weightPatterns = [
     // more specific
-    { 'key': 200, 'value': /[ \-]?(200|((extra|ultra)\-?light))/i },
-    { 'key': 800, 'value': /[ \-]?(800|((extra|ultra)\-?bold))/i },
-    { 'key': 600, 'value': /[ \-]?(600|([ds]emi(\-?bold)?))/i },
+    { 'key': 200, 'value': /[ \-]?(200|((extra|ultra)\-?light))/ig },
+    { 'key': 800, 'value': /[ \-]?(800|((extra|ultra)\-?bold))/ig },
+    { 'key': 600, 'value': /[ \-]?(600|([ds]emi(\-?bold)?))/ig },
     // less specific
-    { 'key': 100, 'value': /[ \-]?(100|thin)/i },
-    { 'key': 300, 'value': /[ \-]?(300|light)/i },
-    { 'key': 400, 'value': /[ \-]?(400|normal|regular|book)/i },
-    { 'key': 500, 'value': /[ \-]?(500|medium)/i },
-    { 'key': 700, 'value': /[ \-]?(700|bold)/i },
-    { 'key': 900, 'value': /[ \-]?(900|black|heavy)/i },
-    { 'key': '100 900', 'value': /[ \-]?(VariableFont|\[wght\])/i },
+    { 'key': 100, 'value': /[ \-]?(100|thin)/ig },
+    { 'key': 300, 'value': /[ \-]?(300|light)/ig },
+    { 'key': 400, 'value': /[ \-]?(400|normal|regular|book)/ig },
+    { 'key': 500, 'value': /[ \-]?(500|medium)/ig },
+    { 'key': 700, 'value': /[ \-]?(700|bold)/ig },
+    { 'key': 900, 'value': /[ \-]?(900|black|heavy)/ig },
+    { 'key': '100 900', 'value': /[\-|\_]?(VariableFont|\[wght\]|opsz,wght|opsz|wght)/ig },
 ];
 
 const stylePatterns = [
@@ -90,6 +90,7 @@ function uploadFonts(e) {
 
         selectedMediaFiles = sortBy(selectedMediaFiles, (f) => formatPrecedence[f.extension]);
 
+        /** @type {string} fontFamily */
         let fontFamily = null;
 
         selectedMediaFiles.forEach(element => {
@@ -100,7 +101,7 @@ function uploadFonts(e) {
             for (let i = 0; i < weightPatterns.length; i++) {
                 if (fontFamily.match(weightPatterns[i].value)) {
                     weight = weightPatterns[i].key;
-                    fontFamily = fontFamily.replace(weightPatterns[i].value, '');
+                    fontFamily = fontFamily.replaceAll(weightPatterns[i].value, '');
                     break;
                 }
             }
@@ -112,6 +113,8 @@ function uploadFonts(e) {
                     break;
                 }
             }
+
+            fontFamily = fontFamily.replace(/[ \-]?webfont/i, '').trim();
 
             let fontFace = props.fontFaces.find((f) => {
                 return f.weight === weight && f.style === style;

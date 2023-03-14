@@ -39,6 +39,20 @@ class Runtime
         return $font_faces;
     }
 
+    public static function refresh_google_fonts_attachment_url(array $font_files): array
+    {
+        foreach ($font_files as $i => $font_file) {
+            if (property_exists($font_file, 'file')) {
+                $attachment_url = wp_get_attachment_url($font_file->file->attachment_id);
+                if ($attachment_url) {
+                    $font_files[$i]->file->attachment_url = $attachment_url;
+                }
+            }
+        }
+
+        return $font_files;
+    }
+
     public static function build_css(): string
     {
         /** @var wpdb $wpdb */

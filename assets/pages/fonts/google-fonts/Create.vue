@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="tw-flex tw-items-center tw-space-x-2 tw-mt-8 tw-mb-3">
-                            <h3 class="tw-flex-1">Variants <input v-if="fontFaces.length > 0" v-model="selectAll" class="" type="checkbox" title="(De)select All" /></h3>
+                            <h3 class="tw-flex-1">Variants <input v-if="fontFaces?.length > 0" v-model="selectAll" class="" type="checkbox" title="(De)select All" /></h3>
 
                             <div class="tw-flex tw-items-center tw-space-x-2 tw-border tw-border-solid tw-py-2 tw-px-2 !tw-border-gray-300">
 

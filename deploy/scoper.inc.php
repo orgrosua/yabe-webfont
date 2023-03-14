@@ -98,7 +98,8 @@ return [
         $wp_functions,
         [
             // 'mb_str_split',
-            'Breakdance\Fonts\registerFont'
+            'Breakdance\Fonts\registerFont',
+            'bricks_is_builder',
         ]
     ),
     'exclude-constants' => array_merge(

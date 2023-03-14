@@ -269,7 +269,7 @@ class Font extends AbstractApi implements ApiInterface
             ], 404, []);
         }
 
-        return new WP_REST_Response([
+        $payload = [
             'id' => $row->id,
             'type' => $row->type,
             'title' => $row->title,
@@ -281,7 +281,13 @@ class Font extends AbstractApi implements ApiInterface
             'created_at' => strtotime($row->created_at),
             'updated_at' => strtotime($row->updated_at),
             'deleted_at' => $row->deleted_at ? strtotime($row->deleted_at) : null,
-        ], 200, []);
+        ];
+
+        if (property_exists($payload['metadata'], 'google_fonts')) {
+            $payload['metadata']->google_fonts->font_files = Runtime::refresh_google_fonts_attachment_url($payload['metadata']->google_fonts->font_files);
+        }
+
+        return new WP_REST_Response($payload, 200, []);
     }
 
     private function custom_store(WP_REST_Request $wprestRequest): WP_REST_Response
