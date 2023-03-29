@@ -141,7 +141,7 @@ class Runtime
         }
 
         if ($result !== []) {
-            $css .= "body{\n";
+            $css .= "body {\n";
 
             $families = [];
 

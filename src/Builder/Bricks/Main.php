@@ -54,8 +54,14 @@ class Main implements BuilderInterface
                 $yabeOptions[$font_family['family']] = $font_family['title'];
             }
             wp_add_inline_script('bricks-builder', 'var yabeOptions = ' . json_encode($yabeOptions, JSON_THROW_ON_ERROR), 'before');
-            wp_add_inline_script('bricks-builder', 'bricksData.loadData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
-            wp_add_inline_script('bricks-builder', "bricksData.loadData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.loadData.fonts.options};", 'before');
+
+            if (version_compare(BRICKS_VERSION, '1.7.1', '>=')) {
+                wp_add_inline_script('bricks-builder', 'bricksData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+                wp_add_inline_script('bricks-builder', "bricksData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.fonts.options};", 'before');
+            } else {
+                wp_add_inline_script('bricks-builder', 'bricksData.loadData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+                wp_add_inline_script('bricks-builder', "bricksData.loadData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.loadData.fonts.options};", 'before');
+            }
         }
     }
 }

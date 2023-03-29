@@ -55,6 +55,9 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 
 == Changelog ==
 
+= 2.0.17 =
+* **[Bricks] Improve**: Ensure compatibility with Bricks 1.7.1 and later
+
 = 2.0.16 =
 * **[Bricks] Improve**: Font items on the Bricks editor is now grouped under the `Yabe Webfont` category
 * **Improve**: Regenerate the font files url with the new attachment url

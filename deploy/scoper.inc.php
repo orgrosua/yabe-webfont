@@ -128,6 +128,7 @@ return [
 
             'SHOW_CT_BUILDER',
             'CWICLY_VERSION',
+            'BRICKS_VERSION',
         ]
     ),
 

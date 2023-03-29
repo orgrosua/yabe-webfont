@@ -116,7 +116,7 @@ class Main implements BuilderInterface
         foreach ($font_families as $font_family) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
 
-            $inline_css .= sprintf(".has-%s-font-family{\n", $slug);
+            $inline_css .= sprintf(".has-%s-font-family {\n", $slug);
             $inline_css .= sprintf("\tfont-family: var(--yabe-webfont--family--%s) !important;\n", $slug);
             $inline_css .= "}\n\n";
         }
