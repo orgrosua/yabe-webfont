@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Core;
 
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Upload;
 
 /**
@@ -125,7 +126,8 @@ class Runtime
                 $css .= "}\n\n";
             }
 
-            if ($metadata->selector) {
+            // if property selector is exists
+            if (property_exists($metadata, 'selector') && $metadata->selector) {
                 $css .= "{$metadata->selector} {\n\tfont-family: '{$row->family}';\n}\n\n";
             }
 
@@ -136,6 +138,19 @@ class Runtime
                     $css .= "\tfont-style: {$font_face->style};\n";
                     $css .= "\tfont-weight: {$font_face->weight};\n";
                     $css .= "}\n\n";
+                }
+            }
+        }
+
+        // Adobe Fonts
+        if ($result !== []) {
+            $project_id = Config::get('adobe_fonts.project_id', null);
+            if ($project_id !== null) {
+                // check if the $result array contain item.type = 'adobe-fonts'
+                $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
+
+                if ($any_adobe_fonts !== false) {
+                    $css .= self::get_kit_css($project_id);
                 }
             }
         }
@@ -253,5 +268,24 @@ class Runtime
         }
 
         return $families;
+    }
+
+    public static function get_kit_css($kit_id): string
+    {
+        $css = '';
+
+        $response = wp_remote_get(sprintf('https://use.typekit.net/%s.css', $kit_id));
+
+        if (is_wp_error($response)) {
+            return $css;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+
+        if (is_wp_error($body)) {
+            return $css;
+        }
+
+        return $css . ($body . "\n\n");
     }
 }

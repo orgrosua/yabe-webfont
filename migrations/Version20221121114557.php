@@ -34,23 +34,23 @@ final class Version20221121114557 extends AbstractMigration
             `metadata` TEXT,
             `font_faces` TEXT,
             `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP, -- ON UPDATE CURRENT_TIMESTAMP,
+            `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             `deleted_at` DATETIME DEFAULT NULL,
             PRIMARY KEY (`id`)
         ) {$this->collation()};";
 
-        $sql[] = "CREATE TRIGGER lastUpdateTrigger BEFORE
-        UPDATE ON `{$wpdb->prefix}yabe_webfont_fonts` FOR EACH ROW 
-        BEGIN IF (
-                NEW.title <> OLD.title
-                || NEW.family <> OLD.family 
-                || NEW.metadata <> OLD.metadata 
-                || NEW.font_faces <> OLD.font_faces 
-            ) THEN
-            SET
-                NEW.updated_at = CURRENT_TIMESTAMP();
-        END IF;
-        END;";
+        // $sql[] = "CREATE TRIGGER lastUpdateTrigger BEFORE
+        // UPDATE ON `{$wpdb->prefix}yabe_webfont_fonts` FOR EACH ROW 
+        // BEGIN IF (
+        //         NEW.title <> OLD.title
+        //         || NEW.family <> OLD.family 
+        //         || NEW.metadata <> OLD.metadata 
+        //         || NEW.font_faces <> OLD.font_faces 
+        //     ) THEN
+        //     SET
+        //         NEW.updated_at = CURRENT_TIMESTAMP();
+        // END IF;
+        // END;";
 
         dbDelta($sql);
     }

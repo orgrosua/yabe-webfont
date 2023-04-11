@@ -305,16 +305,23 @@ class Font extends AbstractApi implements ApiInterface
         $metadata = $payload['metadata'];
         $font_faces = $payload['font_faces'];
 
-        $sql = "
-            INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
-            (type, title, slug, family, status, metadata, font_faces)
-            VALUES
-            (%s, %s, %s, %s, %d, %s, %s)
-        ";
-
-        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR));
-
-        $wpdb->query($sql);
+        $wpdb->insert(sprintf('%syabe_webfont_fonts', $wpdb->prefix), [
+            'type' => $type,
+            'title' => $title,
+            'slug' => $slug,
+            'family' => $family,
+            'status' => $status,
+            'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
+            'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+        ], [
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%d',
+            '%s',
+            '%s',
+        ]);
 
         $id = $wpdb->insert_id;
 
@@ -351,15 +358,15 @@ class Font extends AbstractApi implements ApiInterface
             ], 404, []);
         }
 
-        $sql = "
-            UPDATE {$wpdb->prefix}yabe_webfont_fonts
-            SET status = %d
-            WHERE id = %d
-        ";
-
-        $sql = $wpdb->prepare($sql, $status, $id);
-
-        $wpdb->query($sql);
+        $wpdb->update(sprintf('%syabe_webfont_fonts', $wpdb->prefix), [
+            'status' => $status,
+        ], [
+            'id' => $id,
+        ], [
+            '%d',
+        ], [
+            '%d',
+        ]);
 
         do_action('a!yabe/webfont/api/font:update_status', $id);
 
@@ -451,15 +458,15 @@ class Font extends AbstractApi implements ApiInterface
             ], 404, []);
         }
 
-        $sql = "
-            UPDATE {$wpdb->prefix}yabe_webfont_fonts
-            SET deleted_at = null
-            WHERE id = %d
-        ";
-
-        $sql = $wpdb->prepare($sql, $id);
-
-        $wpdb->query($sql);
+        $wpdb->update(sprintf('%syabe_webfont_fonts', $wpdb->prefix), [
+            'deleted_at' => null,
+        ], [
+            'id' => $id,
+        ], [
+            '%s',
+        ], [
+            '%d',
+        ]);
 
         do_action('a!yabe/webfont/api/font:restore', $id);
 
@@ -499,19 +506,29 @@ class Font extends AbstractApi implements ApiInterface
         $metadata = $payload['metadata'];
         $font_faces = $payload['font_faces'];
 
-        $sql = "
-            UPDATE {$wpdb->prefix}yabe_webfont_fonts
-            SET title = %s,
-                family = %s,
-                status = %d,
-                metadata = %s,
-                font_faces = %s
-            WHERE id = %d
-        ";
-
-        $sql = $wpdb->prepare($sql, $title, $family, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR), $id);
-
-        $wpdb->query($sql);
+        $wpdb->update(
+            sprintf('%syabe_webfont_fonts', $wpdb->prefix),
+            [
+                'title' => $title,
+                'family' => $family,
+                'status' => $status,
+                'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
+                'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+            ],
+            [
+                'id' => $id,
+            ],
+            [
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s',
+            ],
+            [
+                '%d',
+            ],
+        );
 
         do_action('a!yabe/webfont/api/font:custom_update', $id);
 
@@ -730,16 +747,27 @@ class Font extends AbstractApi implements ApiInterface
             }
         }
 
-        $sql = "
-            INSERT INTO {$wpdb->prefix}yabe_webfont_fonts
-            (type, title, slug, family, status, metadata, font_faces)
-            VALUES
-            (%s, %s, %s, %s, %d, %s, %s)
-        ";
-
-        $sql = $wpdb->prepare($sql, $type, $title, $slug, $family, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR));
-
-        $wpdb->query($sql);
+        $wpdb->insert(
+            sprintf('%syabe_webfont_fonts', $wpdb->prefix),
+            [
+                'type' => $type,
+                'title' => $title,
+                'slug' => $slug,
+                'family' => $family,
+                'status' => $status,
+                'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
+                'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+            ],
+            [
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+                '%d',
+                '%s',
+                '%s',
+            ]
+        );
 
         $id = $wpdb->insert_id;
 
@@ -986,18 +1014,27 @@ class Font extends AbstractApi implements ApiInterface
             }
         }
 
-        $sql = "
-            UPDATE {$wpdb->prefix}yabe_webfont_fonts
-            SET title = %s,
-                status = %d,
-                metadata = %s,
-                font_faces = %s
-            WHERE id = %d
-        ";
-
-        $sql = $wpdb->prepare($sql, $title, $status, json_encode($metadata, JSON_THROW_ON_ERROR), json_encode($font_faces, JSON_THROW_ON_ERROR), $id);
-
-        $wpdb->query($sql);
+        $wpdb->update(
+            sprintf('%syabe_webfont_fonts', $wpdb->prefix),
+            [
+                'title' => $title,
+                'status' => $status,
+                'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
+                'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+            ],
+            [
+                'id' => $id,
+            ],
+            [
+                '%s',
+                '%d',
+                '%s',
+                '%s',
+            ],
+            [
+                '%d',
+            ]
+        );
 
         do_action('a!yabe/webfont/api/font:google_fonts_update', $id);
 

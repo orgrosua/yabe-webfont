@@ -115,7 +115,7 @@
                             <a class="tw-px-1 tw-cursor-pointer"> Restore </a>
                             |
                             <a class="tw-px-1 tw-text-red-700 tw-cursor-wait hover:tw-text-red-800">
-                                Delete Permanently 
+                                Delete Permanently
                             </a>
                         </template>
                     </div>
@@ -176,13 +176,14 @@
 import { ref, reactive, computed, watch, onMounted, provide } from 'vue';
 import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { __ } from '@wordpress/i18n';
+import cloneDeep from 'lodash-es/cloneDeep';
 
 import { useApi } from '../../library/api';
 import { useBusy } from '../../stores/busy';
 
 import TheBulkAction from '../../components/TheBulkAction.vue';
 import ThePagination from '../../components/ThePagination.vue';
-import TheFontIndexRow from '../../components/fonts/local/TheFontIndexRow.vue';
+import TheFontIndexRow from '../../components/fonts/TheFontIndexRow.vue';
 import { useNotifier } from '../../library/notifier';
 import { Switch } from '@headlessui/vue';
 
@@ -217,6 +218,8 @@ const meta = reactive({
     total_deleted: 0,
     skeleton: 5,
 });
+
+const options = ref({});
 
 const items = ref([]);
 
@@ -313,6 +316,8 @@ function doRefreshItems() {
             meta.skeleton = data.data.length > 0 ? data.data.length : 5;
 
             resetBulkSelection();
+
+            loadTypekitCss();
         })
         .catch(function (error) {
             notifier.alert(error.message);
@@ -458,6 +463,9 @@ function doBulkActions(action) {
             ) {
                 selectedItems.value.forEach(async (id) => {
                     const item = items.value.find((item) => item.id === id);
+                    if (item.type === 'adobe-fonts') {
+                        return;
+                    }
                     doDelete(item);
                 });
                 resetBulkSelection();
@@ -499,6 +507,42 @@ function doBulkActions(action) {
         default:
             break;
     }
+}
+
+function loadTypekitCss() {
+    // get stylesheet element with id="typekit-css" else create it
+    let typekitCss = document.getElementById('typekit-css');
+    if (!typekitCss) {
+        typekitCss = document.createElement('link');
+        typekitCss.setAttribute('id', 'typekit-css');
+        typekitCss.setAttribute('rel', 'stylesheet');
+        document.head.appendChild(typekitCss);
+    }
+
+
+    busy.add('settings:fetch-options');
+    api
+        .request({
+            method: 'GET',
+            url: '/setting/option/index'
+        })
+        .then(response => response.data)
+        .then(data => {
+            options.value = cloneDeep(data.options);
+
+            const project_id = options.value.adobe_fonts?.project_id;
+            if (project_id) {
+                typekitCss.setAttribute('href', `https://use.typekit.net/${project_id}.css`);
+            }
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            busy.remove('settings:fetch-options');
+        });
+
+
 }
 </script>
 

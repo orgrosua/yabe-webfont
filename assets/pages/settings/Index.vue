@@ -32,7 +32,7 @@
                 <tr>
                     <th scope="row"> Cached CSS </th>
                     <td>
-                        <p>
+                        <p class="tw-flex tw-gap-x-1">
                             <span class="tw-font-medium"> Last generated: </span>
                             <template v-if="css_cache.last_generated">
                                 {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
@@ -43,6 +43,7 @@
                                     </svg>
                                 </a>
                             </template>
+                            <span :class="busy.isBusy && (busy.hasTask('settings:generate-cache') || busy.hasTask('settings:fetch-cache')) ? 'tw-visible' : 'tw-hidden'" class="spinner"></span>
                         </p>
                         <p class="description">
                             Serve the CSS file from the cache instead of generating it on the fly.
@@ -94,6 +95,28 @@
         </table>
     </div>
 
+    <div class="tw-mb-6">
+        <h2 class="title">Adobe Fonts</h2>
+
+        <table class="form-table" role="presentation">
+            <tbody>
+                <tr>
+                    <th scope="row"><label>Project ID</label></th>
+                    <td>
+                        <div class="tw-flex tw-items-center">
+                            <input type="text" id="adobe-font-project-id" name="adobe_font_project_id" :value="get(options, 'adobe_fonts.project_id', null)" @change="$event => set(options, 'adobe_fonts.project_id', $event.target.value === '' ? null : $event.target.value)" class="">
+                            <button v-if="adobe_font_kit" type="button" @click="doSyncAdobeFonts" class="button button-secondary"> Sync fonts </button>
+                            <span :class="busy.isBusy && (busy.hasTask('settings:fetch-adobe-fonts-kits') || busy.hasTask('settings:sync-adobe-fonts-kits')) ? 'tw-visible' : 'tw-hidden'" class="spinner"></span>
+                        </div>
+                        <p class="description">
+                            Get your Project ID from <a href="https://fonts.adobe.com/my_fonts#web_projects-section" target="_blank">https://fonts.adobe.com/my_fonts#web_projects-section</a>
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <button type="button" @click="doStore" v-ripple class="button button-primary">Save Changes</button>
 </template>
 
@@ -125,6 +148,8 @@ const css_cache = ref({
 });
 
 const options = ref({});
+
+const adobe_font_kit = ref(null);
 
 onBeforeMount(() => {
     busy.add('settings:fetch-license');
@@ -217,6 +242,44 @@ watch(
     }
 );
 
+watch(
+    () => options.value.adobe_fonts?.project_id,
+    async (newProjectId, oldProjectId) => {
+        if (newProjectId === oldProjectId) {
+            return;
+        }
+
+        adobe_font_kit.value = null;
+ 
+        if (newProjectId === null) {
+            doDestroyAdobeFonts();
+            return;
+        }
+        
+        busy.add('settings:fetch-adobe-fonts-kits');
+        api
+            .request({
+                method: 'POST',
+                url: '/setting/adobe-fonts/get-kits',
+                data: {
+                    project_id: newProjectId
+                },
+            })
+            .then(response => response.data)
+            .then(data => {
+                adobe_font_kit.value = data.data.kit;
+                doStore();
+                doSyncAdobeFonts();
+            })
+            .catch(function (error) {
+                notifier.alert(error.response.data.message);
+            })
+            .finally(() => {
+                busy.remove('settings:fetch-adobe-fonts-kits');
+            });
+    }
+);
+
 function doStore() {
     busy.add('settings:store-options');
     api
@@ -256,6 +319,48 @@ function doGenerateCache() {
         })
         .finally(() => {
             busy.remove('settings:generate-cache');
+        });
+}
+
+function doSyncAdobeFonts() {
+    busy.add('settings:sync-adobe-fonts');
+    api
+        .request({
+            method: 'POST',
+            url: '/setting/adobe-fonts/sync',
+            data: {
+                project_id: options.value.adobe_fonts.project_id,
+                kit: adobe_font_kit.value
+            },
+        })
+        .then(response => response.data)
+        .then(data => {
+            notifier.success('Adobe Fonts synced.');
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            busy.remove('settings:sync-adobe-fonts');
+        });
+}
+
+function doDestroyAdobeFonts() {
+    busy.add('settings:destroy-adobe-fonts');
+    api
+        .request({
+            method: 'POST',
+            url: '/setting/adobe-fonts/destroy',
+        })
+        .then(response => response.data)
+        .then(data => {
+            notifier.success('Adobe Fonts cleared.');
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            busy.remove('settings:destroy-adobe-fonts');
         });
 }
 </script>

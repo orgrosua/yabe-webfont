@@ -26,7 +26,7 @@ final class Migration
 
     public function __construct()
     {
-        $this->migrator = Migrator::getInstance([
+        $this->migrator = new Migrator([
             'tableName' => 'yabe_webfont_migrations',
             'namespace' => 'Yabe\Webfont\Migrations',
             'directory' => 'migrations',

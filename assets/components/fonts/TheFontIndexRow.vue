@@ -10,8 +10,8 @@
                 <strong>{{ item.title }}</strong> was successfully restored.
             </td>
         </tr>
-        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': !item.status }" class="tw-group">
-            <th scope="row" :class="{ 'tw-pl-1.5': !item.status }" class="tw-align-middle tw-py-2 ywf-check-column">
+        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': (!item.status || item.deleted_at != null) }" class="tw-group">
+            <th scope="row" :class="{ 'tw-pl-1.5': !item.status, 'tw-pl-2': item.deleted_at !== null }" class="tw-align-middle tw-py-2 ywf-check-column">
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
             <td v-if="item.deleted_at == null" width="1%" class="manage-column tw-align-middle">
@@ -49,39 +49,49 @@
                             <path fill="#1A73E8" d="M13 2a2.5 2.5 0 010 5" />
                             <path fill="#34A853" d="M13 7c1.66 0 3 1.34 3 3s-1.34 3-3 3" />
                         </svg>
-                        <!-- <div class="tw-px-2 tw-rounded tw-font-bold tw-cursor-default tw-bg-[#ffd600]">
-                            GF
-                        </div> -->
+                    </div>
+                    <div v-else-if="item.type === 'adobe-fonts'" title="Adobe Fonts" class="tw-flex tw-items-center tw-mr-1.5">
+                        <svg class="tw-w-5 tw-h-5" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                            <g>
+                                <rect class="cls-1" fill="#000b1d" y="0.5" width="32" height="31" rx="5.64848"></rect>
+                                <path class="cls-2" fill="#fff" d="M17.63921,13.46488c-.74711,2.504-1.37579,4.91772-2.12289,7.28029a12.90012,12.90012,0,0,1-1.47406,3.41265,4.1921,4.1921,0,0,1-3.31166,1.777c-1.02992,0-2.03957-.48468-2.03957-1.5549A1.40176,1.40176,0,0,1,9.92281,23.0876a.61424.61424,0,0,1,.56539.32311c.50483.90867.98951,1.43364,1.21164,1.43364s.40383-.30284.76725-1.61534l2.65045-9.76247-1.90691-.00211a.91358.91358,0,0,1,.30208-1.03289h1.89816a17.53964,17.53964,0,0,1,1.3978-3.43866,5.04817,5.04817,0,0,1,4.36161-2.928c1.51448,0,2.14044.72695,2.14044,1.65589A1.52543,1.52543,0,0,1,22.01837,9.215c-.323,0-.48456-.24228-.58555-.58555-.34326-1.29235-.78752-1.676-1.05007-1.676s-.66638.48456-1.11052,1.49421a25.74394,25.74394,0,0,0-1.343,3.99058l2.30933-.003a.86867.86867,0,0,1-.31678,1.02946Z"></path>
+                            </g>
+                        </svg>
                     </div>
 
-                    <router-link v-if="item.deleted_at == null" :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
+                    <a v-if="item.type === 'adobe-fonts'" :href="`https://fonts.adobe.com/fonts/${item.slug}`" target="_blank" class="tw-font-semibold">
+                        {{ item.title }}
+                    </a>
+                    <router-link v-else-if="item.deleted_at == null" :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
                         'tw-font-semibold': item.status
                     }">
                         {{ item.title }}
-                        <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal">ID: {{ item.id }}</span>
                     </router-link>
                     <template v-else>
                         {{ item.title }}
-                        <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal tw-pl-1">ID: {{ item.id }}</span>
                     </template>
+                    <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal tw-pl-1">ID: {{ item.id }}</span>
                 </div>
                 <div class="row-actions visible">
-                    <template v-if="item.deleted_at == null">
-                        <router-link :to="{ name: getRouteName(), params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
-                        |
-                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
-                            {{ item.isDeleting ? 'Deleting...' : 'Trash' }}
-                        </a>
+                    <template v-if="item.type !== 'adobe-fonts'">
+                        <template v-if="item.deleted_at == null">
+                            <router-link :to="{ name: getRouteName(), params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
+                            |
+                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
+                                {{ item.isDeleting ? 'Deleting...' : 'Trash' }}
+                            </a>
+                        </template>
+                        <template v-else>
+                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-cursor-pointer " @click="$emit('restore')">
+                                {{ item.isRestoring ? 'Restoring...' : 'Restore' }}
+                            </a>
+                            |
+                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
+                                {{ item.isDeleting ? 'Deleting...' : 'Delete Permanently' }}
+                            </a>
+                        </template>
                     </template>
-                    <template v-else>
-                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-cursor-pointer " @click="$emit('restore')">
-                            {{ item.isRestoring ? 'Restoring...' : 'Restore' }}
-                        </a>
-                        |
-                        <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
-                            {{ item.isDeleting ? 'Deleting...' : 'Delete Permanently' }}
-                        </a>
-                    </template>
+
                 </div>
             </td>
             <td width="20%" class="tw-align-middle">
@@ -104,7 +114,7 @@
 <script setup>
 import ago from 's-ago';
 import { computed, inject, onBeforeMount, onBeforeUnmount } from 'vue';
-import { useBusy } from '../../../stores/busy';
+import { useBusy } from '../../stores/busy';
 
 import { Switch } from '@headlessui/vue';
 import ContentEditable from 'vue-contenteditable';

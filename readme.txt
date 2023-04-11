@@ -1,9 +1,9 @@
 === Yabe Webfont ===
 Contributors: suabahasa
 Donate link: https://ko-fi.com/suabahasa
-Tags: custom fonts, google fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
+Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
-Tested up to: 6.1.1
+Tested up to: 6.2
 Stable tag: 2.0.18-DEV
 Requires PHP: 7.4
 License: GPLv3
@@ -34,6 +34,7 @@ The plugin is designed to be user friendly and easy to use. It just require a fe
 
 - **Custom Fonts** — Upload your custom fonts and use them on your WordPress website.
 - **Google Fonts Import** — Type on the search box to find the Google Fonts you want to self-host, then click the import button.
+- **Adobe Fonts** — Add the project/kit ID to use the Adobe Fonts on your WordPress website.
 
 ### Seamless integration with page builders
 
@@ -54,6 +55,10 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 
 == Changelog ==
+
+= 2.0.18 =
+* **New**: Adobe Fonts integration
+* **Improve**: Database query optimization
 
 = 2.0.17 =
 * **[Bricks] Improve**: Ensure compatibility with Bricks 1.7.1 and later
