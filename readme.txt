@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.19-DEV
+Stable tag: 2.0.19
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,6 +55,10 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 
 == Changelog ==
+
+= 2.0.19 =
+* **Improve**: The font files URL now is a relative path, ensure working between environments
+* **[Gutenberg] Fix**: Site Editor compatibility
 
 = 2.0.18 =
 * **New**: Adobe Fonts integration
