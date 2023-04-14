@@ -336,7 +336,12 @@ const cssFontFaceRule = computed(() => {
                 css += `\tsrc: `;
 
                 let files = fontFace.files.map(file => {
-                    return `url('${file.attachment_url}') format("${fontFormatMap(file.extension)}")`;
+                    let attachment_url = file.attachment_url;
+                    try {
+                        attachment_url = (new URL(file.attachment_url)).pathname;
+                    } catch (e) { }
+
+                    return `url('${attachment_url}') format("${fontFormatMap(file.extension)}")`;
                 });
 
                 css += files.join(',\n\t\t');

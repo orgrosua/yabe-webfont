@@ -55,7 +55,7 @@
                                 </svg>
                             </h3>
 
-                            <TheBulkUpload :font-faces="fontFaces" :family="family"/>
+                            <TheBulkUpload :font-faces="fontFaces" :family="family" />
                             <button type="button" @click="createNewFontFace" v-ripple class="button tw-my-4">Add variant</button>
                         </div>
 
@@ -306,7 +306,12 @@ const cssFontFaceRule = computed(() => {
                 css += `\tsrc: `;
 
                 let files = fontFace.files.map(file => {
-                    return `url('${file.attachment_url}') format("${fontFormatMap(file.extension)}")`;
+                    let attachment_url = file.attachment_url;
+                    try {
+                        attachment_url = (new URL(file.attachment_url)).pathname;
+                    } catch (e) { }
+
+                    return `url('${attachment_url}') format("${fontFormatMap(file.extension)}")`;
                 });
 
                 css += files.join(',\n\t\t');

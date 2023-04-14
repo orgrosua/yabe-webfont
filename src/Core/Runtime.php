@@ -32,7 +32,8 @@ class Runtime
             foreach ($font_face->files as $j => $file) {
                 $attachment_url = wp_get_attachment_url($file->attachment_id);
                 if ($attachment_url) {
-                    $font_faces[$i]->files[$j]->attachment_url = $attachment_url;
+                    $parsed = parse_url($attachment_url);
+                    $font_faces[$i]->files[$j]->attachment_url = $parsed['path'];
                 }
             }
         }
@@ -46,7 +47,8 @@ class Runtime
             if (property_exists($font_file, 'file')) {
                 $attachment_url = wp_get_attachment_url($font_file->file->attachment_id);
                 if ($attachment_url) {
-                    $font_files[$i]->file->attachment_url = $attachment_url;
+                    $parsed = parse_url($attachment_url);
+                    $font_files[$i]->file->attachment_url = $parsed['path'];
                 }
             }
         }
