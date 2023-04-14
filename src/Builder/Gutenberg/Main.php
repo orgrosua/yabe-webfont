@@ -34,7 +34,8 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_theme($theme_json), 1_000_001);
+        add_filter('wp_theme_json_data_theme', fn ($theme_json) => $this->filter_theme_json_data_theme($theme_json), 1_000_001);
+        add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
         add_filter('f!yabe/webfont/core/runtime:append_build_css_content', fn ($css, $rows) => $this->filter_append_build_css_content($css, $rows), 1_000_001, 2);
 
         add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
@@ -51,7 +52,7 @@ class Main implements BuilderInterface
      * @param WP_Theme_JSON_Data $theme_json
      * @return WP_Theme_JSON_Data
      */
-    public function filter_theme_json_theme($theme_json)
+    public function filter_theme_json_data_user($theme_json)
     {
         $theme_json_data = $theme_json->get_data();
 
@@ -82,11 +83,49 @@ class Main implements BuilderInterface
         return $theme_json->update_with($new_data);
     }
 
+    /**
+     * @see https://make.wordpress.org/core/2022/10/10/filters-for-theme-json-data/
+     * @param WP_Theme_JSON_Data $theme_json
+     * @return WP_Theme_JSON_Data
+     */
+    public function filter_theme_json_data_theme($theme_json)
+    {
+        $theme_json_data = $theme_json->get_data();
+
+        $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies']['theme'] ?? [];
+
+        $font_families = Runtime::get_font_families();
+
+        foreach ($font_families as $font_family) {
+            /**
+             * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
+             */
+            $theme_json_font_families[] = [
+                'name' => sprintf('[Yabe] %s', $font_family['title']),
+                'slug' => preg_replace('#[^a-zA-Z0-9\-_]+#', '-', $font_family['family']),
+                'fontFamily' => $font_family['family'],
+            ];
+        }
+
+        $new_data = [
+            'version' => 2,
+            'settings' => [
+                'typography' => [
+                    'fontFamilies' => [
+                        'theme' => $theme_json_font_families,
+                    ],
+                ],
+            ],
+        ];
+
+        return $theme_json->update_with($new_data);
+    }
+
     public function enqueue_block_editor_assets()
     {
         $screen = get_current_screen();
         if (is_admin() && $screen->is_block_editor()) {
-            Frontpage::enqueue_css_cache();
+            add_action('admin_head', fn () => Frontpage::enqueue_css_cache(), 1_000_001);
         }
     }
 
