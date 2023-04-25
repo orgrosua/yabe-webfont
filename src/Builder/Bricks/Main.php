@@ -51,7 +51,8 @@ class Main implements BuilderInterface
             $yabeOptions = [];
             $font_families = Runtime::get_font_families();
             foreach ($font_families as $font_family) {
-                $yabeOptions[$font_family['family']] = $font_family['title'];
+                $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
+                $yabeOptions[sprintf('",var(--ywf--family-%s),"', $slug)] = $font_family['title'];
             }
             wp_add_inline_script('bricks-builder', 'var yabeOptions = ' . json_encode($yabeOptions, JSON_THROW_ON_ERROR), 'before');
 

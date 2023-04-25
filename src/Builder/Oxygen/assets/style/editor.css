@@ -1,6 +1,9 @@
+/* div.oxygen-select-box-option.ng-binding.ng-scope[ng-repeat*="typeKitFonts"], */
 div.oxygen-select-box-option.ng-binding.ng-scope[ng-repeat*="elegantCustomFonts"] {
     align-items: center;
 }
+
+/* div.oxygen-select-box-option.ng-binding.ng-scope[ng-repeat*="typeKitFonts"]:before, */
 div.oxygen-select-box-option.ng-binding.ng-scope[ng-repeat*="elegantCustomFonts"]:before {
     content: "Yabe";
     color: #fff;

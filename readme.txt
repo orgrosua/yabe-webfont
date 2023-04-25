@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.19
+Stable tag: 2.0.20
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -52,9 +52,19 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Kadence WP](https://kadencewp.com)
 - [Beaver Builder](https://www.wpbeaverbuilder.com/)
 - [Greenshift](https://greenshiftwp.com/)
+- [Spectra](https://wpspectra.com/)
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 
 == Changelog ==
+
+= 2.0.20 =
+* **New**: [Spectra](https://wpspectra.com/) integration
+* **New**: Search Google Fonts by category with the `:` prefix. For example, `:sans-serif`  will search for all fonts in the sans-serif category
+* **New**: CSS custom properties (variables) with pattern `--ywf--family-{font-slug}` for each family
+* **New**: Allow to define fallback font
+* **[Bricks] New**: Fallback font support
+* **[Breakdance] New**: Fallback font support
+* **[Gutenberg] New**: Fallback font support
 
 = 2.0.19 =
 * **Improve**: The font files URL now is a relative path, ensure working between environments

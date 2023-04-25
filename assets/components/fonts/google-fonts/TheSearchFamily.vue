@@ -1,5 +1,5 @@
 <template>
-    <VueSelect :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family">
+    <VueSelect :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
         <template #list-footer>
             <li class="tw-flex tw-my-0 tw-w-full">
                 <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button tw-flex-1" v-ripple>
@@ -9,6 +9,13 @@
                     Next
                 </button>
             </li>
+        </template>
+        <template #option="{family, category}">
+            <div class="tw-flex tw-justify-between">
+                <span class="">{{ family }}</span>
+
+                <span class="tw-text-xs tw-text-gray-500 tw-bg-gray-100 tw-px-1 tw-py-0.5 tw-rounded">{{ category.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>
+            </div>
         </template>
     </VueSelect>
 </template>
@@ -43,8 +50,20 @@ const searchFontFamily = ref('');
 const offset = ref(0);
 const limit = ref(50);
 
+const categories = computed(() => {
+    return [...new Set(props.catalog.map(({ category }) => category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase()))];
+});
+
 const filteredCatalog = computed(() => {
     if (searchFontFamily.value) {
+
+        if (searchFontFamily.value.toLowerCase().startsWith(':')) {
+            const queryCategory = searchFontFamily.value.slice(1).trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase();
+            if (categories.value.includes(queryCategory)) {
+                return props.catalog.filter(({ category }) =>  category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() === queryCategory);
+            }
+        }
+
         const fuse = new Fuse(props.catalog, {
             keys: ['family']
         });
@@ -73,3 +92,9 @@ function onSearch(query) {
     offset.value = 0;
 }
 </script>
+
+<style>
+.ywf-google-search-family li.vs__dropdown-option {
+    --vs-dropdown-option-padding: 3px 8px;
+}
+</style>

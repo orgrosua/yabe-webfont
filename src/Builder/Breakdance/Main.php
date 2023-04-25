@@ -43,8 +43,9 @@ class Main implements BuilderInterface
         $font_families = Runtime::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', $font_family['family']);
-            $cssName = sprintf("'%s'", $font_family['family']);
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
+
+            $cssName = sprintf('var(--ywf--family-%s)', $slug);
             $dropdownLabel = sprintf('[Yabe] %s', $font_family['title']);
             $fallbackString = '';
             $dependencies = [

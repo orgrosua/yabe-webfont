@@ -33,8 +33,8 @@
                                 </select>
                             </div>
                             <div class="tw-col-span-4 tw-flex tw-flex-col tw-gap-1.5">
-                                <label for="selector" class="tw-text-sm tw-font-semibold">CSS Selector</label>
-                                <input type="text" name="selector" id="selector" v-model="selector" placeholder="h1, h2, .poetry, .haiku, p, span, #lyric, #description" autocomplete="off">
+                                <label for="selector" class="tw-text-sm tw-font-semibold">CSS Selector | Fallback Font</label>
+                                <input type="text" name="selector" id="selector" v-model="selector" placeholder="h1, .title, #lyric | Arial, Helvetica, sans-serif" autocomplete="off">
                             </div>
                             <div class="tw-col-span-2 tw-flex tw-flex-col tw-gap-1.5">
                                 <span class="tw-text-sm tw-font-semibold">Preload</span>
@@ -286,7 +286,7 @@ const cssFontFaceRule = computed(() => {
 
             css += `@font-face {\n`;
 
-            css += `\tfont-family: '${family.value}';\n`;
+            css += `\tfont-family: '<family>';\n`;
 
             css += `\tfont-style: ${fontFace.style};\n`;
 
@@ -341,14 +341,32 @@ const cssPreviewStylesheet = computed(() => {
 
     css += cssFontFaceRule.value;
 
+    const rootVarName = family.value.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase();
+
+    let fallbackFamily = '';
+
+    let selectorParts = [];
+
     if (selector.value) {
-        css += `${selector.value} {\n\tfont-family: '${family.value}';\n}\n\n`;
+        selectorParts = selector.value.split('|').map(s => s.trim());
+    }
+
+    if (selectorParts.length > 1 && selectorParts[1]) {
+        fallbackFamily = `, ${selectorParts[1]}`;
+    }
+
+    css += `:root {\n`;
+    css += `\t--ywf--family-${rootVarName}: '<family>'${fallbackFamily};\n`;
+    css += `}\n\n`;
+
+    if (selectorParts.length > 0 && selectorParts[0]) {
+        css += `${selectorParts[0]} {\n\tfont-family: var(--ywf--family-${rootVarName});\n}\n\n`;
     }
 
     fontFaces.value.forEach(fontFace => {
         if (fontFace.selector) {
             css += `${fontFace.selector} {\n`;
-            css += `\tfont-family: '${family.value}';\n`;
+            css += `\tfont-family: var(--ywf--family-${rootVarName});\n`;
             css += `\tfont-style: ${fontFace.style};\n`;
             css += `\tfont-weight: ${fontFace.weight};\n`;
             css += `}\n\n`;

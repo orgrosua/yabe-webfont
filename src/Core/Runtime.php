@@ -83,6 +83,17 @@ class Runtime
             'eot' => 5,
         ];
 
+        // Adobe Fonts
+        $project_id = Config::get('adobe_fonts.project_id', null);
+        if ($project_id !== null) {
+            // check if the $result array contain item.type = 'adobe-fonts'
+            $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
+
+            if ($any_adobe_fonts !== false) {
+                $css .= self::get_kit_css($project_id);
+            }
+        }
+
         foreach ($result as $row) {
             $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
             $font_faces = self::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
@@ -127,55 +138,62 @@ class Runtime
 
                 $css .= "}\n\n";
             }
+        }
+
+        // CSS custom properties (variables)
+        $css .= ":root {\n";
+
+        foreach ($result as $row) {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+
+            $selectorParts = [];
+            $fallbackFamily = '';
 
             // if property selector is exists
             if (property_exists($metadata, 'selector') && $metadata->selector) {
-                $css .= "{$metadata->selector} {\n\tfont-family: '{$row->family}';\n}\n\n";
+                $selectorParts = explode('|', $metadata->selector);
+                $selectorParts = array_map('trim', $selectorParts);
+                $selectorParts = array_filter($selectorParts);
+
+                $fallbackFamily = isset($selectorParts[1]) ? ', ' . $selectorParts[1] : '';
+            }
+
+            $value = sprintf("'%s'%s", $row->family, $fallbackFamily);
+
+            $name = sprintf('--ywf--family-%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
+
+            $css .= "\t{$name}: {$value};\n";
+        }
+
+        $css .= "}\n\n";
+
+        foreach ($result as $row) {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            $font_faces = self::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family));
+
+            $selectorParts = [];
+
+            if (property_exists($metadata, 'selector') && $metadata->selector) {
+                $selectorParts = explode('|', $metadata->selector);
+                $selectorParts = array_map('trim', $selectorParts);
+                $selectorParts = array_filter($selectorParts);
+
+                if (isset($selectorParts[0]) && $selectorParts[0]) {
+                    $css .= "{$selectorParts[0]} {\n\tfont-family: var(--ywf--family-{$slug});\n}\n\n";
+                }
             }
 
             foreach ($font_faces as $font_face) {
                 if ($font_face->selector) {
                     $css .= "{$font_face->selector} {\n";
-                    $css .= "\tfont-family: '{$row->family}';\n";
+                    $css .= sprintf("\tfont-family: var(--ywf--family-%s);\n", $slug);
                     $css .= "\tfont-style: {$font_face->style};\n";
                     $css .= "\tfont-weight: {$font_face->weight};\n";
                     $css .= "}\n\n";
                 }
             }
-        }
-
-        // Adobe Fonts
-        if ($result !== []) {
-            $project_id = Config::get('adobe_fonts.project_id', null);
-            if ($project_id !== null) {
-                // check if the $result array contain item.type = 'adobe-fonts'
-                $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
-
-                if ($any_adobe_fonts !== false) {
-                    $css .= self::get_kit_css($project_id);
-                }
-            }
-        }
-
-        if ($result !== []) {
-            $css .= "body {\n";
-
-            $families = [];
-
-            foreach ($result as $row) {
-                $families[] = $row->family;
-            }
-
-            $families = array_unique($families);
-
-            foreach ($families as $family) {
-                $value = sprintf("'%s'", $family);
-                $name = sprintf('--yabe-webfont--family--%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($family)));
-
-                $css .= "\t{$name}: {$value};\n";
-            }
-
-            $css .= "}\n\n";
         }
 
         /**
@@ -255,7 +273,7 @@ class Runtime
         $families = [];
 
         $sql = "
-            SELECT title, family FROM {$wpdb->prefix}yabe_webfont_fonts 
+            SELECT title, family, type, slug FROM {$wpdb->prefix}yabe_webfont_fonts 
             WHERE status = 1
                 AND deleted_at IS NULL
         ";
@@ -266,6 +284,8 @@ class Runtime
             $families[] = [
                 'title' => $row->title,
                 'family' => $row->family,
+                'type' => $row->type,
+                'slug' => $row->slug,
             ];
         }
 
