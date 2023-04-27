@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Core;
 
 use Yabe\Webfont\Utils\Config;
+use Yabe\Webfont\Utils\Debug;
 
 /**
  * Serve the font on the frontpage.
@@ -34,6 +35,8 @@ final class Frontpage
             return;
         }
 
+        Debug::stopwatch()->start(sprintf('%s::%s', self::class, __FUNCTION__));
+
         if (file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE))) {
             $handle = YABE_WEBFONT_OPTION_NAMESPACE . '-cache';
             $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
@@ -51,6 +54,8 @@ final class Frontpage
         }
 
         define('YABE_WEBFONT_CSS_CACHE_WAS_LOADED', true);
+
+        Debug::stopwatch()->stop(sprintf('%s::%s', self::class, __FUNCTION__));
     }
 
     /**
@@ -62,6 +67,8 @@ final class Frontpage
             return;
         }
 
+        Debug::stopwatch()->start(sprintf('%s::%s', self::class, __FUNCTION__));
+
         if (file_exists(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE))) {
             $preload_html = file_get_contents(Cache::get_cache_path(Cache::PRELOAD_HTML_FILE));
             if ($preload_html !== false) {
@@ -70,5 +77,7 @@ final class Frontpage
         }
 
         define('YABE_WEBFONT_PRELOAD_HTML_WAS_LOADED', true);
+
+        Debug::stopwatch()->stop(sprintf('%s::%s', self::class, __FUNCTION__));
     }
 }

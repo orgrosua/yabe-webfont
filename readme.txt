@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.20
+Stable tag: 2.0.21
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -49,6 +49,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Cwicly](https://cwicly.com/?ref=suabahasa)
 - [Breakdance](https://breakdance.com/ref/165/)
 - [Zion Builder](https://zionbuilder.io/)
+- [Builderius](https://builderius.io/)
 - [Kadence WP](https://kadencewp.com)
 - [Beaver Builder](https://www.wpbeaverbuilder.com/)
 - [Greenshift](https://greenshiftwp.com/)
@@ -56,6 +57,9 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 
 == Changelog ==
+
+= 2.0.21 =
+* **New**: [Builderius](https://builderius.io/) integration
 
 = 2.0.20 =
 * **New**: [Spectra](https://wpspectra.com/) integration

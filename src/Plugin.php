@@ -20,6 +20,7 @@ use Yabe\Webfont\Api\Router as ApiRouter;
 use Yabe\Webfont\Builder\Integration as BuilderIntegration;
 use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Debug;
 use Yabe\Webfont\Utils\Notice;
 
 /**
@@ -32,12 +33,12 @@ final class Plugin
     /**
      * @var string
      */
-    public const VERSION = '2.0.20';
+    public const VERSION = '2.0.21';
 
     /**
      * @var int
      */
-    public const VERSION_ID = 20020;
+    public const VERSION_ID = 20021;
 
     /**
      * @var int
@@ -52,7 +53,7 @@ final class Plugin
     /**
      * @var int
      */
-    public const RELEASE_VERSION = 20;
+    public const RELEASE_VERSION = 21;
 
     /**
      * @var string
@@ -104,17 +105,24 @@ final class Plugin
      */
     public static function get_instance(): self
     {
-        $cls = static::class;
         if (! isset(self::$instance)) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 
     public function boot_debug()
     {
-        // if (WP_DEBUG === true && class_exists(\Sentry\SentrySdk::class)) {
+        if (WP_DEBUG === false) {
+            return;
+        }
+
+        // if (class_exists(\Sentry\SentrySdk::class)) {
         // }
+
+        // when php exits, call the shutdown function.
+        register_shutdown_function(static fn () => Debug::shutdown());
     }
 
     public function boot_migration()

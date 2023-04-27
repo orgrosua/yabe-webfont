@@ -56,15 +56,16 @@ class Common
      *
      * @param string $content The content of the file.
      * @param string $file_path The file path.
+     * @param int $flags The flags to pass to the file_put_contents() function.
      * @throws Exception
      */
-    public static function save_file($content, $file_path): void
+    public static function save_file($content, $file_path, $flags = 0): void
     {
         if (! file_exists($file_path)) {
             wp_mkdir_p(dirname($file_path));
         }
 
-        $result = file_put_contents($file_path, $content);
+        $result = file_put_contents($file_path, $content, $flags);
 
         if ($result === false) {
             throw new Exception('Failed to save to file.', 500);

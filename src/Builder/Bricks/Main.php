@@ -47,22 +47,28 @@ class Main implements BuilderInterface
 
     public function enqueue_scripts()
     {
-        if (wp_script_is('bricks-builder', 'registered') && bricks_is_builder()) {
-            $yabeOptions = [];
-            $font_families = Runtime::get_font_families();
-            foreach ($font_families as $font_family) {
-                $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
-                $yabeOptions[sprintf('",var(--ywf--family-%s),"', $slug)] = $font_family['title'];
-            }
-            wp_add_inline_script('bricks-builder', 'var yabeOptions = ' . json_encode($yabeOptions, JSON_THROW_ON_ERROR), 'before');
+        if (! function_exists('bricks_is_builder') || ! bricks_is_builder()) {
+            return;
+        }
 
-            if (version_compare(BRICKS_VERSION, '1.7.1', '>=')) {
-                wp_add_inline_script('bricks-builder', 'bricksData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
-                wp_add_inline_script('bricks-builder', "bricksData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.fonts.options};", 'before');
-            } else {
-                wp_add_inline_script('bricks-builder', 'bricksData.loadData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
-                wp_add_inline_script('bricks-builder', "bricksData.loadData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeOptions, ...bricksData.loadData.fonts.options};", 'before');
-            }
+        if (! wp_script_is('bricks-builder', 'registered')) {
+            return;
+        }
+
+        $yabeWebfontBricksOptions = [];
+        $font_families = Runtime::get_font_families();
+        foreach ($font_families as $font_family) {
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
+            $yabeWebfontBricksOptions[sprintf('",var(--ywf--family-%s),"', $slug)] = $font_family['title'];
+        }
+        wp_add_inline_script('bricks-builder', 'var yabeWebfontBricksOptions = ' . json_encode($yabeWebfontBricksOptions, JSON_THROW_ON_ERROR), 'before');
+
+        if (version_compare(BRICKS_VERSION, '1.7.1', '>=')) {
+            wp_add_inline_script('bricks-builder', 'bricksData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+            wp_add_inline_script('bricks-builder', "bricksData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeWebfontBricksOptions, ...bricksData.fonts.options};", 'before');
+        } else {
+            wp_add_inline_script('bricks-builder', 'bricksData.loadData.fonts.yabe = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+            wp_add_inline_script('bricks-builder', "bricksData.loadData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfonts' }, ...yabeWebfontBricksOptions, ...bricksData.loadData.fonts.options};", 'before');
         }
     }
 }
