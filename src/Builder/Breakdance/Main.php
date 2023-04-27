@@ -50,7 +50,7 @@ class Main implements BuilderInterface
             $fallbackString = '';
             $dependencies = [
                 'styles' => [
-                    Cache::get_cache_url(Cache::CSS_CACHE_FILE),
+                    // Cache::get_cache_url(Cache::CSS_CACHE_FILE),
                 ],
             ];
 
