@@ -286,7 +286,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $row = $wpdb->get_row($sql);
 
-        if (!$row) {
+        if (! $row) {
             return new WP_REST_Response([
                 'message' => 'Font not found',
             ], 404, []);
@@ -417,7 +417,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $item = $wpdb->get_row($sql);
 
-        if (!$item) {
+        if (! $item) {
             return new WP_REST_Response([
                 'message' => __('Font not found', 'yabe-webfont'),
             ], 404, []);
@@ -588,7 +588,7 @@ class Font extends AbstractApi implements ApiInterface
         $m_font_files = $metadata['google_fonts']['font_files'];
 
         foreach ($m_font_faces as $k => $m_face) {
-            if (!$m_face['isEnabled']) {
+            if (! $m_face['isEnabled']) {
                 continue;
             }
 
@@ -649,7 +649,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (!$attachment_id) {
+                            if (! $attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {
@@ -734,7 +734,7 @@ class Font extends AbstractApi implements ApiInterface
                     try {
                         $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                        if (!$attachment_id) {
+                        if (! $attachment_id) {
                             continue;
                         }
                     } catch (\Throwable $throwable) {
@@ -875,7 +875,7 @@ class Font extends AbstractApi implements ApiInterface
 
         $items = $params['items'];
 
-        if (!is_array($items) || $items === []) {
+        if (! is_array($items) || $items === []) {
             return new WP_REST_Response([
                 'message' => 'No items to export',
             ], 400, []);
@@ -1029,7 +1029,7 @@ class Font extends AbstractApi implements ApiInterface
                         continue;
                     }
 
-                    if (!$attachment_id || is_wp_error($attachment_id)) {
+                    if (! $attachment_id || is_wp_error($attachment_id)) {
                         continue;
                     }
 
@@ -1084,7 +1084,7 @@ class Font extends AbstractApi implements ApiInterface
         foreach ($m_font_faces as $k => $m_face) {
             $metadata['google_fonts']['font_faces'][$k]['attached_font_files'] = [];
 
-            if (!$m_face['isEnabled']) {
+            if (! $m_face['isEnabled']) {
                 continue;
             }
 
@@ -1148,7 +1148,7 @@ class Font extends AbstractApi implements ApiInterface
                             try {
                                 $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                                if (!$attachment_id) {
+                                if (! $attachment_id) {
                                     continue;
                                 }
                             } catch (\Throwable $throwable) {
@@ -1237,7 +1237,7 @@ class Font extends AbstractApi implements ApiInterface
                         try {
                             $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
 
-                            if (!$attachment_id) {
+                            if (! $attachment_id) {
                                 continue;
                             }
                         } catch (\Throwable $throwable) {

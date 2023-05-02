@@ -158,6 +158,6 @@ class Cache
          * LiteSpeed Cache
          * @see https://docs.litespeedtech.com/lscache/lscwp/api/#purge-all-existing-caches
          */
-        do_action( 'litespeed_purge_all' );
+        do_action('litespeed_purge_all');
     }
 }
