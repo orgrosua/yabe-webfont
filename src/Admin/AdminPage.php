@@ -96,6 +96,7 @@ class AdminPage
         wp_localize_script(YABE_WEBFONT_OPTION_NAMESPACE . '-app', 'yabeWebfont', [
             '_version' => Plugin::VERSION,
             '_wpnonce' => wp_create_nonce(YABE_WEBFONT_OPTION_NAMESPACE),
+            'option_namespace' => YABE_WEBFONT_OPTION_NAMESPACE,
             'web_history' => self::get_page_url(),
             'rest_api' => [
                 'nonce' => wp_create_nonce('wp_rest'),

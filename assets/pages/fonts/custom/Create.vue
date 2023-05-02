@@ -19,7 +19,7 @@
                         <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                             <div class="tw-col-span-4 tw-flex tw-flex-col tw-gap-1.5">
                                 <label for="family" class="tw-text-sm tw-font-semibold">Font Family</label>
-                                <input type="text" name="family" id="family" v-model="family" required placeholder="Font Family" autocomplete="off">
+                                <input type="text" name="family" id="family" v-model="family" required placeholder="Font Family" autofocus autocomplete="off">
                             </div>
 
                             <div class="tw-col-span-2 tw-flex tw-flex-col tw-gap-1.5">
@@ -286,7 +286,7 @@ const cssFontFaceRule = computed(() => {
 
             css += `@font-face {\n`;
 
-            css += `\tfont-family: '<family>';\n`;
+            css += `\tfont-family: '${family.value}';\n`;
 
             css += `\tfont-style: ${fontFace.style};\n`;
 
@@ -356,7 +356,7 @@ const cssPreviewStylesheet = computed(() => {
     }
 
     css += `:root {\n`;
-    css += `\t--ywf--family-${rootVarName}: '<family>'${fallbackFamily};\n`;
+    css += `\t--ywf--family-${rootVarName}: '${family.value}'${fallbackFamily};\n`;
     css += `}\n\n`;
 
     if (selectorParts.length > 0 && selectorParts[0]) {

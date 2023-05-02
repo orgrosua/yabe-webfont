@@ -91,6 +91,16 @@
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row"><label>Bundled export</label></th>
+                    <td>
+                        <input id="export-bundle-binary" name="export_bundle_binary" type="checkbox" :checked="get(options, 'misc.export_bundle_binary', false)" :value="get(options, 'misc.export_bundle_binary', false)" @input="set(options, 'misc.export_bundle_binary', !options?.misc?.export_bundle_binary)">
+                        <label for="export-bundle-binary"> Bundle file on the exported file </label>
+                        <p class="description">
+                            Include font binary file on the exported file. This will increase the file size.
+                        </p>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -207,6 +217,10 @@ onBeforeMount(() => {
 watch(
     () => license.value.key,
     async (newKey, oldKey) => {
+        if (busy.isBusy) {
+            return;
+        }
+
         if (newKey === oldKey) {
             return;
         }
@@ -245,6 +259,10 @@ watch(
 watch(
     () => options.value.adobe_fonts?.project_id,
     async (newProjectId, oldProjectId) => {
+        if (busy.isBusy) {
+            return;
+        }
+
         if (newProjectId === oldProjectId) {
             return;
         }

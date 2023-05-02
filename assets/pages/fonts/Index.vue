@@ -1,5 +1,6 @@
 <template>
     <router-link :to="{ name: 'fonts.create.custom' }" class="page-title-action">{{ __('Add New', 'yabe-webfont') }}</router-link>
+    <button @click="showImportModal = !showImportModal" v-ripple class="page-title-action">Import</button>
     <router-link :to="{ name: 'fonts.create.google-fonts' }" class="page-title-action">{{ __('Import Google Fonts', 'yabe-webfont') }}</router-link>
 
     <span v-if="route.query.search" class="subtitle"> {{ __('Search results for', 'yabe-webfont') }}: <strong> {{ route.query.search }} </strong> </span>
@@ -8,16 +9,27 @@
 
     <hr class="tw-invisible tw-m-0 -tw-mt-0.5" />
 
+
+    <div class="upload-plugin-wrap">
+        <div :class="{ 'tw-block': showImportModal }" class="upload-plugin">
+            <p class="install-help">Import <code>ywf-exported-{timestamp}.json</code> file by locating the file and clicking "Import json" button.</p>
+            <div class="wp-upload-form">
+                <input type="file" ref="importfile" id="importfile" name="importfile" accept=".json" />
+                <div @click="doImportJsonFile" class="button">Import json</div>
+            </div>
+        </div>
+    </div>
+
     <ul class="subsubsub">
         <li class="all">
             <router-link :to="{
-                name: 'fonts.index',
-                query: {
-                    ...route.query,
-                    soft_deleted: 0,
-                    page: 1,
-                },
-            }" :class="{ current: !Boolean(query.soft_deleted) }"> {{ __('All', 'yabe-webfont') }} <span class="count"> ({{ meta.total_exists }}) </span> </router-link>
+                    name: 'fonts.index',
+                    query: {
+                        ...route.query,
+                        soft_deleted: 0,
+                        page: 1,
+                    },
+                }" :class="{ current: !Boolean(query.soft_deleted) }"> {{ __('All', 'yabe-webfont') }} <span class="count"> ({{ meta.total_exists }}) </span> </router-link>
             |
         </li>
         <li class="trash tw-pl-1">
@@ -185,15 +197,20 @@ import TheBulkAction from '../../components/TheBulkAction.vue';
 import ThePagination from '../../components/ThePagination.vue';
 import TheFontIndexRow from '../../components/fonts/TheFontIndexRow.vue';
 import { useNotifier } from '../../library/notifier';
+import { useWordpressNotice } from '../../stores/wordpressNotice';
 import { Switch } from '@headlessui/vue';
 
 const route = useRoute();
 const router = useRouter();
 const api = useApi();
 const busy = useBusy();
+const wordpressNotice = useWordpressNotice();
 
 const searchBtn = ref(null);
 const notifier = useNotifier();
+
+const importfile = ref(null);
+const showImportModal = ref(false);
 
 const preview = reactive({
     text: `The quick brown fox jumps over a lazy dog`,
@@ -402,6 +419,135 @@ function doRestore(item) {
         });
 }
 
+function doExport(items) {
+    busy.add('fonts.index:export');
+
+    api
+        .request({
+            method: 'POST',
+            url: `/fonts/export`,
+            data: {
+                items: items,
+            },
+        })
+        .then((response) => {
+            return response.data.data;
+        })
+        .then(data => {
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = `ywf-exported-${data.export_time}.json`;
+            a.click();
+        })
+        .catch(function (error) {
+            notifier.alert(error.message);
+        })
+        .finally(() => {
+            busy.remove('fonts.index:export');
+        });
+}
+
+function doImportJsonFile() {
+
+    if (importfile.value.files.length === 0) {
+        notifier.alert('Please select a file to import.');
+        return;
+    }
+
+    // first element
+    const jsonfile = importfile.value.files[0];
+
+    // read file type
+    if (jsonfile.type !== 'application/json') {
+        notifier.alert('Please select a valid JSON file.');
+        return;
+    }
+
+    // read file
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const data = JSON.parse(e.target.result);
+
+        if (data === null || data === undefined) {
+            notifier.alert('Please select a valid JSON file.');
+            return;
+        }
+
+        if (!data.hasOwnProperty('module_id') || data.module_id !== yabeWebfont.option_namespace) {
+            notifier.alert('Please select a valid JSON file.');
+            return;
+        }
+
+        // loop send data.items import request to server one by one to avoid server timeout
+        let i = 0;
+
+        const importNext = () => {
+            if (i < data.items.length) {
+                const item = data.items[i];
+                busy.add('fonts.index:import');
+
+                const promise = api
+                    .request({
+                        method: 'POST',
+                        url: `/fonts/import`,
+                        data: {
+                            site_url: data.site_url,
+                            is_bundled: data.is_bundled,
+                            version: data.version,
+                            item
+                        }
+                    })
+                    .then((response) => {
+                        const editUrl = router.resolve({
+                            name: `fonts.edit.${item.type}`,
+                            params: {
+                                id: response.data.id,
+                            },
+                        }).href;
+
+                        wordpressNotice.add({
+                            type: 'success',
+                            message: `<p>Font "${item.title}" imported successfully. <a href="${editUrl}">Edit Font</a></p>`
+                        });
+                    })
+                    .catch(function (error) {
+                        wordpressNotice.add({
+                            type: 'error',
+                            message: `<p>Failed to import font "${item.title}".`
+                            // message: `<p>Google Fonts imported successfully. <a href="${editUrl}">Edit Font</a></p>`,
+                        });
+
+                        // return error so that notifier.async can handle it
+                        throw error;
+                    })
+                    .finally(() => {
+                        busy.remove('fonts.index:import');
+                        i++;
+                        importNext();
+                    });
+
+                notifier.async(
+                    promise,
+                    `Successfully imported font: ${item.title}.`,
+                    `Failed to import font: ${item.title}.`,
+                    `Importing font: ${item.title}...`
+                );
+            } else {
+                doRefreshItems();
+            }
+        };
+
+        importNext();
+    };
+
+    reader.readAsText(jsonfile);
+
+    // reset file input
+    importfile.value.value = '';
+}
+
 const selectAll = computed({
     get() {
         if (items.value.length > 0) {
@@ -445,6 +591,7 @@ watch(
             bulkActions.value = [
                 { key: 'activate', label: 'Activate' },
                 { key: 'deactivate', label: 'Deactivate' },
+                { key: 'export', label: 'Export' },
                 { key: 'delete', label: 'Delete' },
             ];
         }
@@ -503,6 +650,16 @@ function doBulkActions(action) {
                 });
                 resetBulkSelection();
             }
+            break;
+        case 'export':
+            if (selectedItems.value.length === 0) {
+                notifier.alert(__(`Please select at least one font to export.`, 'yabe-webfont'));
+                return;
+            }
+
+            doExport(selectedItems.value);
+
+            resetBulkSelection();
             break;
         default:
             break;

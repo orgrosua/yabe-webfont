@@ -1,5 +1,5 @@
 <template>
-    <VueSelect :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
+    <VueSelect ref="vueSelectEl" :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" :autoscroll="true" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
         <template #list-footer>
             <li class="tw-flex tw-my-0 tw-w-full">
                 <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button tw-flex-1" v-ripple>
@@ -22,7 +22,7 @@
 
 <script setup>
 import Fuse from 'fuse.js';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 const props = defineProps({
     catalog: {
@@ -49,6 +49,10 @@ const fontData = computed({
 const searchFontFamily = ref('');
 const offset = ref(0);
 const limit = ref(50);
+
+const vueSelectEl = ref(null);
+
+
 
 const categories = computed(() => {
     return [...new Set(props.catalog.map(({ category }) => category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase()))];
@@ -91,6 +95,10 @@ function onSearch(query) {
     searchFontFamily.value = query;
     offset.value = 0;
 }
+
+onMounted(() => {
+    vueSelectEl.value.searchEl.focus();
+});
 </script>
 
 <style>

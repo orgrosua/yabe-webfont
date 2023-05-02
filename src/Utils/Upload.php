@@ -145,6 +145,84 @@ class Upload
     }
 
     /**
+     * Remote upload file to WordPress media library.
+     * The implementation is based on the https://rudrastyh.com/wordpress/how-to-add-images-to-media-library-from-uploaded-files-programmatically.html#upload-image-from-url
+     *
+     * @param string $binary binary-safe string containing the file
+     * @param string $file_name Name of the remote file to be stored in the media library
+     * @param string $mime_type Mime type of the remote file
+     * @return int|WP_Error|false Attachment ID on success, WP_Error or false on failure
+     * @throws Exception
+     */
+    public static function binary_upload_media(string $binary, string $file_name, string $mime_type)
+    {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+
+        $temp_file = wp_tempnam($file_name);
+
+        if (! $temp_file) {
+            return false;
+        }
+
+        $handle = fopen($temp_file, 'wb');
+
+        if (! $handle) {
+            return false;
+        }
+
+        fwrite($handle, $binary);
+        fclose($handle);
+
+        $file = [
+            'name' => $file_name,
+            'type' => $mime_type,
+            'tmp_name' => $temp_file,
+            'size' => filesize($temp_file),
+        ];
+
+        $sideload = wp_handle_sideload($file, [
+            'test_form' => false,
+            'test_size' => false,
+        ]);
+
+        if (! empty($sideload['error'])) {
+            // you may return error message if you want
+
+            return false;
+        }
+
+        // it is time to add our uploaded image into WordPress media library
+        $attachment_id = wp_insert_attachment(
+            [
+                'guid' => $sideload['url'],
+                'post_mime_type' => $sideload['type'],
+                'post_title' => basename($sideload['file']),
+                'post_content' => '',
+                'post_status' => 'inherit',
+            ],
+            $sideload['file']
+        );
+
+        if (is_wp_error($attachment_id)) {
+            return $attachment_id;
+        }
+
+        if (! $attachment_id) {
+            return false;
+        }
+
+        try {
+            if (file_exists($temp_file)) {
+                unlink($temp_file);
+            }
+        } catch (Throwable $throwable) {
+            throw $throwable;
+        }
+
+        return $attachment_id;
+    }
+
+    /**
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#font_formats
      * @param string $mime file extension or mime type
      */

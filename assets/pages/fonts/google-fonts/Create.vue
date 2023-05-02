@@ -617,7 +617,7 @@ const cssFontFaceRuleFiltered = computed(() => {
 
                     css += `@font-face {\n`;
 
-                    css += `\tfont-family: '<family>';\n`;
+                    css += `\tfont-family: '${family.value}';\n`;
 
                     if (fontFace.weight !== 0) {
                         css += `\tfont-weight: ${fontFace.weight};\n`;
@@ -665,7 +665,7 @@ const cssFontFaceRuleFiltered = computed(() => {
 
             css += `@font-face {\n`;
 
-            css += `\tfont-family: '<family>';\n`;
+            css += `\tfont-family: '${family.value}';\n`;
 
             css += `\tfont-style: ${fontFace.style};\n`;
 
@@ -743,7 +743,7 @@ const cssPreviewStylesheet = computed(() => {
     }
 
     css += `:root {\n`;
-    css += `\t--ywf--family-${rootVarName}: '<family>'${fallbackFamily};\n`;
+    css += `\t--ywf--family-${rootVarName}: '${family.value}'${fallbackFamily};\n`;
     css += `}\n\n`;
 
     if (selectorParts.length > 0 && selectorParts[0]) {

@@ -58,6 +58,10 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 
 == Changelog ==
 
+= 2.0.23 =
+* **New**: Export and import
+* **[Builderius] Improve**: Ensure compatibility with Builderius 0.11.0 and later
+
 = 2.0.22 =
 * **[Breakdance] Fix**: CSS file loaded twice
 
