@@ -17,7 +17,7 @@ use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Runtime;
 
 /**
- * GeneratePress integration.
+ * GeneratePress and GenerateBlocks integration.
  *
  * @author Joshua <id@rosua.org>
  */
@@ -31,19 +31,30 @@ class Main implements BuilderInterface
         add_filter('generate_font_manager_show_google_fonts', static fn () => false, 1_000_001, 0);
 
         /**
-         * @deprecated version 2.0.11
-         * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
+         * Disable GenerateBlocks's built-in Google Fonts.
          */
-        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        add_filter('generateblocks_option_defaults', fn ($value) => $this->filter_generateblocks_option_defaults($value), 1_000_001, 1);
+        add_filter('option_generateblocks', static fn ($value, $option) => $this->filter_option_generateblocks($value), 1_000_001, 2);
+
+        /**
+         * Add custom font to GeneratePress.
+         */
 
         add_filter('option_generate_settings', fn ($value, $option) => $this->generate_settings($value), 1_000_001, 2);
         add_filter('pre_update_option_generate_settings', fn ($value, $old_value, $option) => $this->generate_settings($value), 1_000_001, 3);
 
         /**
-         * TODO: Add custom font to GenerateBlocks.
-         *
-         * @see https://generatepress.com/forums/topic/feature-request-custom-font-from-generatepress-in-generateblocks/#post-2556290
+         * @deprecated version 2.0.11
+         * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
+        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+
+        /**
+         * Add custom font to GenerateBlocks.
+         *
+         * @see https://github.com/tomusborne/generateblocks/issues/937
+         */
+        add_filter('generateblocks_typography_font_family_list', fn ($fonts) => $this->generateblocks_typography_font_family_list($fonts), 1_000_001);
     }
 
     public function get_name(): string
@@ -72,6 +83,44 @@ class Main implements BuilderInterface
                 ];
             }
         }
+
         return $opt;
+    }
+
+    public function filter_generateblocks_option_defaults($opt)
+    {
+        if (is_array($opt)) {
+            $opt['disable_google_fonts'] = true;
+        }
+
+        return $opt;
+    }
+
+    public function filter_option_generateblocks($opt)
+    {
+        if (is_array($opt)) {
+            $opt['disable_google_fonts'] = true;
+        }
+
+        return $opt;
+    }
+
+    public function generateblocks_typography_font_family_list($fonts)
+    {
+        $get_families = Runtime::get_font_families();
+
+        $families = array_map(static function ($f) {
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($f['family']));
+            return [
+                'label' => $f['title'],
+                // 'value' => sprintf('var(--ywf--family-%s)', $slug),
+                'value' => $f['family'],
+            ];
+        }, $get_families);
+
+        return array_merge([[
+            'label' => 'Yabe Webfont',
+            'options' => $families,
+        ]], is_array($fonts) ? $fonts : iterator_to_array($fonts));
     }
 }
