@@ -267,26 +267,32 @@ class Runtime
 
     public static function get_font_families(): array
     {
-        /** @var wpdb $wpdb */
-        global $wpdb;
+        $families = wp_cache_get('get_font_families', YABE_WEBFONT_OPTION_NAMESPACE);
 
-        $families = [];
+        if ($families === false) {
+            /** @var wpdb $wpdb */
+            global $wpdb;
 
-        $sql = "
-            SELECT title, family, type, slug FROM {$wpdb->prefix}yabe_webfont_fonts 
-            WHERE status = 1
-                AND deleted_at IS NULL
-        ";
+            $families = [];
 
-        $result = $wpdb->get_results($sql);
+            $sql = "
+                SELECT title, family, type, slug FROM {$wpdb->prefix}yabe_webfont_fonts 
+                WHERE status = 1
+                    AND deleted_at IS NULL
+            ";
 
-        foreach ($result as $row) {
-            $families[] = [
-                'title' => $row->title,
-                'family' => $row->family,
-                'type' => $row->type,
-                'slug' => $row->slug,
-            ];
+            $result = $wpdb->get_results($sql);
+
+            foreach ($result as $row) {
+                $families[] = [
+                    'title' => $row->title,
+                    'family' => $row->family,
+                    'type' => $row->type,
+                    'slug' => $row->slug,
+                ];
+            }
+
+            wp_cache_set('get_font_families', $families, YABE_WEBFONT_OPTION_NAMESPACE);
         }
 
         return $families;

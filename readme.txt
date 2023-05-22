@@ -59,6 +59,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 == Changelog ==
 
 = 2.0.24 =
+* **Improve**: Performance optimization
 * **[GeneratePress] New**: GenerateBlocks 1.8.0 and later integration
 
 = 2.0.23 =

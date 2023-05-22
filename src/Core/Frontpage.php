@@ -25,8 +25,16 @@ final class Frontpage
 {
     public function __construct()
     {
-        add_action('wp_head', fn () => $this->preload(), 1_000_001);
-        add_action('wp_head', static fn () => self::enqueue_css_cache(), 1_000_001);
+        add_action('wp_head', fn () => $this->append_header(), 1_000_001);
+    }
+
+    /**
+     * Append the header to the frontpage.
+     */
+    private function append_header()
+    {
+        $this->preload();
+        self::enqueue_css_cache();
     }
 
     public static function enqueue_css_cache()

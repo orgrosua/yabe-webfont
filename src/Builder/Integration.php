@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder;
 
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Yabe\Webfont\Plugin;
 
 class Integration
 {
@@ -33,6 +34,18 @@ class Integration
 
     public function scan_builders()
     {
+        // Get cached Builders
+        $transient_name = 'yabe_webfont_scanned_builders_' . Plugin::VERSION;
+
+        /** @var BuilderInterface[]|false $cached */
+        $cached = get_transient($transient_name);
+
+        if ($cached !== false) {
+            $this->builders = $cached;
+
+            return;
+        }
+
         $finder = new Finder();
         $finder->files()->in(__DIR__)->name('*.php');
 
@@ -77,6 +90,9 @@ class Integration
                 'class_name' => $reflector->getName(),
             ];
         }
+
+        // Cache the Builders
+        set_transient($transient_name, $this->builders);
     }
 
     /**
@@ -94,7 +110,7 @@ class Integration
         $builders = apply_filters('f!yabe/webfont/builder/integration:register_builders', $this->builders);
 
         foreach ($builders as $builder) {
-            // Create new instance of Builder class and register custom endpoints
+            // Create new instance of Builder class
             /** @var BuilderInterface $builderInstance */
             $builderInstance = new $builder['class_name']();
             $this->builders[$builder['name']]['instance'] = $builderInstance;

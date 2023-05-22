@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Api;
 
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
+use Yabe\Webfont\Plugin;
 
 class Router
 {
@@ -35,6 +36,18 @@ class Router
 
     public function scan_apis()
     {
+        // Get cached APIs
+        $transient_name = 'yabe_webfont_scanned_apis_' . Plugin::VERSION;
+
+        /** @var ApiInterface[]|false $cached */
+        $cached = get_transient($transient_name);
+
+        if ($cached !== false) {
+            $this->apis = $cached;
+
+            return;
+        }
+
         $finder = new Finder();
         $finder->files()->in(__DIR__)->name('*.php');
 
@@ -79,6 +92,9 @@ class Router
                 'class_name' => $reflector->getName(),
             ];
         }
+
+        // Cache the scanned APIs
+        set_transient($transient_name, $this->apis);
     }
 
     /**

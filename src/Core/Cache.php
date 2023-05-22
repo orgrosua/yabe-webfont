@@ -63,10 +63,12 @@ class Cache
 
     public function filter_cron_schedules($schedules)
     {
-        $schedules['yabe_webfont_cache'] = [
-            'interval' => MINUTE_IN_SECONDS,
-            'display' => __('Every minute', 'yabe-webfont'),
-        ];
+        if (!array_key_exists('minutely', $schedules)) {
+            $schedules['minutely'] = [
+                'interval' => MINUTE_IN_SECONDS,
+                'display' => __('Once Minutely', 'yabe-webfont'),
+            ];
+        }
 
         return $schedules;
     }
