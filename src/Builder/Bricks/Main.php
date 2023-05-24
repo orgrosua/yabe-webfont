@@ -15,7 +15,7 @@ namespace Yabe\Webfont\Builder\Bricks;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * @author Joshua <id@rosua.org>
@@ -33,7 +33,7 @@ class Main implements BuilderInterface
         /**
          * @see https://academy.bricksbuilder.io/article/filter-standard-fonts/
          */
-        // add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        // add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_font_families(), 'family')), 1_000_001);
 
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('bricks'), 1_000_001);
 
@@ -56,7 +56,7 @@ class Main implements BuilderInterface
         }
 
         $yabeWebfontBricksOptions = [];
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
         foreach ($font_families as $font_family) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
             $yabeWebfontBricksOptions[sprintf('",var(--ywf--family-%s),"', $slug)] = $font_family['title'];

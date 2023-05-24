@@ -15,7 +15,9 @@ namespace Yabe\Webfont\Core;
 
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Notice;
+use Yabe\Webfont\Utils\Upload;
 
 /**
  * Manage the cache of fonts for the frontpage.
@@ -75,7 +77,7 @@ class Cache
 
     public function schedule_cache()
     {
-        if (! wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
+        if (!wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
             wp_schedule_single_event(time() + 10, 'a!yabe/webfont/core/cache:build_cache');
         }
     }
@@ -92,7 +94,7 @@ class Cache
 
     public function build_cache()
     {
-        $css = Runtime::build_css();
+        $css = self::build_css();
 
         $payload = sprintf(
             "/*\n! %s v%s | %s\n*/\n\n%s",
@@ -108,7 +110,7 @@ class Cache
             Notice::error(sprintf('Failed to build Fonts CSS cache: %s', $throwable->getMessage()));
         }
 
-        $preload_html = Runtime::build_preload();
+        $preload_html = self::build_preload();
 
         try {
             Common::save_file($preload_html, self::get_cache_path(self::PRELOAD_HTML_FILE));
@@ -117,6 +119,238 @@ class Cache
         }
 
         $this->purge_cache_plugin();
+    }
+
+    public static function build_css(): string
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $css = '';
+
+        $sql = "
+            SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts 
+            WHERE status = 1
+                AND deleted_at IS NULL
+        ";
+
+        $result = $wpdb->get_results($sql);
+
+        if (empty($result)) {
+            return $css;
+        }
+
+        $format_precedence = [
+            'woff2' => 1,
+            'woff' => 2,
+            'ttf' => 3,
+            'otf' => 4,
+            'eot' => 5,
+        ];
+
+        // Adobe Fonts
+        $project_id = Config::get('adobe_fonts.project_id', null);
+        if ($project_id !== null) {
+            // check if the $result array contain item.type = 'adobe-fonts'
+            $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
+
+            if ($any_adobe_fonts !== false) {
+                $css .= self::get_kit_css($project_id);
+            }
+        }
+
+        foreach ($result as $row) {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+
+            foreach ($font_faces as $font_face) {
+                if ($font_face->comment) {
+                    $css .= "/* {$font_face->comment} */\n";
+                }
+
+                $css .= "@font-face {\n";
+
+                $css .= "\tfont-family: '{$row->family}';\n";
+
+                $css .= "\tfont-style: {$font_face->style};\n";
+
+                $wght = $font_face->weight ?: '400';
+                $wdth = $font_face->width ?: '100%';
+
+                $css .= "\tfont-weight: {$wght};\n";
+
+                $css .= "\tfont-stretch: {$wdth};\n";
+
+                $display = $font_face->display ?: $metadata->display;
+
+                $css .= "\tfont-display: {$display};\n";
+
+                if ($font_face->files !== []) {
+                    usort($font_face->files, static fn ($a, $b) => $format_precedence[$a->extension] <=> $format_precedence[$b->extension]);
+
+                    $css .= "\tsrc: ";
+
+                    $files = array_map(static fn ($f) => sprintf("url('%s') format(\"%s\")", $f->attachment_url, Upload::mime_keyword($f->extension)), $font_face->files);
+
+                    $css .= implode(",\n\t\t", $files);
+
+                    $css .= ";\n";
+                }
+
+                if ($font_face->unicodeRange) {
+                    $css .= "\tunicode-range: {$font_face->unicodeRange};\n";
+                }
+
+                $css .= "}\n\n";
+            }
+        }
+
+        // CSS custom properties (variables)
+        $css .= ":root {\n";
+
+        foreach ($result as $row) {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+
+            $selectorParts = [];
+            $fallbackFamily = '';
+
+            // if property selector is exists
+            if (property_exists($metadata, 'selector') && $metadata->selector) {
+                $selectorParts = explode('|', $metadata->selector);
+                $selectorParts = array_map('trim', $selectorParts);
+                $selectorParts = array_filter($selectorParts);
+
+                $fallbackFamily = isset($selectorParts[1]) ? ', ' . $selectorParts[1] : '';
+            }
+
+            $value = sprintf("'%s'%s", $row->family, $fallbackFamily);
+
+            // TODO: extract variable name to a reusable function
+            $name = sprintf('--ywf--family-%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
+
+            $css .= "\t{$name}: {$value};\n";
+        }
+
+        $css .= "}\n\n";
+
+        foreach ($result as $row) {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+
+            // TODO: extract variable name to a reusable function
+            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family));
+
+            $selectorParts = [];
+
+            if (property_exists($metadata, 'selector') && $metadata->selector) {
+                $selectorParts = explode('|', $metadata->selector);
+                $selectorParts = array_map('trim', $selectorParts);
+                $selectorParts = array_filter($selectorParts);
+
+                if (isset($selectorParts[0]) && $selectorParts[0]) {
+                    // TODO: extract variable name to a reusable function
+                    $css .= "{$selectorParts[0]} {\n\tfont-family: var(--ywf--family-{$slug});\n}\n\n";
+                }
+            }
+
+            foreach ($font_faces as $font_face) {
+                if ($font_face->selector) {
+                    $css .= "{$font_face->selector} {\n";
+                    // TODO: extract variable name to a reusable function
+                    $css .= sprintf("\tfont-family: var(--ywf--family-%s);\n", $slug);
+                    $css .= "\tfont-style: {$font_face->style};\n";
+                    $css .= "\tfont-weight: {$font_face->weight};\n";
+                    $css .= "}\n\n";
+                }
+            }
+        }
+
+        /**
+         * @param string $css The CSS content
+         * @param array $result The result of the SQL query
+         * @return string The CSS content
+         */
+        $css = apply_filters('f!yabe/webfont/core/cache:build_css.append_content', $css, $result);
+
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            // replace tabs with 2 spaces
+            $css = preg_replace('#\t#', '  ', $css);
+        } else {
+            // remove new lines and tabs
+            $css = preg_replace('#\n#', '', $css);
+            $css = preg_replace('#\t#', '', $css);
+        }
+
+        return $css;
+    }
+
+    public static function build_preload(): string
+    {
+        /** @var wpdb $wpdb */
+        global $wpdb;
+
+        $html = '';
+
+        $sql = "
+            SELECT metadata, font_faces FROM {$wpdb->prefix}yabe_webfont_fonts
+            WHERE status = 1
+                AND deleted_at IS NULL
+        ";
+
+        $result = $wpdb->get_results($sql);
+
+        if (empty($result)) {
+            return $html;
+        }
+
+        $preload_files = [];
+
+        foreach ($result as $row) {
+            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+
+            foreach ($font_faces as $font_face) {
+                if ($metadata->preload || (property_exists($font_face, 'preload') && $font_face->preload)) {
+                    foreach ($font_face->files as $file) {
+                        $preload_files[] = [
+                            'href' => $file->attachment_url,
+                            'type' => $file->mime,
+                        ];
+                    }
+                }
+            }
+        }
+
+        $preload_files = array_unique($preload_files, SORT_REGULAR);
+
+        foreach ($preload_files as $preload_file) {
+            $html .= sprintf(
+                '<link rel="preload" href="%s" as="font" type="%s" crossorigin>' . PHP_EOL,
+                $preload_file['href'],
+                $preload_file['type']
+            );
+        }
+
+        return $html;
+    }
+
+    public static function get_kit_css($kit_id): string
+    {
+        $css = '';
+
+        $response = wp_remote_get(sprintf('https://use.typekit.net/%s.css', $kit_id));
+
+        if (is_wp_error($response)) {
+            return $css;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+
+        if (is_wp_error($body)) {
+            return $css;
+        }
+
+        return $css . ($body . "\n\n");
     }
 
     /**

@@ -15,7 +15,7 @@ namespace Yabe\Webfont\Builder\Cwicly;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * Cwicly integration.
@@ -47,7 +47,7 @@ class Main implements BuilderInterface
             $font_cols = json_decode($font_cols, true, 512, JSON_THROW_ON_ERROR);
         }
 
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_cols as $k => $v) {
             if ($v === []) {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\Kadence;
 
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 use Yabe\Webfont\Plugin;
 
 /**
@@ -69,7 +69,7 @@ class Main implements BuilderInterface
         if (wp_script_is('kadence-blocks-js', 'registered')) {
             $fonts = [];
 
-            foreach (Runtime::get_font_families() as $font_family) {
+            foreach (Font::get_font_families() as $font_family) {
                 $fonts[] = [
                     'label' => $font_family['title'],
                     'value' => $font_family['family'],
@@ -134,7 +134,7 @@ class Main implements BuilderInterface
 
     public function theme_custom_fonts($fonts)
     {
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         $v = [
             '100',

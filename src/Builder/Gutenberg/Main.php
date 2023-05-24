@@ -17,7 +17,7 @@ use WP_Theme_JSON_Data;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Frontpage;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * Gutenberg integration.
@@ -36,7 +36,7 @@ class Main implements BuilderInterface
     {
         add_filter('wp_theme_json_data_theme', fn ($theme_json) => $this->filter_theme_json_data_theme($theme_json), 1_000_001);
         add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
-        add_filter('f!yabe/webfont/core/runtime:append_build_css_content', fn ($css, $rows) => $this->filter_append_build_css_content($css, $rows), 1_000_001, 2);
+        add_filter('f!yabe/webfont/core/cache:build_css.append_content', fn ($css, $rows) => $this->filter_append_build_css_content($css, $rows), 1_000_001, 2);
 
         add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
         add_action('after_setup_theme', fn () => $this->after_setup_theme(), 1_000_001);
@@ -58,7 +58,7 @@ class Main implements BuilderInterface
 
         $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies'] ?? [];
 
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
@@ -96,7 +96,7 @@ class Main implements BuilderInterface
 
         $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies']['theme'] ?? [];
 
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
@@ -154,7 +154,7 @@ class Main implements BuilderInterface
     {
         $inline_css = '';
 
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));

@@ -17,7 +17,6 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use wpdb;
-use Yabe\Webfont\Core\Runtime;
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
@@ -222,7 +221,7 @@ class Font extends AbstractApi implements ApiInterface
                 'slug' => $row->slug,
                 'family' => $row->family,
                 'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-                'font_faces' => Runtime::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+                'font_faces' => Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
                 'status' => (bool) $row->status,
                 'created_at' => strtotime($row->created_at),
                 'updated_at' => strtotime($row->updated_at),
@@ -299,7 +298,7 @@ class Font extends AbstractApi implements ApiInterface
             'slug' => $row->slug,
             'family' => $row->family,
             'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-            'font_faces' => Runtime::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+            'font_faces' => Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
             'status' => (bool) $row->status,
             'created_at' => strtotime($row->created_at),
             'updated_at' => strtotime($row->updated_at),
@@ -307,7 +306,7 @@ class Font extends AbstractApi implements ApiInterface
         ];
 
         if (property_exists($payload['metadata'], 'google_fonts')) {
-            $payload['metadata']->google_fonts->font_files = Runtime::refresh_google_fonts_attachment_url($payload['metadata']->google_fonts->font_files);
+            $payload['metadata']->google_fonts->font_files = Upload::refresh_google_fonts_attachment_url($payload['metadata']->google_fonts->font_files);
         }
 
         return new WP_REST_Response($payload, 200, []);

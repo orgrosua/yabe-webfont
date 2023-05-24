@@ -15,7 +15,7 @@ namespace Yabe\Webfont\Builder\Spectra;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * Spectra integration.
@@ -45,7 +45,7 @@ class Main implements BuilderInterface
     public function select_font_globally()
     {
         $global_fonts = [];
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
             $global_fonts[] = [

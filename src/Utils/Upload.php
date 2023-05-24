@@ -248,4 +248,40 @@ class Upload
                 return 'woff2';
         }
     }
+
+    /**
+     * Get the new attachment url of a font face.
+     */
+    public static function refresh_font_faces_attachment_url(array $font_faces): array
+    {
+        foreach ($font_faces as $i => $font_face) {
+            foreach ($font_face->files as $j => $file) {
+                $attachment_url = wp_get_attachment_url($file->attachment_id);
+                if ($attachment_url) {
+                    $parsed = parse_url($attachment_url);
+                    $font_faces[$i]->files[$j]->attachment_url = $parsed['path'];
+                }
+            }
+        }
+
+        return $font_faces;
+    }
+
+    /**
+     * Get the new attachment url of a Google Fonts.
+     */
+    public static function refresh_google_fonts_attachment_url(array $font_files): array
+    {
+        foreach ($font_files as $i => $font_file) {
+            if (property_exists($font_file, 'file')) {
+                $attachment_url = wp_get_attachment_url($font_file->file->attachment_id);
+                if ($attachment_url) {
+                    $parsed = parse_url($attachment_url);
+                    $font_files[$i]->file->attachment_url = $parsed['path'];
+                }
+            }
+        }
+
+        return $font_files;
+    }
 }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\Beaver;
 
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * Beaver integration.
@@ -36,7 +36,7 @@ class Main implements BuilderInterface
 
     public function custom_fonts($fonts)
     {
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
             $fonts[$font_family['family']] = [

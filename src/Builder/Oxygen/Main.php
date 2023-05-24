@@ -16,7 +16,7 @@ namespace Yabe\Webfont\Builder\Oxygen;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Builder\Gutenberg\Main as GutenbergMain;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 use Yabe\Webfont\Plugin;
 
 /**
@@ -44,7 +44,7 @@ class Main implements BuilderInterface
         /**
          * Add Gutenberg non block-based theme support.
          */
-        add_filter('f!yabe/webfont/core/runtime:append_build_css_content', fn ($css, $rows) => $this->filter_append_build_css_content_for_gutenberg($css, $rows), 1_000_001, 2);
+        add_filter('f!yabe/webfont/core/cache:build_css.append_content', fn ($css, $rows) => $this->filter_append_build_css_content_for_gutenberg($css, $rows), 1_000_001, 2);
 
         add_action('wp_enqueue_scripts', fn () => $this->enqueue_editor_style(), 1_000_001);
         add_action('ct_builder_ng_init', fn () => $this->elegant_custom_fonts(), 1_000_001);
@@ -58,7 +58,7 @@ class Main implements BuilderInterface
 
     public function elegant_custom_fonts()
     {
-        $output = json_encode(array_column(Runtime::get_font_families(), 'family'), JSON_THROW_ON_ERROR);
+        $output = json_encode(array_column(Font::get_font_families(), 'family'), JSON_THROW_ON_ERROR);
         $output = htmlspecialchars($output, ENT_QUOTES);
         echo sprintf('elegantCustomFonts=%s;', $output);
     }

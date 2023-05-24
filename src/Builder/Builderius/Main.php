@@ -15,7 +15,7 @@ namespace Yabe\Webfont\Builder\Builderius;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * @author Joshua <id@rosua.org>
@@ -46,7 +46,7 @@ class Main implements BuilderInterface
             return;
         }
 
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         $inline_script_content = <<<JS
 const moduleTypography = builderiusBackend.settingsList?.module?.advanced?.typography?.find((item) => item.name === 'font');

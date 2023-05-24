@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\GeneratePress;
 
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * GeneratePress and GenerateBlocks integration.
@@ -47,7 +47,7 @@ class Main implements BuilderInterface
          * @deprecated version 2.0.11
          * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
-        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Runtime::get_font_families(), 'family')), 1_000_001);
+        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_font_families(), 'family')), 1_000_001);
 
         /**
          * Add custom font to GenerateBlocks.
@@ -64,7 +64,7 @@ class Main implements BuilderInterface
 
     public function generate_settings($opt)
     {
-        $font_families = Runtime::get_font_families();
+        $font_families = Font::get_font_families();
 
         if (! is_array($opt)) {
             $opt = [];
@@ -107,7 +107,7 @@ class Main implements BuilderInterface
 
     public function generateblocks_typography_font_family_list($fonts)
     {
-        $get_families = Runtime::get_font_families();
+        $get_families = Font::get_font_families();
 
         $families = array_map(static function ($f) {
             $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($f['family']));
