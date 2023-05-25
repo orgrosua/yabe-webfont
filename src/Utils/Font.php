@@ -31,7 +31,7 @@ class Font
             $families = [];
 
             $sql = "
-                SELECT title, family, type, slug FROM {$wpdb->prefix}yabe_webfont_fonts 
+                SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts 
                 WHERE status = 1
                     AND deleted_at IS NULL
             ";
@@ -53,7 +53,9 @@ class Font
                     'fallback_family' => null,
                 ];
 
-                foreach ($$row->font_faces as $font_face) {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+
+                foreach ($font_faces as $font_face) {
                     $f['variants'][] = [
                         'weight' => $font_face->weight,
                         'style' => $font_face->style,
@@ -61,6 +63,8 @@ class Font
                 }
 
                 $selectorParts = [];
+
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
 
                 // if property selector is exists
                 if (property_exists($metadata, 'selector') && $metadata->selector) {
