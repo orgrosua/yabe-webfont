@@ -44,10 +44,32 @@ class Font
                     'family' => $row->family,
                     'type' => $row->type,
                     'slug' => $row->slug,
+                    'css' => [
+                        'slug' => self::slugify($row->family),
+                        'custom_property' => self::css_custom_property($row->family),
+                        'variable' => self::css_variable($row->family),
+                    ],
+                    'variants' => [],
+                    'fallback_family' => null,
                 ];
 
-                // TODO: add CSS variable using the extracted function
-                // $f['css_variable'] = '';
+                foreach ($$row->font_faces as $font_face) {
+                    $f['variants'][] = [
+                        'weight' => $font_face->weight,
+                        'style' => $font_face->style,
+                    ];
+                }
+
+                $selectorParts = [];
+
+                // if property selector is exists
+                if (property_exists($metadata, 'selector') && $metadata->selector) {
+                    $selectorParts = explode('|', $metadata->selector);
+                    $selectorParts = array_map('trim', $selectorParts);
+                    $selectorParts = array_filter($selectorParts);
+
+                    $f['fallback_family'] = isset($selectorParts[1]) ? $selectorParts[1] : null;
+                }
 
                 $families[] = $f;
             }
@@ -56,5 +78,32 @@ class Font
         }
 
         return $families;
+    }
+
+    /**
+     * @param string $value font family name
+     * @return string css custom property wrapped with variable function. e.g. `var(--ywf--family-open-sans)` for `Open Sans`
+     */
+    public static function css_variable(string $value): string
+    {
+        return sprintf('var(%s)', self::css_custom_property($value));
+    }
+
+    /**
+     * @param string $value font family name
+     * @return string css custom property. e.g. `--ywf--family-open-sans` for `Open Sans`
+     */
+    public static function css_custom_property(string $value): string
+    {
+        return sprintf('--ywf--family-%s', self::slugify($value));
+    }
+
+    /**
+     * @param string $value font family name
+     * @return string slugified string. e.g. `open-sans` for `Open Sans`
+     */
+    public static function slugify(string $value): string
+    {
+        return preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($value));
     }
 }

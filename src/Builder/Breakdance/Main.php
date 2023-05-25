@@ -43,18 +43,16 @@ class Main implements BuilderInterface
         $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
-
-            $cssName = sprintf('var(--ywf--family-%s)', $slug);
+            $cssName = Font::css_variable($font_family['family']);
             $dropdownLabel = sprintf('[Yabe] %s', $font_family['title']);
-            $fallbackString = '';
+            $fallbackString = $font_family['fallback_family'];
             $dependencies = [
                 'styles' => [
                     // Cache::get_cache_url(Cache::CSS_CACHE_FILE),
                 ],
             ];
 
-            \Breakdance\Fonts\registerFont($slug, $cssName, $dropdownLabel, $fallbackString, $dependencies);
+            \Breakdance\Fonts\registerFont(Font::slugify($font_family['family']), $cssName, $dropdownLabel, $fallbackString, $dependencies);
         }
     }
 }

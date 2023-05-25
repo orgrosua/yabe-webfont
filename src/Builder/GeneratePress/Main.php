@@ -110,10 +110,9 @@ class Main implements BuilderInterface
         $get_families = Font::get_font_families();
 
         $families = array_map(static function ($f) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($f['family']));
             return [
                 'label' => $f['title'],
-                // 'value' => sprintf('var(--ywf--family-%s)', $slug),
+                // 'value' => Font::css_variable($f['family']),
                 'value' => $f['family'],
             ];
         }, $get_families);

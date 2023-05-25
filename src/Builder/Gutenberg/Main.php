@@ -61,15 +61,13 @@ class Main implements BuilderInterface
         $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
-
             /**
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
                 'name' => sprintf('[Yabe] %s', $font_family['title']),
-                'slug' => $slug,
-                'fontFamily' => sprintf('var(--ywf--family-%s)', $slug),
+                'slug' => Font::slugify($font_family['family']),
+                'fontFamily' => Font::css_variable($font_family['family']),
             ];
         }
 
@@ -99,15 +97,13 @@ class Main implements BuilderInterface
         $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
-
             /**
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
                 'name' => sprintf('[Yabe] %s', $font_family['title']),
-                'slug' => $slug,
-                'fontFamily' => sprintf('var(--ywf--family-%s)', $slug),
+                'slug' => Font::slugify($font_family['family']),
+                'fontFamily' => Font::css_variable($font_family['family']),
             ];
         }
 
@@ -157,10 +153,8 @@ class Main implements BuilderInterface
         $font_families = Font::get_font_families();
 
         foreach ($font_families as $font_family) {
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($font_family['family']));
-
-            $inline_css .= sprintf(".has-%s-font-family {\n", $slug);
-            $inline_css .= sprintf("\tfont-family: var(--ywf--family-%s) !important;\n", $slug);
+            $inline_css .= sprintf(".has-%s-font-family {\n", Font::slugify($font_family['family']));
+            $inline_css .= sprintf("\tfont-family: %s !important;\n", Font::css_variable($font_family['family']));
             $inline_css .= "}\n\n";
         }
 

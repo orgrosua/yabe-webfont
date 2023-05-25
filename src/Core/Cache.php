@@ -16,6 +16,7 @@ namespace Yabe\Webfont\Core;
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
+use Yabe\Webfont\Utils\Font;
 use Yabe\Webfont\Utils\Notice;
 use Yabe\Webfont\Utils\Upload;
 
@@ -225,8 +226,7 @@ class Cache
 
             $value = sprintf("'%s'%s", $row->family, $fallbackFamily);
 
-            // TODO: extract variable name to a reusable function
-            $name = sprintf('--ywf--family-%s', preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family)));
+            $name = Font::css_custom_property($row->family);
 
             $css .= "\t{$name}: {$value};\n";
         }
@@ -237,9 +237,6 @@ class Cache
             $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
             $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
 
-            // TODO: extract variable name to a reusable function
-            $slug = preg_replace('#[^a-zA-Z0-9\-_]+#', '-', strtolower($row->family));
-
             $selectorParts = [];
 
             if (property_exists($metadata, 'selector') && $metadata->selector) {
@@ -248,16 +245,14 @@ class Cache
                 $selectorParts = array_filter($selectorParts);
 
                 if (isset($selectorParts[0]) && $selectorParts[0]) {
-                    // TODO: extract variable name to a reusable function
-                    $css .= "{$selectorParts[0]} {\n\tfont-family: var(--ywf--family-{$slug});\n}\n\n";
+                    $css .= sprintf("%s {\n\tfont-family: %s;\n}\n\n", $selectorParts[0], Font::css_variable($row->family));
                 }
             }
 
             foreach ($font_faces as $font_face) {
                 if ($font_face->selector) {
                     $css .= "{$font_face->selector} {\n";
-                    // TODO: extract variable name to a reusable function
-                    $css .= sprintf("\tfont-family: var(--ywf--family-%s);\n", $slug);
+                    $css .= sprintf("\tfont-family: %s;\n", Font::css_variable($row->family));
                     $css .= "\tfont-style: {$font_face->style};\n";
                     $css .= "\tfont-weight: {$font_face->weight};\n";
                     $css .= "}\n\n";
