@@ -25,7 +25,9 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('fl_theme_system_fonts', fn ($fonts) => $this->custom_fonts($fonts), 1_000_001);
+        add_filter('fl_builder_google_fonts_pre_enqueue', fn () => [], 1_000_001);
+        add_filter('fl_builder_font_families_google', fn () => [], 1_000_001);
+
         add_filter('fl_builder_font_families_system', fn ($fonts) => $this->custom_fonts($fonts), 1_000_001);
     }
 
@@ -38,12 +40,16 @@ class Main implements BuilderInterface
     {
         $font_families = Font::get_font_families();
 
+        $families = [];
+
         foreach ($font_families as $font_family) {
-            $fonts[$font_family['family']] = [
-                'fallback' => 'Verdana, Arial, sans-serif',
+            $families[$font_family['family']] = [
+                'fallback' => '',
                 'weights' => ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
             ];
         }
+
+        $fonts = array_merge($families, $fonts);
 
         return $fonts;
     }

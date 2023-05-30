@@ -34,7 +34,7 @@ class Main implements BuilderInterface
 
     public function get_name(): string
     {
-        return 'zion';
+        return 'zionbuilder';
     }
 
     /**
@@ -46,7 +46,7 @@ class Main implements BuilderInterface
      */
     public function filter_rest_request_after_callbacks($response, $handler, $request)
     {
-        if ($request->get_route() === '/zion/v1/data-sets' && $response instanceof \WP_REST_Response) {
+        if ($request->get_route() === '/zionbuilder/v1/data-sets' && $response instanceof \WP_REST_Response) {
             $data = $response->get_data();
             if (array_key_exists('fonts_list', $data)) {
                 if (! array_key_exists('custom_fonts', $data['fonts_list'])) {
