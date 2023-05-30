@@ -16,8 +16,8 @@ namespace Yabe\Webfont\Builder\Oxygen;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Builder\Gutenberg\Main as GutenbergMain;
-use Yabe\Webfont\Utils\Font;
 use Yabe\Webfont\Plugin;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * @author Joshua <id@rosua.org>

@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\Kadence;
 
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Utils\Font;
 use Yabe\Webfont\Plugin;
+use Yabe\Webfont\Utils\Font;
 
 /**
  * Kadence integration.

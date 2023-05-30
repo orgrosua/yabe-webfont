@@ -68,7 +68,7 @@ class Main implements BuilderInterface
 
                 $response['localfonts'][$key] = $f;
 
-                array_push($response['localactivefonts'], $key);
+                $response['localactivefonts'][] = $key;
             }
         }
 
@@ -89,7 +89,7 @@ class Main implements BuilderInterface
                 $value = $request->get_param('value');
 
                 // remove array element with key 'custom-yabe-'
-                $value = array_filter($value, fn ($k) => !str_starts_with($k, 'custom-yabe-'), ARRAY_FILTER_USE_KEY);
+                $value = array_filter($value, static fn ($k) => strncmp($k, 'custom-yabe-', strlen('custom-yabe-')) !== 0, ARRAY_FILTER_USE_KEY);
 
                 $request->set_param('value', $value);
             }
@@ -98,7 +98,7 @@ class Main implements BuilderInterface
                 $value = $request->get_param('value');
 
                 // remove array element with value 'custom-yabe-'
-                $value = array_filter($value, fn ($v) => !str_starts_with($v, 'custom-yabe-'));
+                $value = array_filter($value, static fn ($v) => strncmp($v, 'custom-yabe-', strlen('custom-yabe-')) !== 0);
 
                 $request->set_param('value', $value);
             }

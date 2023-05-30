@@ -28,15 +28,6 @@ final class Frontpage
         add_action('wp_head', fn () => $this->append_header(), 1_000_001);
     }
 
-    /**
-     * Append the header to the frontpage.
-     */
-    private function append_header()
-    {
-        $this->preload();
-        self::enqueue_css_cache();
-    }
-
     public static function enqueue_css_cache()
     {
         if (defined('YABE_WEBFONT_CSS_CACHE_WAS_LOADED')) {
@@ -64,6 +55,15 @@ final class Frontpage
         define('YABE_WEBFONT_CSS_CACHE_WAS_LOADED', true);
 
         Debug::stopwatch()->stop(sprintf('%s::%s', self::class, __FUNCTION__));
+    }
+
+    /**
+     * Append the header to the frontpage.
+     */
+    private function append_header()
+    {
+        $this->preload();
+        self::enqueue_css_cache();
     }
 
     /**

@@ -72,7 +72,7 @@ class Font
                     $selectorParts = array_map('trim', $selectorParts);
                     $selectorParts = array_filter($selectorParts);
 
-                    $f['fallback_family'] = isset($selectorParts[1]) ? $selectorParts[1] : null;
+                    $f['fallback_family'] = $selectorParts[1] ?? null;
                 }
 
                 $fonts[] = $f;

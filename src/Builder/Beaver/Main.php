@@ -25,8 +25,8 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('fl_builder_google_fonts_pre_enqueue', fn () => [], 1_000_001);
-        add_filter('fl_builder_font_families_google', fn () => [], 1_000_001);
+        add_filter('fl_builder_google_fonts_pre_enqueue', static fn () => [], 1_000_001);
+        add_filter('fl_builder_font_families_google', static fn () => [], 1_000_001);
 
         add_filter('fl_builder_font_families_system', fn ($fonts) => $this->custom_fonts($fonts), 1_000_001);
     }

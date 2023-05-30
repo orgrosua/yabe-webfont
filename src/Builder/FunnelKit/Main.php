@@ -28,8 +28,8 @@ class Main implements BuilderInterface
         /**
          * Disable SlingBlocks' built-in Google Fonts.
          */
-        add_filter('bwf_custom_google_font', fn () => [], 1_000_001);
-        add_filter('bwf_custom_google_font_names_list', fn () => [], 1_000_001);
+        add_filter('bwf_custom_google_font', static fn () => [], 1_000_001);
+        add_filter('bwf_custom_google_font_names_list', static fn () => [], 1_000_001);
         add_action('enqueue_block_editor_assets', fn () => $this->remove_google_fonts_list(), 1_000_001);
         add_action('wp_print_scripts', fn () => $this->dequeue_webfont(), 1_000_001);
 
@@ -61,13 +61,13 @@ class Main implements BuilderInterface
 
     private function remove_google_fonts_list()
     {
-        if (!defined('SLINGBLOCKS_PLUGIN_VERSION')) {
+        if (! defined('SLINGBLOCKS_PLUGIN_VERSION')) {
             return;
         }
 
         $screen = get_current_screen();
         if (is_admin() && $screen->is_block_editor()) {
-            if (!wp_script_is('slingblocks-editor', 'registered')) {
+            if (! wp_script_is('slingblocks-editor', 'registered')) {
                 return;
             }
 
@@ -77,7 +77,7 @@ class Main implements BuilderInterface
 
     private function dequeue_webfont()
     {
-        if (!defined('SLINGBLOCKS_PLUGIN_VERSION')) {
+        if (! defined('SLINGBLOCKS_PLUGIN_VERSION')) {
             return;
         }
 

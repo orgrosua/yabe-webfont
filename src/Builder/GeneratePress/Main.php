@@ -109,13 +109,11 @@ class Main implements BuilderInterface
     {
         $fonts = Font::get_fonts();
 
-        $yabe_fonts = array_map(static function ($f) {
-            return [
-                'label' => $f['title'],
-                // 'value' => Font::css_variable($f['family']),
-                'value' => $f['family'],
-            ];
-        }, $fonts);
+        $yabe_fonts = array_map(static fn ($f) => [
+            'label' => $f['title'],
+            // 'value' => Font::css_variable($f['family']),
+            'value' => $f['family'],
+        ], $fonts);
 
         return array_merge([[
             'label' => 'Yabe Webfont',

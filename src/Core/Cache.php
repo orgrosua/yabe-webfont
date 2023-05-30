@@ -66,7 +66,7 @@ class Cache
 
     public function filter_cron_schedules($schedules)
     {
-        if (!array_key_exists('minutely', $schedules)) {
+        if (! array_key_exists('minutely', $schedules)) {
             $schedules['minutely'] = [
                 'interval' => MINUTE_IN_SECONDS,
                 'display' => __('Once Minutely', 'yabe-webfont'),
@@ -78,7 +78,7 @@ class Cache
 
     public function schedule_cache()
     {
-        if (!wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
+        if (! wp_next_scheduled('a!yabe/webfont/core/cache:build_cache')) {
             wp_schedule_single_event(time() + 10, 'a!yabe/webfont/core/cache:build_cache');
         }
     }
