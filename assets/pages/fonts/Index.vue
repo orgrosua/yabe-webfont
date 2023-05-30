@@ -23,13 +23,13 @@
     <ul class="subsubsub">
         <li class="all">
             <router-link :to="{
-                    name: 'fonts.index',
-                    query: {
-                        ...route.query,
-                        soft_deleted: 0,
-                        page: 1,
-                    },
-                }" :class="{ current: !Boolean(query.soft_deleted) }"> {{ __('All', 'yabe-webfont') }} <span class="count"> ({{ meta.total_exists }}) </span> </router-link>
+                name: 'fonts.index',
+                query: {
+                    ...route.query,
+                    soft_deleted: 0,
+                    page: 1,
+                },
+            }" :class="{ current: !Boolean(query.soft_deleted) }"> {{ __('All', 'yabe-webfont') }} <span class="count"> ({{ meta.total_exists }}) </span> </router-link>
             |
         </li>
         <li class="trash tw-pl-1">
@@ -77,11 +77,17 @@
                 </th>
                 <th scope="col" class="tw-flex tw-items-center">
                     {{ __('Preview', 'yabe-webfont') }}
-                    <div v-if="items.length > 0" class="tw-px-4 tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
-                        <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
-                        <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 tw-mx-0 !tw-py-0 !tw-px-2 !tw-border  !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
-                        <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
-                    </div>
+                    <template v-if="items.length > 0">
+                        <div class="tw-px-4 tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">size</span>
+                            <input type="number" v-model="preview.fontSize" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-none !tw-border-gray-300 !tw-text-xs" />
+                            <span class="tw-inline-flex tw-items-center tw-rounded-r-md tw-border tw-border-solid !tw-border-l-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">px</span>
+                        </div>
+                        <div class="tw-h-fit tw-flex tw-rounded-md tw-shadow-sm">
+                            <span class="tw-inline-flex tw-items-center tw-rounded-l-md tw-border tw-border-solid !tw-border-r-0 !tw-border-gray-300 tw-bg-gray-50 tw-px-3 tw-text-gray-500 !tw-text-xs">weight</span>
+                            <input type="number" min="1" max="1000" v-model="preview.fontWeight" class="!tw-block !tw-min-w-0 tw-w-16 !tw-min-h-0 !tw-h-6 tw-mx-0 !tw-py-0 !tw-px-2 !tw-border !tw-border-solid !tw-rounded-r-md !tw-border-gray-300 !tw-text-xs" />
+                        </div>
+                    </template>
                 </th>
             </tr>
         </thead>
@@ -215,6 +221,7 @@ const showImportModal = ref(false);
 const preview = reactive({
     text: `The quick brown fox jumps over a lazy dog`,
     fontSize: 18,
+    fontWeight: 400,
     lineHeight: 1.5,
 });
 
