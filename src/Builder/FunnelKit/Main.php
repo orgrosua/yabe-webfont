@@ -25,6 +25,14 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
+        /**
+         * Disable SlingBlocks' built-in Google Fonts.
+         */
+        add_filter('bwf_custom_google_font', fn () => [], 1_000_001);
+        add_filter('bwf_custom_google_font_names_list', fn () => [], 1_000_001);
+        add_action('enqueue_block_editor_assets', fn () => $this->remove_google_fonts_list(), 1_000_001);
+        add_action('wp_print_scripts', fn () => $this->dequeue_webfont(), 1_000_001);
+
         // SlingBlocks
         add_filter('bwf_custom_system_font', fn ($f) => $this->add_block_fonts($f), 1_000_001);
     }
@@ -42,12 +50,37 @@ class Main implements BuilderInterface
 
         foreach ($fonts as $font) {
             $yabe_fonts[] = [
-                'label' => $font['title'],
+                'label' => '[Yabe] ' . $font['title'],
                 'value' => Font::css_variable($font['family']),
                 'google' => false,
             ];
         }
 
         return array_merge($yabe_fonts, $bwf_fonts);
+    }
+
+    private function remove_google_fonts_list()
+    {
+        if (!defined('SLINGBLOCKS_PLUGIN_VERSION')) {
+            return;
+        }
+
+        $screen = get_current_screen();
+        if (is_admin() && $screen->is_block_editor()) {
+            if (!wp_script_is('slingblocks-editor', 'registered')) {
+                return;
+            }
+
+            wp_add_inline_script('slingblocks-editor', 'const WebFont = { load: () => {} }', 'before');
+        }
+    }
+
+    private function dequeue_webfont()
+    {
+        if (!defined('SLINGBLOCKS_PLUGIN_VERSION')) {
+            return;
+        }
+
+        wp_dequeue_script('web-font');
     }
 }
