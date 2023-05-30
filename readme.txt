@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/suabahasa
 Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.24-DEV
+Stable tag: 2.0.24
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,12 +55,19 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 - [Greenshift](https://greenshiftwp.com/)
 - [Spectra](https://wpspectra.com/)
 - [Classic Editor](https://wordpress.org/plugins/classic-editor/)
+- [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/)
 
 == Changelog ==
 
 = 2.0.24 =
+* **New**: The website has been redesigned, and the documentation is now available at [webfont.yabe.land](https://webfont.yabe.land)
+* **New**: [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) integration
 * **Improve**: Performance optimization
+* **[Beaver Builder] Improve**: Disable built-in Google Fonts programatically
+* **[Breakdance] Improve**: Ensure compatibility with Breakdance 1.3.0 and later
+* **[Cwicly] Change**: Register the font using the new font system introduced in Cwicly [1.2.9.5](https://discourse.cwicly.com/t/1-2-9-5/2563)
 * **[GeneratePress] New**: GenerateBlocks 1.8.0 and later integration
+* **[Zion Builder] Fix**: Font list not showing on the visual editor
 
 = 2.0.23 =
 * **New**: Export and import
@@ -77,8 +84,8 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 * **New**: Search Google Fonts by category with the `:` prefix. For example, `:sans-serif`  will search for all fonts in the sans-serif category
 * **New**: CSS custom properties (variables) with pattern `--ywf--family-{font-slug}` for each family
 * **New**: Allow to define fallback font
-* **[Bricks] New**: Fallback font support
 * **[Breakdance] New**: Fallback font support
+* **[Bricks] New**: Fallback font support
 * **[Gutenberg] New**: Fallback font support
 
 = 2.0.19 =
@@ -93,9 +100,9 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 * **[Bricks] Improve**: Ensure compatibility with Bricks 1.7.1 and later
 
 = 2.0.16 =
-* **[Bricks] Improve**: Font items on the Bricks editor is now grouped under the `Yabe Webfont` category
 * **Improve**: Regenerate the font files url with the new attachment url
 * **Fix**: Import Google Fonts form is not resetting properly after successful import
+* **[Bricks] Improve**: Font items on the Bricks editor is now grouped under the `Yabe Webfont` category
 
 = 2.0.15 =
 * **New**: Hide font files from Media Library
@@ -134,19 +141,19 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 = 2.0.5 =
 * **Improve**: Sync the cache generation
 * **Improve**: Add submenu to all page builders integration
-* **[Gutenberg] Improve**: Support non block-based theme
-* **[Elementor] Improve**: Force disable the built-in Google Fonts and override the `Elementor > Settings > Advanced: Google Fonts` setting
-* **[Bricks] Improve**: Force disable the built-in Google Fonts and override the `Bricks > Settings > Performance: Disable Google Fonts` setting
-* **[Oxygen] Improve**: Force disable the built-in Google Fonts and override the `Oxygen > Settings > Bloat Eliminator: Disable Google Fonts` setting
 * **Fix**: Issue with the plugin upgrade for the upcoming version
 * **Fix**: Revert the admin notices style to WordPress default
+* **[Bricks] Improve**: Force disable the built-in Google Fonts and override the `Bricks > Settings > Performance: Disable Google Fonts` setting
+* **[Elementor] Improve**: Force disable the built-in Google Fonts and override the `Elementor > Settings > Advanced: Google Fonts` setting
+* **[Gutenberg] Improve**: Support non block-based theme
+* **[Oxygen] Improve**: Force disable the built-in Google Fonts and override the `Oxygen > Settings > Bloat Eliminator: Disable Google Fonts` setting
 
 = 2.0.4 =
 * **New**: [Greenshift](https://greenshiftwp.com/) integration
 * **Improve**: Better variable fonts support for Google Fonts
 * **Improve**: Delete all fonts file associated with the deleted font
-* **[Oxygen] Improve**: Disable Elegant Custom Fonts plugin
 * **Fix**: Scheduled cache generation not cleared properly on manual action
+* **[Oxygen] Improve**: Disable Elegant Custom Fonts plugin
 
 = 2.0.3 =
 * **New**: [Breakdance](https://breakdance.com/ref/165/) integration
@@ -165,17 +172,17 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 * **New**: New plugin interface
 * **New**: Custom fonts management
 * **New**: Editable imported Google Fonts
-* **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
-* **New**: [Bricks](https://bricksbuilder.io/) integration
-* **New**: [Oxygen](https://oxygenbuilder.com/) integration
-* **New**: [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) integration
-* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration
-* **New**: [Zion Builder](https://zionbuilder.io/) integration
-* **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
-* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
-* **New**: [GeneratePress](https://generatepress.com/?ref=7954) integration
 * **Fix**: Some Google Fonts with variable fonts are not loaded properly
 * **Change**: Plugin admin menu moved to `Appearance → Yabe Webfont`
+* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
+* **New**: [Bricks](https://bricksbuilder.io/) integration
+* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration
+* **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
+* **New**: [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) integration
+* **New**: [GeneratePress](https://generatepress.com/?ref=7954) integration
+* **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
+* **New**: [Oxygen](https://oxygenbuilder.com/) integration
+* **New**: [Zion Builder](https://zionbuilder.io/) integration
 
 = 1.0.0 =
 * 🐣 Initial release.
