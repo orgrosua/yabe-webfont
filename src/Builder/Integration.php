@@ -92,7 +92,7 @@ class Integration
         }
 
         // Cache the Builders
-        set_transient($transient_name, $this->builders);
+        set_transient($transient_name, $this->builders, DAY_IN_SECONDS);
     }
 
     /**
