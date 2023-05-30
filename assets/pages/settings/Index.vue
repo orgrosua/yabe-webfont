@@ -206,6 +206,9 @@ onBeforeMount(() => {
         .then(data => {
             options.value = cloneDeep(data.options);
         })
+        .then(() => {
+            adobe_font_kit.value = options.value.adobe_fonts?.kit;
+        })
         .catch(function (error) {
             notifier.alert(error.message);
         })
