@@ -26,7 +26,9 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->cwicly_build_cache(), 1_000_001);
+        add_filter('rest_request_before_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->deregister_fonts_list($response, $handler, $wprestRequest), 1_000_001, 3);
+        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->register_fonts_list($response, $handler, $wprestRequest), 1_000_001, 3);
+
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('cwicly'), 1_000_001);
     }
 
@@ -35,34 +37,73 @@ class Main implements BuilderInterface
         return 'cwicly';
     }
 
-    public function cwicly_build_cache()
+    /**
+     * @see https://github.com/WordPress/wordpress-develop/blob/ea08277674413b9853aa19df6ecc23841de894b6/src/wp-includes/rest-api/class-wp-rest-server.php#L1197
+     * @param \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed $response
+     * @param array $handler  Route handler used for the request.
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
+     */
+    public function register_fonts_list($response, $handler, $request)
     {
-        if (! defined('CWICLY_VERSION')) {
-            return;
-        }
+        if ($request->get_route() === '/cwicly/v1/editor_start' && is_array($response)) {
+            $font_families = Font::get_font_families();
 
-        $font_cols = get_option('cwicly_font_cols', []);
+            if (is_bool($response['localactivefonts'])) {
+                $response['localactivefonts'] = [];
+            }
 
-        if (! is_array($font_cols)) {
-            $font_cols = json_decode($font_cols, true, 512, JSON_THROW_ON_ERROR);
-        }
+            foreach ($font_families as $font_family) {
+                $key = sprintf('custom-yabe-%s', Font::slugify($font_family['family']));
 
-        $font_families = Font::get_font_families();
+                $f = [
+                    'family' => $font_family['family'],
+                    'fonts' => [],
+                    'type' => 'custom',
+                    'category' => 'Sans Serif',
+                    'display' => 'swap',
+                    'subsets' => [],
+                    'axes' => [],
+                ];
 
-        foreach ($font_cols as $k => $v) {
-            if ($v === []) {
-                unset($font_cols[$k]);
+                $response['localfonts'][$key] = $f;
+
+                array_push($response['localactivefonts'], $key);
             }
         }
 
-        foreach ($font_families as $font_family) {
-            if (! array_key_exists($font_family['family'], $font_cols)) {
-                $font_cols[$font_family['family']] = [];
+        return $response;
+    }
+
+    /**
+     * @see https://github.com/WordPress/wordpress-develop/blob/ea08277674413b9853aa19df6ecc23841de894b6/src/wp-includes/rest-api/class-wp-rest-server.php#L1197
+     * @param \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed $response
+     * @param array $handler  Route handler used for the request.
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
+     */
+    public function deregister_fonts_list($response, $handler, $request)
+    {
+        if ($request->get_route() === '/cwicly/v1/options') {
+            if ($request->get_param('option') === 'cwicly_local_fonts') {
+                $value = $request->get_param('value');
+
+                // remove array element with key 'custom-yabe-'
+                $value = array_filter($value, fn ($k) => !str_starts_with($k, 'custom-yabe-'), ARRAY_FILTER_USE_KEY);
+
+                $request->set_param('value', $value);
+            }
+
+            if ($request->get_param('option') === 'cwicly_local_active_fonts') {
+                $value = $request->get_param('value');
+
+                // remove array element with value 'custom-yabe-'
+                $value = array_filter($value, fn ($v) => !str_starts_with($v, 'custom-yabe-'));
+
+                $request->set_param('value', $value);
             }
         }
 
-        $font_cols = $font_cols !== [] ? json_encode($font_cols, JSON_THROW_ON_ERROR) : '{}';
-
-        update_option('cwicly_font_cols', $font_cols);
+        return $response;
     }
 }
