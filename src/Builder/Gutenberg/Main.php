@@ -58,16 +58,16 @@ class Main implements BuilderInterface
 
         $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies'] ?? [];
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
+        foreach ($fonts as $font) {
             /**
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
-                'name' => sprintf('[Yabe] %s', $font_family['title']),
-                'slug' => Font::slugify($font_family['family']),
-                'fontFamily' => Font::css_variable($font_family['family']),
+                'name' => sprintf('[Yabe] %s', $font['title']),
+                'slug' => Font::slugify($font['family']),
+                'fontFamily' => Font::css_variable($font['family']),
             ];
         }
 
@@ -94,16 +94,16 @@ class Main implements BuilderInterface
 
         $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies']['theme'] ?? [];
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
+        foreach ($fonts as $font) {
             /**
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
-                'name' => sprintf('[Yabe] %s', $font_family['title']),
-                'slug' => Font::slugify($font_family['family']),
-                'fontFamily' => Font::css_variable($font_family['family']),
+                'name' => sprintf('[Yabe] %s', $font['title']),
+                'slug' => Font::slugify($font['family']),
+                'fontFamily' => Font::css_variable($font['family']),
             ];
         }
 
@@ -150,11 +150,11 @@ class Main implements BuilderInterface
     {
         $inline_css = '';
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $inline_css .= sprintf(".has-%s-font-family {\n", Font::slugify($font_family['family']));
-            $inline_css .= sprintf("\tfont-family: %s !important;\n", Font::css_variable($font_family['family']));
+        foreach ($fonts as $font) {
+            $inline_css .= sprintf(".has-%s-font-family {\n", Font::slugify($font['family']));
+            $inline_css .= sprintf("\tfont-family: %s !important;\n", Font::css_variable($font['family']));
             $inline_css .= "}\n\n";
         }
 

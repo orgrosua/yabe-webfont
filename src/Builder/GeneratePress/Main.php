@@ -47,7 +47,7 @@ class Main implements BuilderInterface
          * @deprecated version 2.0.11
          * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
-        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_font_families(), 'family')), 1_000_001);
+        // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_fonts(), 'family')), 1_000_001);
 
         /**
          * Add custom font to GenerateBlocks.
@@ -64,7 +64,7 @@ class Main implements BuilderInterface
 
     public function generate_settings($opt)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
         if (! is_array($opt)) {
             $opt = [];
@@ -74,10 +74,10 @@ class Main implements BuilderInterface
             $opt['font_manager'] = [];
         }
 
-        foreach ($font_families as $font_family) {
-            if (! in_array($font_family['family'], array_column($opt['font_manager'], 'fontFamily'), true)) {
+        foreach ($fonts as $font) {
+            if (! in_array($font['family'], array_column($opt['font_manager'], 'fontFamily'), true)) {
                 $opt['font_manager'][] = [
-                    'fontFamily' => $font_family['family'],
+                    'fontFamily' => $font['family'],
                     'googleFont' => false,
                     'googleFontApi' => 0,
                 ];
@@ -105,21 +105,21 @@ class Main implements BuilderInterface
         return $opt;
     }
 
-    public function generateblocks_typography_font_family_list($fonts)
+    public function generateblocks_typography_font_family_list($gb_fonts)
     {
-        $get_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        $families = array_map(static function ($f) {
+        $yabe_fonts = array_map(static function ($f) {
             return [
                 'label' => $f['title'],
                 // 'value' => Font::css_variable($f['family']),
                 'value' => $f['family'],
             ];
-        }, $get_families);
+        }, $fonts);
 
         return array_merge([[
             'label' => 'Yabe Webfont',
-            'options' => $families,
-        ]], is_array($fonts) ? $fonts : iterator_to_array($fonts));
+            'options' => $yabe_fonts,
+        ]], is_array($gb_fonts) ? $gb_fonts : iterator_to_array($gb_fonts));
     }
 }

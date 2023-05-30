@@ -67,12 +67,14 @@ class Main implements BuilderInterface
     public function register_block_editor_assets()
     {
         if (wp_script_is('kadence-blocks-js', 'registered')) {
-            $fonts = [];
+            $yabe_fonts = [];
 
-            foreach (Font::get_font_families() as $font_family) {
-                $fonts[] = [
-                    'label' => $font_family['title'],
-                    'value' => $font_family['family'],
+            $fonts = Font::get_fonts();
+
+            foreach ($fonts as $font) {
+                $yabe_fonts[] = [
+                    'label' => $font['title'],
+                    'value' => $font['family'],
                     'google' => false,
                     'weights' => [
                         [
@@ -127,14 +129,14 @@ class Main implements BuilderInterface
 
             wp_enqueue_script('yabe-webfont-for-kadence-blocks', plugin_dir_url(__FILE__) . '/assets/script/kadence-blocks.js', ['kadence-blocks-js'], Plugin::VERSION, true);
             wp_localize_script('yabe-webfont-for-kadence-blocks', 'yabeWebfontKadenceBlocks', [
-                'fonts' => $fonts,
+                'fonts' => $yabe_fonts,
             ]);
         }
     }
 
-    public function theme_custom_fonts($fonts)
+    public function theme_custom_fonts($kadence_fonts)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
         $v = [
             '100',
@@ -157,12 +159,12 @@ class Main implements BuilderInterface
             '900italic',
         ];
 
-        foreach ($font_families as $font_family) {
-            $fonts[$font_family['family']] = [
+        foreach ($fonts as $font) {
+            $kadence_fonts[$font['family']] = [
                 'v' => $v,
             ];
         }
 
-        return $fonts;
+        return $kadence_fonts;
     }
 }

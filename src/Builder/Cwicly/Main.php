@@ -26,8 +26,8 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('rest_request_before_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->deregister_fonts_list($response, $handler, $wprestRequest), 1_000_001, 3);
-        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->register_fonts_list($response, $handler, $wprestRequest), 1_000_001, 3);
+        add_filter('rest_request_before_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->deregister_fonts($response, $handler, $wprestRequest), 1_000_001, 3);
+        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->register_fonts($response, $handler, $wprestRequest), 1_000_001, 3);
 
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('cwicly'), 1_000_001);
     }
@@ -44,20 +44,20 @@ class Main implements BuilderInterface
      * @param \WP_REST_Request $request
      * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
      */
-    public function register_fonts_list($response, $handler, $request)
+    public function register_fonts($response, $handler, $request)
     {
         if ($request->get_route() === '/cwicly/v1/editor_start' && is_array($response)) {
-            $font_families = Font::get_font_families();
+            $fonts = Font::get_fonts();
 
             if (is_bool($response['localactivefonts'])) {
                 $response['localactivefonts'] = [];
             }
 
-            foreach ($font_families as $font_family) {
-                $key = sprintf('custom-yabe-%s', Font::slugify($font_family['family']));
+            foreach ($fonts as $font) {
+                $key = sprintf('custom-yabe-%s', Font::slugify($font['family']));
 
                 $f = [
-                    'family' => $font_family['family'],
+                    'family' => $font['family'],
                     'fonts' => [],
                     'type' => 'custom',
                     'category' => 'Sans Serif',
@@ -82,7 +82,7 @@ class Main implements BuilderInterface
      * @param \WP_REST_Request $request
      * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
      */
-    public function deregister_fonts_list($response, $handler, $request)
+    public function deregister_fonts($response, $handler, $request)
     {
         if ($request->get_route() === '/cwicly/v1/options') {
             if ($request->get_param('option') === 'cwicly_local_fonts') {

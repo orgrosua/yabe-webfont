@@ -44,14 +44,14 @@ class Main implements BuilderInterface
         return 'elementor';
     }
 
-    public function filter_elementor_fonts($fonts)
+    public function filter_elementor_fonts($elementor_fonts)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $fonts[$font_family['family']] = 'yabe-webfont';
+        foreach ($fonts as $font) {
+            $elementor_fonts[$font['family']] = 'yabe-webfont';
         }
 
-        return $fonts;
+        return $elementor_fonts;
     }
 }

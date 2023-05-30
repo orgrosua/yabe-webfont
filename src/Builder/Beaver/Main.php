@@ -36,21 +36,19 @@ class Main implements BuilderInterface
         return 'beaver';
     }
 
-    public function custom_fonts($fonts)
+    public function custom_fonts($fl_fonts)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        $families = [];
+        $yabe_fonts = [];
 
-        foreach ($font_families as $font_family) {
-            $families[$font_family['family']] = [
+        foreach ($fonts as $font) {
+            $yabe_fonts[$font['family']] = [
                 'fallback' => '',
                 'weights' => ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
             ];
         }
 
-        $fonts = array_merge($families, $fonts);
-
-        return $fonts;
+        return array_merge($yabe_fonts, $fl_fonts);
     }
 }

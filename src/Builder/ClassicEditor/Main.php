@@ -40,10 +40,10 @@ class Main implements BuilderInterface
     {
         $theme_advanced_fonts = '';
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $theme_advanced_fonts .= sprintf('[Yabe] %s=%s;', $font_family['title'], $font_family['family']);
+        foreach ($fonts as $font) {
+            $theme_advanced_fonts .= sprintf('[Yabe] %s=%s;', $font['title'], $font['family']);
         }
 
         $mceInit['font_formats'] = $theme_advanced_fonts . 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats';

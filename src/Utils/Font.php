@@ -20,15 +20,15 @@ namespace Yabe\Webfont\Utils;
  */
 class Font
 {
-    public static function get_font_families(): array
+    public static function get_fonts(): array
     {
-        $families = wp_cache_get('get_font_families', YABE_WEBFONT_OPTION_NAMESPACE);
+        $fonts = wp_cache_get('get_fonts', YABE_WEBFONT_OPTION_NAMESPACE);
 
-        if ($families === false) {
+        if ($fonts === false) {
             /** @var wpdb $wpdb */
             global $wpdb;
 
-            $families = [];
+            $fonts = [];
 
             $sql = "
                 SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts 
@@ -75,13 +75,13 @@ class Font
                     $f['fallback_family'] = isset($selectorParts[1]) ? $selectorParts[1] : null;
                 }
 
-                $families[] = $f;
+                $fonts[] = $f;
             }
 
-            wp_cache_set('get_font_families', $families, YABE_WEBFONT_OPTION_NAMESPACE);
+            wp_cache_set('get_fonts', $fonts, YABE_WEBFONT_OPTION_NAMESPACE);
         }
 
-        return $families;
+        return $fonts;
     }
 
     /**

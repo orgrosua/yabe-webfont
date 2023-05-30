@@ -52,12 +52,12 @@ class Main implements BuilderInterface
                 if (! array_key_exists('custom_fonts', $data['fonts_list'])) {
                     $data['fonts_list']['custom_fonts'] = [];
                 }
-                $font_families = Font::get_font_families();
+                $fonts = Font::get_fonts();
 
-                foreach ($font_families as $font_family) {
+                foreach ($fonts as $font) {
                     $data['fonts_list']['custom_fonts'][] = [
-                        'id' => $font_family['family'],
-                        'name' => '[Yabe] ' . $font_family['title'],
+                        'id' => $font['family'],
+                        'name' => '[Yabe] ' . $font['title'],
                     ];
                 }
 

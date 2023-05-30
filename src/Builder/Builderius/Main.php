@@ -46,7 +46,7 @@ class Main implements BuilderInterface
             return;
         }
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
         $inline_script_content = <<<JS
 const moduleTypography = builderiusBackend.settingsList?.module?.advanced?.typography?.find((item) => item.name === 'font');
@@ -54,7 +54,7 @@ const moduleTypography = builderiusBackend.settingsList?.module?.advanced?.typog
 if (moduleTypography) {
     moduleTypography.options.fontType.values.push('Yabe Webfont');
     moduleTypography.options.genericFamily.values['Yabe Webfont'] = ['Yabe Webfont'];
-    moduleTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFamilies;
+    moduleTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFonts;
 }
 
 const GlobalTypography = builderiusBackend.settingsList?.global?.advanced?.typography?.find((item) => item.name === 'font');
@@ -62,7 +62,7 @@ const GlobalTypography = builderiusBackend.settingsList?.global?.advanced?.typog
 if (GlobalTypography) {
     GlobalTypography.options.fontType.values.push('Yabe Webfont');
     GlobalTypography.options.genericFamily.values['Yabe Webfont'] = ['Yabe Webfont'];
-    GlobalTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFamilies;
+    GlobalTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFonts;
 }
 
 const templateTypography = builderiusBackend.settingsList?.template?.advanced?.typography?.find((item) => item.name === 'font');
@@ -70,10 +70,10 @@ const templateTypography = builderiusBackend.settingsList?.template?.advanced?.t
 if (templateTypography) {
     templateTypography.options.fontType.values.push('Yabe Webfont');
     templateTypography.options.genericFamily.values['Yabe Webfont'] = ['Yabe Webfont'];
-    templateTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFamilies;
+    templateTypography.options.fontFamily.values['Yabe Webfont.Yabe Webfont'] = yabeWebfontBuilderiusFonts;
 }
 JS;
-        wp_add_inline_script('builderius-builder', 'const yabeWebfontBuilderiusFamilies = ' . json_encode(array_column($font_families, 'family'), JSON_THROW_ON_ERROR), 'before');
+        wp_add_inline_script('builderius-builder', 'const yabeWebfontBuilderiusFonts = ' . json_encode(array_column($fonts, 'family'), JSON_THROW_ON_ERROR), 'before');
         wp_add_inline_script('builderius-builder', $inline_script_content, 'before');
     }
 }

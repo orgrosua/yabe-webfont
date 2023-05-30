@@ -45,12 +45,12 @@ class Main implements BuilderInterface
     public function select_font_globally()
     {
         $global_fonts = [];
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
+        foreach ($fonts as $font) {
             $global_fonts[] = [
-                'value' => $font_family['family'],
-                'label' => '[Yabe] ' . $font_family['title'],
+                'value' => $font['family'],
+                'label' => '[Yabe] ' . $font['title'],
             ];
         }
 

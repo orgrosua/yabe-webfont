@@ -32,10 +32,10 @@ class Main implements BuilderInterface
             // 1.2.1 is the last breakpoint version that supports the old font registration method
             if (version_compare(__BREAKDANCE_VERSION, '1.2.1', '>')) {
                 remove_action('breakdance_register_fonts', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
-                add_action('breakdance_register_fonts', fn (FontsController $fontsController) => $this->register_font_families($fontsController), -1_000_001);
+                add_action('breakdance_register_fonts', fn (FontsController $fontsController) => $this->register_fonts($fontsController), -1_000_001);
             } else {
                 remove_action('init', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
-                add_action('breakdance_loaded', fn () => $this->register_font_families_v10201(), 1_000_001);
+                add_action('breakdance_loaded', fn () => $this->register_fonts_v10201(), 1_000_001);
             }
         }
 
@@ -47,14 +47,14 @@ class Main implements BuilderInterface
         return 'breakdance';
     }
 
-    public function register_font_families(FontsController $fontsController)
+    public function register_fonts(FontsController $fontsController)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $cssName = Font::css_variable($font_family['family']);
-            $dropdownLabel = sprintf('[Yabe] %s', $font_family['title']);
-            $fallbackString = $font_family['fallback_family'] ?? '';
+        foreach ($fonts as $font) {
+            $cssName = Font::css_variable($font['family']);
+            $dropdownLabel = sprintf('[Yabe] %s', $font['title']);
+            $fallbackString = $font['fallback_family'] ?? '';
             $dependencies = [
                 'styles' => [
                     // Cache::get_cache_url(Cache::CSS_CACHE_FILE),
@@ -62,7 +62,7 @@ class Main implements BuilderInterface
             ];
 
             $fontsController->registerFont(
-                Font::slugify($font_family['family']),
+                Font::slugify($font['family']),
                 $cssName,
                 $dropdownLabel,
                 $fallbackString,
@@ -71,14 +71,14 @@ class Main implements BuilderInterface
         }
     }
 
-    public function register_font_families_v10201()
+    public function register_fonts_v10201()
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $cssName = Font::css_variable($font_family['family']);
-            $dropdownLabel = sprintf('[Yabe] %s', $font_family['title']);
-            $fallbackString = $font_family['fallback_family'];
+        foreach ($fonts as $font) {
+            $cssName = Font::css_variable($font['family']);
+            $dropdownLabel = sprintf('[Yabe] %s', $font['title']);
+            $fallbackString = $font['fallback_family'];
             $dependencies = [
                 'styles' => [
                     // Cache::get_cache_url(Cache::CSS_CACHE_FILE),
@@ -86,7 +86,7 @@ class Main implements BuilderInterface
             ];
 
             \Breakdance\Fonts\registerFont(
-                Font::slugify($font_family['family']),
+                Font::slugify($font['family']),
                 $cssName,
                 $dropdownLabel,
                 $fallbackString,

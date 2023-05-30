@@ -41,17 +41,17 @@ class Main implements BuilderInterface
         return 'divi';
     }
 
-    public function filter_divi_fonts($fonts)
+    public function filter_divi_fonts($divi_fonts)
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $fonts[$font_family['family']] = [
+        foreach ($fonts as $font) {
+            $divi_fonts[$font['family']] = [
                 'type' => 'serif',
             ];
         }
 
-        return $fonts;
+        return $divi_fonts;
     }
 
     public function et_google_api_settings($opt)

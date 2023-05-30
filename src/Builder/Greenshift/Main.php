@@ -37,10 +37,10 @@ class Main implements BuilderInterface
     {
         $localfonts = (! empty($localfont)) ? json_decode($localfont, true) : [];
 
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        foreach ($font_families as $font_family) {
-            $localfonts[$font_family['family']] = [];
+        foreach ($fonts as $font) {
+            $localfonts[$font['family']] = [];
         }
 
         return json_encode($localfonts);

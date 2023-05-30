@@ -36,18 +36,18 @@ class Main implements BuilderInterface
 
     private function add_block_fonts(array $bwf_fonts): array
     {
-        $font_families = Font::get_font_families();
+        $fonts = Font::get_fonts();
 
-        $fonts = [];
+        $yabe_fonts = [];
 
-        foreach ($font_families as $font_family) {
-            $fonts[] = [
-                'label' => $font_family['title'],
-                'value' => Font::css_variable($font_family['family']),
+        foreach ($fonts as $font) {
+            $yabe_fonts[] = [
+                'label' => $font['title'],
+                'value' => Font::css_variable($font['family']),
                 'google' => false,
             ];
         }
 
-        return array_merge($fonts, $bwf_fonts);
+        return array_merge($yabe_fonts, $bwf_fonts);
     }
 }
