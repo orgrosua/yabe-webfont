@@ -33,12 +33,12 @@ final class Plugin
     /**
      * @var string
      */
-    public const VERSION = '2.0.26';
+    public const VERSION = '2.0.27';
 
     /**
      * @var int
      */
-    public const VERSION_ID = 20026;
+    public const VERSION_ID = 20027;
 
     /**
      * @var int
@@ -53,7 +53,7 @@ final class Plugin
     /**
      * @var int
      */
-    public const RELEASE_VERSION = 26;
+    public const RELEASE_VERSION = 27;
 
     /**
      * @var string
@@ -265,9 +265,15 @@ final class Plugin
 
     /**
      * Initialize the plugin updater.
+     *
+     * @return PluginUpdater
      */
     public function maybe_update_plugin()
     {
+        if ($this->plugin_updater !== null) {
+            return $this->plugin_updater;
+        }
+
         $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
             'key' => '',
             'opt_in_pre_release' => false,
@@ -285,11 +291,12 @@ final class Plugin
                 'author' => YABE_WEBFONT_EDD_STORE['author'],
             ]
         );
+
+        return $this->plugin_updater;
     }
 
     /**
-     * Check if the plugin distributed with an embedded license.
-     * If so, activate the license.
+     * Check if the plugin distributed with an embedded license and activate the license.
      */
     private function maybe_embedded_license(): void
     {
@@ -315,5 +322,8 @@ final class Plugin
         ]);
 
         unlink($license_file);
+
+        // activate the license.
+        $this->maybe_update_plugin()->activate($license_key);
     }
 }
