@@ -34,7 +34,7 @@ class Main implements BuilderInterface
          * Disable GenerateBlocks's built-in Google Fonts.
          */
         add_filter('generateblocks_option_defaults', fn ($value) => $this->filter_generateblocks_option_defaults($value), 1_000_001, 1);
-        add_filter('option_generateblocks', static fn ($value, $option) => $this->filter_option_generateblocks($value), 1_000_001, 2);
+        add_filter('option_generateblocks', fn ($value, $option) => $this->filter_option_generateblocks($value), 1_000_001, 2);
 
         /**
          * Add custom font to GeneratePress.
