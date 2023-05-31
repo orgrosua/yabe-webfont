@@ -33,12 +33,12 @@ final class Plugin
     /**
      * @var string
      */
-    public const VERSION = '2.0.25';
+    public const VERSION = '2.0.26';
 
     /**
      * @var int
      */
-    public const VERSION_ID = 20025;
+    public const VERSION_ID = 20026;
 
     /**
      * @var int
@@ -53,7 +53,7 @@ final class Plugin
     /**
      * @var int
      */
-    public const RELEASE_VERSION = 25;
+    public const RELEASE_VERSION = 26;
 
     /**
      * @var string
@@ -191,6 +191,8 @@ final class Plugin
 
         update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
 
+        $this->maybe_embedded_license();
+
         do_action('a!yabe/webfont/plugins:activate_plugin_end');
     }
 
@@ -283,5 +285,35 @@ final class Plugin
                 'author' => YABE_WEBFONT_EDD_STORE['author'],
             ]
         );
+    }
+
+    /**
+     * Check if the plugin distributed with an embedded license.
+     * If so, activate the license.
+     */
+    private function maybe_embedded_license(): void
+    {
+        $license_file = dirname(YABE_WEBFONT_FILE) . '/license-data.php';
+
+        if (! file_exists($license_file)) {
+            return;
+        }
+
+        require_once $license_file;
+
+        $const_name = 'ROSUA_EMBEDDED_LICENSE_KEY_' . YABE_WEBFONT_EDD_STORE['item_id'];
+
+        if (! defined($const_name)) {
+            return;
+        }
+
+        $license_key = constant($const_name);
+
+        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
+            'key' => $license_key,
+            'opt_in_pre_release' => false,
+        ]);
+
+        unlink($license_file);
     }
 }
