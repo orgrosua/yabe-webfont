@@ -78,7 +78,7 @@ class Main implements BuilderInterface
         foreach ($fonts as $font) {
             $cssName = Font::css_variable($font['family']);
             $dropdownLabel = sprintf('[Yabe] %s', $font['title']);
-            $fallbackString = $font['fallback_family'];
+            $fallbackString = $font['fallback_family'] ?? '';
             $dependencies = [
                 'styles' => [
                     // Cache::get_cache_url(Cache::CSS_CACHE_FILE),
