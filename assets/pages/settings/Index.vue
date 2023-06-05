@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-mb-6">
+    <div v-if="!yabeWebfont.lite_edition" class="tw-mb-6">
         <table class="form-table" role="presentation">
             <tbody>
                 <tr>

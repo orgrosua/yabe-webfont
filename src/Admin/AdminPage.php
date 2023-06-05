@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Admin;
 
+use EDD_SL\PluginUpdater;
 use WP_Query;
 use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
@@ -107,6 +108,7 @@ class AdminPage
             'assets' => [
                 'url' => plugin_dir_url(YABE_WEBFONT_FILE),
             ],
+            'lite_edition' => !class_exists(PluginUpdater::class),
             'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', defined('YABE_SELF_HOSTED_WAKUFONT') ? constant('YABE_SELF_HOSTED_WAKUFONT') : YABE_WEBFONT_HOSTED_WAKUFONT), '/'),
         ]);
     }

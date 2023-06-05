@@ -122,7 +122,7 @@ class Common
                 wp_redirect($location);
             }
         } else {
-            echo '<meta http-equiv="refresh" content="0;url=' . $location . '">';
+            echo '<meta http-equiv="refresh" content="0;url=' . esc_url($location) . '">';
         }
         exit;
     }

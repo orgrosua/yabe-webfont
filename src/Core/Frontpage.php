@@ -25,7 +25,10 @@ final class Frontpage
 {
     public function __construct()
     {
-        add_action('wp_head', fn () => $this->append_header(), 1_000_001);
+        /**
+         * @see wp-includes\default-filters.php for the priority.
+         */
+        add_action('wp_head', fn () => $this->append_header(), 4);
     }
 
     public static function enqueue_css_cache()

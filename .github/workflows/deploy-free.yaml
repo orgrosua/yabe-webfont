@@ -1,6 +1,6 @@
 # builds the content of http://github.com/orgrosua/yabe-webfont
 # inspiration from https://github.com/rectorphp/rector-src/blob/main/.github/workflows/build_scoped_rector.yaml
-name: Build release of Yabe Webfont
+name: Build FREE
 
 on:
   push:
@@ -33,6 +33,16 @@ jobs:
           with:
             fetch-depth: 0
 
+        # Get the current tag from github.ref, where the tag name is the version number.
+        # tag name pattern: X.Y.Z, where X, Y, Z are integers
+        # reduce the X by 1, then build the tag name
+        # save the tag name as `TAG_NAME` variable to file $GITHUB_ENV
+        # Note, set-output is deprecated, so use alternative instead of ::set-output
+        - name: "Get the current tag"
+          id: get_tag
+          run: |
+            echo "TAG_NAME=$(echo ${GITHUB_REF#refs/tags/} | awk -F. '{print $1-1"."$2"."$3}')" >> $GITHUB_ENV
+
         # clean up the dev files
         - run: rm -rf ecs.php rector.php
 
@@ -58,6 +68,26 @@ jobs:
           # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
           env:
             COMPOSER_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}
+
+        # remove this folders, as it exclusive for the premium version
+        # - src/Builder/Beaver
+        # - src/Builder/Breakdance
+        # - src/Builder/Bricks
+        # - src/Builder/Builderius
+        # - src/Builder/Cwicly
+        # - src/Builder/Divi
+        # - src/Builder/FunnelKit
+        # - src/Builder/Greenshift
+        # - src/Builder/Oxygen
+        # - src/Builder/Spectra
+        # - src/Builder/Zion
+        - run: rm -rf src/Builder/{Beaver,Breakdance,Bricks,Builderius,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,Spectra,Zion}
+
+        # remove custom update library
+        - run: composer remove rosua/edd-sl-plugin-updater --ansi
+
+        # decrease the version
+        - run: php ./deploy/decrease-version.php
 
         # install only prod dependencies
         - run: composer install --no-dev --ansi
@@ -101,21 +131,29 @@ jobs:
           run: echo ::set-output name=log::$(git log ${{ github.event.before }}..${{ github.event.after }} --reverse --pretty='%H %s' | sed -e 's/^/https:\/\/github.com\/orgrosua\/yabe-webfont-src\/commit\//')
 
         # publish it to remote repository without tag
-        - name: "Commit Prefixed - main"
-          working-directory: remote-repository
-          if: "!startsWith(github.ref, 'refs/tags/')"
-          run: |
-            git add --all
-            git commit -m "Updated Yabe Webfont to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
-            git push --quiet origin main
+        # - name: "Commit Prefixed - main"
+        #   working-directory: remote-repository
+        #   if: "!startsWith(github.ref, 'refs/tags/')"
+        #   run: |
+        #     git add --all
+        #     git commit -m "Updated Yabe Webfont to commit ${{ github.event.after }}" -m "${{ steps.git-log.outputs.log }}"
+        #     git push --quiet origin main
 
-        # publish it to remote repository with tag
+        # publish it to remote repository with tag, where the tag is from the previous step, env.TAG_NAME
         - name: "Commit Prefixed - tag"
           working-directory: remote-repository
           if: "startsWith(github.ref, 'refs/tags/')"
+          # run: |
+          #   git add --all
+          #   git commit -m "Yabe Webfont ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+          #   git push --quiet origin main
+          #   git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
+          #   git push --quiet origin ${GITHUB_REF#refs/tags/}
           run: |
             git add --all
-            git commit -m "Yabe Webfont ${GITHUB_REF#refs/tags/}" -m "${{ steps.git-log.outputs.log }}"
+            git commit -m "Yabe Webfont ${{env.TAG_NAME}}" -m "${{ steps.git-log.outputs.log }}"
             git push --quiet origin main
-            git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
-            git push --quiet origin ${GITHUB_REF#refs/tags/}
+            git tag ${{env.TAG_NAME}} -m "${{env.TAG_NAME}}"
+            git push --quiet origin ${{env.TAG_NAME}}
+
+        # TODO: publish to WordPress.org SVN repo once the plugin is approved

@@ -33,12 +33,12 @@ final class Plugin
     /**
      * @var string
      */
-    public const VERSION = '2.0.28';
+    public const VERSION = '2.0.29-DEV';
 
     /**
      * @var int
      */
-    public const VERSION_ID = 20028;
+    public const VERSION_ID = 20029;
 
     /**
      * @var int
@@ -53,19 +53,19 @@ final class Plugin
     /**
      * @var int
      */
-    public const RELEASE_VERSION = 28;
+    public const RELEASE_VERSION = 29;
 
     /**
      * @var string
      */
-    public const EXTRA_VERSION = '';
+    public const EXTRA_VERSION = 'DEV';
 
     /**
      * Easy Digital Downloads Software Licensing integration wrapper.
      *
-     * @var PluginUpdater
+     * @var PluginUpdater|null
      */
-    public $plugin_updater;
+    public $plugin_updater = null;
 
     /**
      * Stores the instance, implementing a Singleton pattern.
@@ -105,7 +105,7 @@ final class Plugin
      */
     public static function get_instance(): self
     {
-        if (! isset(self::$instance)) {
+        if (!isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -229,9 +229,9 @@ final class Plugin
                 foreach ($messages as $message) {
                     echo sprintf(
                         '<div class="notice notice-%s is-dismissible %s">%s</div>',
-                        $message['status'],
+                        esc_attr($message['status']),
                         YABE_WEBFONT_OPTION_NAMESPACE,
-                        $message['message']
+                        esc_html($message['message'])
                     );
                 }
             }
@@ -265,11 +265,16 @@ final class Plugin
 
     /**
      * Initialize the plugin updater.
+     * Pro version only.
      *
      * @return PluginUpdater
      */
     public function maybe_update_plugin()
     {
+        if (!class_exists(PluginUpdater::class)) {
+            return null;
+        }
+
         if ($this->plugin_updater !== null) {
             return $this->plugin_updater;
         }
@@ -297,12 +302,17 @@ final class Plugin
 
     /**
      * Check if the plugin distributed with an embedded license and activate the license.
+     * Pro version only.
      */
     private function maybe_embedded_license(): void
     {
+        if (!class_exists(PluginUpdater::class)) {
+            return;
+        }
+
         $license_file = dirname(YABE_WEBFONT_FILE) . '/license-data.php';
 
-        if (! file_exists($license_file)) {
+        if (!file_exists($license_file)) {
             return;
         }
 
@@ -310,7 +320,7 @@ final class Plugin
 
         $const_name = 'ROSUA_EMBEDDED_LICENSE_KEY_' . YABE_WEBFONT_EDD_STORE['item_id'];
 
-        if (! defined($const_name)) {
+        if (!defined($const_name)) {
             return;
         }
 
