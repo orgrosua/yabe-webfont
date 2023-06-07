@@ -157,3 +157,11 @@ jobs:
             git push --quiet origin ${{env.TAG_NAME}}
 
         # TODO: publish to WordPress.org SVN repo once the plugin is approved
+        # deploy to WordPress.org SVN repository
+        # - name: WordPress Plugin Deploy
+        #   uses: 10up/action-wordpress-plugin-deploy@stable
+        #   env:
+        #     SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+        #     SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+        #     SLUG: yabe-webfont
+        #     BUILD_DIR: orgrosua-prefixed

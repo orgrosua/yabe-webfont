@@ -1,63 +1,59 @@
 === Yabe Webfont ===
 Contributors: suabahasa
-Donate link: https://ko-fi.com/suabahasa
-Tags: custom fonts, google fonts, adobe fonts, self-hosting, performance, gdpr, bricks, oxygen, elementor, cwicly, zion builder, classic editor, beaver builder, generatepress, kadence, greenshift, breakdance, divi
+Donate link: https://ko-fi.com/Q5Q75XSF7
+Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.29-DEV
+Stable tag: 2.0.29
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Custom fonts management and self-host Google Fonts with seamless WordPress page builders integration
+Self-host Google Fonts and the dedicated custom fonts manager for WordPress with seamless visual/page builders integration.
 
 == Description ==
 
-Yabe Webfont helps you use custom fonts on WordPress and easily self-host the Google Fonts.
+### Yabe Webfont: the #1 Self-host Google Fonts and Custom Fonts Manager for WordPress
 
-Leverage Browser Cache, reduce DNS lookups/requests, reduce Cumulative Layout Shift and make your Google Fonts 100% GDPR compliant.
+Yabe Webfont is a GDPR-friendly font WordPress plugin made for designers and developers that is advanced, easy to use, and intuitive to give you complete control over your fonts and typography in WordPress.
 
-### GDPR Compliant
+### FEATURES
 
-The European Union's General Data Protection Regulation (GDPR) is a regulation in EU law on data protection and privacy for all individuals within the European Union.
-When using a Google Font on your website, you are required to get to get the consent from visitors before displaying the font.
-You can avoid this by self-hosting the font on your website and not need to show your website visitors the GDPR-compliant cookie consent banner.
+Yabe Webfont is packed full of features, designed to streamline your workflow. Some of our favourites are:
 
-### Performance
+* **GDPR / DSGVO friendly**: Allows you to import/self-hosting Google Fonts files from your server through your WordPress admin page. Fewer reasons to worry about GDPR / DSGVO compliance.
+* **Google Fonts and Adobe Fonts ready**: Start using any available fonts on Google Fonts and Adobe Fonts.
+* **Custom Fonts**: A dedicated custom fonts manager for WordPress. The central place to manage all your fonts and typography. 
+* **Easy to use**: Add custom fonts to your WordPress site with a simple and intuitive interface. No coding knowledge is needed. You can upload the font files using the WordPress media uploader. No FTP is required.
+* **Fine-tuning**: A complete control over your fonts and typography. On 90% of use cases, the default one is good to go.
+* **Lightweight and blazingly fast**: The font management system uses WordPress REST API and a modern JavaScript framework for an instant, responsive user experience. The front page cache ensures fast loading and reduces database queries.
+* **Variable Fonts support**: Variable fonts format allow a single font file to contain multiple stylistic variations.
 
-Serving the font file from your own server will improve the website performance by reducing DNS lookups/requests and leverage Browser Cache.
-It will also reduce the Cumulative Layout Shift (CLS) and improve the Core Web Vitals.
+### SEAMSLESS INTEGRATION
 
-### User friendly
+The font must be available for use across different platforms. Yabe Webfont is famous for seamlessly integrating with the most popular visual/page builders:
 
-The plugin is designed to be user friendly and easy to use. It just require a few clicks!
-
-- **Custom Fonts** — Upload your custom fonts and use them on your WordPress website.
-- **Google Fonts Import** — Type on the search box to find the Google Fonts you want to self-host, then click the import button.
-- **Adobe Fonts** — Add the project/kit ID to use the Adobe Fonts on your WordPress website.
-
-### Seamless integration with page builders
-
-Yabe Webfont is designed to be seamlessly integrated with the most popular page builders.
-
-- [Gutenberg](https://wordpress.org/gutenberg)
-- [Bricks](https://bricksbuilder.io/)
-- [Oxygen](https://oxygenbuilder.com/)
-- [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
-- [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
-- [GeneratePress](https://generatepress.com/?ref=7954)
-- [Cwicly](https://cwicly.com/?ref=suabahasa)
-- [Breakdance](https://breakdance.com/ref/165/)
-- [Zion Builder](https://zionbuilder.io/)
-- [Builderius](https://builderius.io/)
-- [Kadence WP](https://kadencewp.com)
-- [Beaver Builder](https://www.wpbeaverbuilder.com/)
-- [Greenshift](https://greenshiftwp.com/)
-- [Spectra](https://wpspectra.com/)
-- [Classic Editor](https://wordpress.org/plugins/classic-editor/)
-- [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/)
+* [Classic Editor](https://wordpress.org/plugins/classic-editor/)
+* [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
+* [GeneratePress](https://generatepress.com/?ref=7954)
+* [Gutenberg](https://wordpress.org/gutenberg)
+* [Kadence WP](https://kadencewp.com)
+* **[Premium]** [Beaver Builder](https://www.wpbeaverbuilder.com/)
+* **[Premium]** [Breakdance](https://breakdance.com/ref/165/)
+* **[Premium]** [Bricks](https://bricksbuilder.io/)
+* **[Premium]** [Builderius](https://builderius.io/)
+* **[Premium]** [Cwicly](https://cwicly.com/?ref=suabahasa)
+* **[Premium]** [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622)
+* **[Premium]** [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/)
+* **[Premium]** [Greenshift](https://greenshiftwp.com/)
+* **[Premium]** [Oxygen](https://oxygenbuilder.com/)
+* **[Premium]** [Spectra](https://wpspectra.com/)
+* **[Premium]** [Zion Builder](https://zionbuilder.io/)
 
 == Changelog ==
+
+= 2.0.29 =
+* **Improve**: Move the Front page's CSS to higher priority to ensure the benefit from the preload feature is working properly.
 
 = 2.0.28 =
 * **[Breakdance] Improve**: Ensure compatibility with Breakdance 1.2.1
@@ -90,7 +86,7 @@ Yabe Webfont is designed to be seamlessly integrated with the most popular page 
 
 = 2.0.20 =
 * **New**: [Spectra](https://wpspectra.com/) integration
-* **New**: Search Google Fonts by category with the `:` prefix. For example, `:sans-serif`  will search for all fonts in the sans-serif category
+* **New**: Search Google Fonts by category with the `:` prefix. For example, `:sans-serif` will search for all fonts in the sans-serif category
 * **New**: CSS custom properties (variables) with pattern `--ywf--family-{font-slug}` for each family
 * **New**: Allow to define fallback font
 * **[Breakdance] New**: Fallback font support
