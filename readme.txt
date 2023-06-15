@@ -1,10 +1,10 @@
 === Yabe Webfont ===
-Contributors: suabahasa
+Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.30-DEV
+Stable tag: 2.0.30
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -50,7 +50,17 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [Spectra](https://wpspectra.com/) **[Pro]** 
 * [Zion Builder](https://zionbuilder.io/) **[Pro]** 
 
+= Liked Yabe Webfont? =
+- Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943).
+- Or rate us on [WordPress](https://wordpress.org/support/plugin/yabe-webfont/reviews/?filter=5/#new-post/) :)
+
+= Credits =
+- Image by [Freepik](https://www.flaticon.com/free-icon/windmill_5137991?related_id=5137991) on Flaticon
+
 == Changelog ==
+
+= 2.0.30 =
+* **New**: Yabe Webfont Lite is now available on [WordPress.org](https://wordpress.org/plugins/yabe-webfont/).
 
 = 2.0.29 =
 * **Improve**: Move the Front page's CSS to higher priority to ensure the benefit from the preload feature is working properly.

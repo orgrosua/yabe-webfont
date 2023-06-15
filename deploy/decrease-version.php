@@ -13,11 +13,11 @@ define('WORK_DIR', getcwd());
  */
 function step_1()
 {
-    $curr_file = file_get_contents(WORK_DIR . '/src/Plugin.php');
+    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
     preg_match('/public const MAJOR_VERSION = (\d+);/', $curr_file, $matches);
     $major_version = $matches[1];
     $curr_file = preg_replace('/public const MAJOR_VERSION = (\d+);/', 'public const MAJOR_VERSION = ' . ($major_version - 1) . ';', $curr_file);
-    file_put_contents(WORK_DIR . '/src/Plugin.php', $curr_file);
+    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
 }
 
 
@@ -72,29 +72,29 @@ function step_4()
 }
 
 /**
- * On the src/Plugin.php file, the pattern is: `public const VERSION = 'X.Y.Z';`, where X is the major version, Y is the minor version and Z is the patch version. Decrease X by 1.
+ * On the constant.php file, the pattern is: `public const VERSION = 'X.Y.Z';`, where X is the major version, Y is the minor version and Z is the patch version. Decrease X by 1.
  */
 function step_5()
 {
-    $curr_file = file_get_contents(WORK_DIR . '/src/Plugin.php');
+    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
     preg_match('/public const VERSION = \'(\d+)\.(\d+)\.(\d+)\';/', $curr_file, $matches);
     $major_version = $matches[1];
     $minor_version = $matches[2];
     $patch_version = $matches[3];
     $curr_file = preg_replace('/public const VERSION = \'(\d+)\.(\d+)\.(\d+)\';/', 'public const VERSION = \'' . ($major_version - 1) . '.' . $minor_version . '.' . $patch_version . '\';', $curr_file);
-    file_put_contents(WORK_DIR . '/src/Plugin.php', $curr_file);
+    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
 }
 
 /**
- * On the src/Plugin.php file, the pattern is: `public const VERSION_ID = W;`, Where W is integer, do reduce W by 10000
+ * On the constant.php file, the pattern is: `public const VERSION_ID = W;`, Where W is integer, do reduce W by 10000
  */
 function step_6()
 {
-    $curr_file = file_get_contents(WORK_DIR . '/src/Plugin.php');
+    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
     preg_match('/public const VERSION_ID = (\d+);/', $curr_file, $matches);
     $version_id = $matches[1];
     $curr_file = preg_replace('/public const VERSION_ID = (\d+);/', 'public const VERSION_ID = ' . ($version_id - 10000) . ';', $curr_file);
-    file_put_contents(WORK_DIR . '/src/Plugin.php', $curr_file);
+    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
 }
 
 step_1();
