@@ -99,4 +99,6 @@ Encore
     })
     ;
 
-module.exports = Encore.getWebpackConfig();
+const config = Encore.getWebpackConfig();
+
+module.exports = config;

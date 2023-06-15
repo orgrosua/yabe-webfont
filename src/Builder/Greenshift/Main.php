@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@ use Yabe\Webfont\Utils\Font;
 /**
  * Greenshift integration.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements BuilderInterface
 {
@@ -35,7 +35,7 @@ class Main implements BuilderInterface
 
     public function filter_gspb_local_font_array($localfonts)
     {
-        $localfonts = (! empty($localfont)) ? json_decode($localfont, true) : [];
+        $localfonts = (empty($localfont)) ? [] : json_decode($localfont, true, 512, JSON_THROW_ON_ERROR);
 
         $fonts = Font::get_fonts();
 
@@ -43,6 +43,6 @@ class Main implements BuilderInterface
             $localfonts[$font['family']] = [];
         }
 
-        return json_encode($localfonts);
+        return json_encode($localfonts, JSON_THROW_ON_ERROR);
     }
 }

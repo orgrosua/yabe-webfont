@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ namespace Yabe\Webfont\Api;
 
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
-use Yabe\Webfont\Plugin;
+use YABE_WEBFONT;
 
 class Router
 {
@@ -37,7 +37,7 @@ class Router
     public function scan_apis()
     {
         // Get cached APIs
-        $transient_name = 'yabe_webfont_scanned_apis_' . Plugin::VERSION;
+        $transient_name = 'yabe_webfont_scanned_apis_' . YABE_WEBFONT::VERSION;
 
         /** @var ApiInterface[]|false $cached */
         $cached = get_transient($transient_name);

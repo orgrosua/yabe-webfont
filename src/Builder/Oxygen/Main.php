@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,11 +16,11 @@ namespace Yabe\Webfont\Builder\Oxygen;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Builder\Gutenberg\Main as GutenbergMain;
-use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Font;
+use YABE_WEBFONT;
 
 /**
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements BuilderInterface
 {
@@ -69,7 +69,7 @@ class Main implements BuilderInterface
             return;
         }
 
-        wp_enqueue_style('yabe-webfont-for-oxygen-editor', plugin_dir_url(__FILE__) . '/assets/style/editor.css', [], Plugin::VERSION);
+        wp_enqueue_style('yabe-webfont-for-oxygen-editor', plugin_dir_url(__FILE__) . '/assets/style/editor.css', [], YABE_WEBFONT::VERSION);
     }
 
     public function remove_ecf_action()

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\Kadence;
 
 use Yabe\Webfont\Builder\BuilderInterface;
-use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Font;
+use YABE_WEBFONT;
 
 /**
  * Kadence integration.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Main implements BuilderInterface
 {
@@ -127,7 +127,7 @@ class Main implements BuilderInterface
                 ];
             }
 
-            wp_enqueue_script('yabe-webfont-for-kadence-blocks', plugin_dir_url(__FILE__) . '/assets/script/kadence-blocks.js', ['kadence-blocks-js'], Plugin::VERSION, true);
+            wp_enqueue_script('yabe-webfont-for-kadence-blocks', plugin_dir_url(__FILE__) . '/assets/script/kadence-blocks.js', ['kadence-blocks-js'], YABE_WEBFONT::VERSION, true);
             wp_localize_script('yabe-webfont-for-kadence-blocks', 'yabeWebfontKadenceBlocks', [
                 'fonts' => $yabe_fonts,
             ]);

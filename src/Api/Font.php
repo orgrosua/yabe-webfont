@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,10 +17,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use wpdb;
-use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Upload;
+use YABE_WEBFONT;
 
 class Font extends AbstractApi implements ApiInterface
 {
@@ -376,7 +376,7 @@ class Font extends AbstractApi implements ApiInterface
 
         if ($count === 0) {
             return new WP_REST_Response([
-                'message' => __('Font not found', 'yabe-webfont'),
+                'message' => __('Font not found', YABE_WEBFONT::TEXT_DOMAIN),
             ], 404, []);
         }
 
@@ -418,7 +418,7 @@ class Font extends AbstractApi implements ApiInterface
 
         if (! $item) {
             return new WP_REST_Response([
-                'message' => __('Font not found', 'yabe-webfont'),
+                'message' => __('Font not found', YABE_WEBFONT::TEXT_DOMAIN),
             ], 404, []);
         }
 
@@ -476,7 +476,7 @@ class Font extends AbstractApi implements ApiInterface
 
         if ($count === 0) {
             return new WP_REST_Response([
-                'message' => __('Font not found', 'yabe-webfont'),
+                'message' => __('Font not found', YABE_WEBFONT::TEXT_DOMAIN),
             ], 404, []);
         }
 
@@ -518,7 +518,7 @@ class Font extends AbstractApi implements ApiInterface
 
         if ($count === 0) {
             return new WP_REST_Response([
-                'message' => __('Font not found', 'yabe-webfont'),
+                'message' => __('Font not found', YABE_WEBFONT::TEXT_DOMAIN),
             ], 404, []);
         }
 
@@ -821,7 +821,7 @@ class Font extends AbstractApi implements ApiInterface
 
         if ($count === 0) {
             return new WP_REST_Response([
-                'message' => __('Font not found', 'yabe-webfont'),
+                'message' => __('Font not found', YABE_WEBFONT::TEXT_DOMAIN),
             ], 404, []);
         }
 
@@ -955,8 +955,8 @@ class Font extends AbstractApi implements ApiInterface
         }
 
         $data = [
-            'module_id' => YABE_WEBFONT_OPTION_NAMESPACE,
-            'version' => Plugin::VERSION,
+            'module_id' => YABE_WEBFONT::WP_OPTION,
+            'version' => YABE_WEBFONT::VERSION,
             'export_time' => time(),
             'site_url' => site_url(),
             'is_bundled' => $is_bundled,

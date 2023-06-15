@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,11 +18,12 @@ use Symfony\Component\PropertyAccess\Exception\AccessException;
 use Symfony\Component\PropertyAccess\Exception\InvalidArgumentException;
 use Symfony\Component\PropertyAccess\Exception\UnexpectedTypeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use YABE_WEBFONT;
 
 /**
  * Accessor for the plugin config.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Config
 {
@@ -51,7 +52,7 @@ class Config
      */
     public static function get($path, $defaultValue = null)
     {
-        $options = json_decode(get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
+        $options = json_decode(get_option(YABE_WEBFONT::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
 
         $options = apply_filters('f!yabe/webfont/api/setting/option:index_options', $options);
 
@@ -74,12 +75,12 @@ class Config
      */
     public static function set($path, $value)
     {
-        $options = json_decode(get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
+        $options = json_decode(get_option(YABE_WEBFONT::WP_OPTION . '_options', '{}'), null, 512, JSON_THROW_ON_ERROR);
 
         $options = apply_filters('f!yabe/webfont/api/setting/option:index_options', $options);
 
         self::propertyAccessor()->setValue($options, $path, $value);
 
-        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_options', json_encode($options, JSON_THROW_ON_ERROR));
+        update_option(YABE_WEBFONT::WP_OPTION . '_options', json_encode($options, JSON_THROW_ON_ERROR));
     }
 }

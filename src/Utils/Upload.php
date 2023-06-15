@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ use WP_Error;
 /**
  * Upload utility functions for the plugin.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Upload
 {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,13 +20,15 @@ use Yabe\Webfont\Api\Router as ApiRouter;
 use Yabe\Webfont\Builder\Integration as BuilderIntegration;
 use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Core\Runtime;
+use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Debug;
 use Yabe\Webfont\Utils\Notice;
+use YABE_WEBFONT;
 
 /**
  * Manage the plugin lifecycle and provides a single point of entry to the plugin.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 final class Plugin
 {
@@ -105,7 +107,7 @@ final class Plugin
      */
     public static function get_instance(): self
     {
-        if (!isset(self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self();
         }
 
@@ -127,7 +129,15 @@ final class Plugin
 
     public function boot_migration()
     {
+        do_action('a!yabe/webfont/plugin:boot_migration.start');
+
+        /** @var wpdb $wpdb */
+        global $wpdb;
+        $wpdb->yabe_webfont_prefix = YABE_WEBFONT::DB_TABLE_PREFIX;
+
         new Migration();
+
+        do_action('a!yabe/webfont/plugin:boot_migration.end');
     }
 
     /**
@@ -141,10 +151,10 @@ final class Plugin
         $this->boot_migration();
 
         // (de)activation hooks.
-        register_activation_hook(YABE_WEBFONT_FILE, function (): void {
+        register_activation_hook(YABE_WEBFONT::FILE, function (): void {
             $this->activate_plugin();
         });
-        register_deactivation_hook(YABE_WEBFONT_FILE, function (): void {
+        register_deactivation_hook(YABE_WEBFONT::FILE, function (): void {
             $this->deactivate_plugin();
         });
 
@@ -152,7 +162,7 @@ final class Plugin
         add_action('upgrader_process_complete', function ($upgrader, $options): void {
             if ($options['action'] === 'update' && $options['type'] === 'plugin') {
                 foreach ($options['plugins'] as $plugin) {
-                    if ($plugin === plugin_basename(YABE_WEBFONT_FILE)) {
+                    if ($plugin === plugin_basename(YABE_WEBFONT::FILE)) {
                         $this->upgrade_plugin();
                     }
                 }
@@ -168,7 +178,7 @@ final class Plugin
 
         // admin hooks.
         if (is_admin()) {
-            add_filter('plugin_action_links_' . plugin_basename(YABE_WEBFONT_FILE), fn ($links) => $this->plugin_action_links($links));
+            add_filter('plugin_action_links_' . plugin_basename(YABE_WEBFONT::FILE), fn ($links) => $this->plugin_action_links($links));
 
             add_action('plugins_loaded', function (): void {
                 $this->plugins_loaded_admin();
@@ -189,7 +199,7 @@ final class Plugin
     {
         do_action('a!yabe/webfont/plugins:activate_plugin_start');
 
-        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_version', self::VERSION);
+        update_option(YABE_WEBFONT::WP_OPTION . '_version', YABE_WEBFONT::VERSION);
 
         $this->maybe_embedded_license();
 
@@ -221,7 +231,7 @@ final class Plugin
      */
     public function plugins_loaded_admin(): void
     {
-        load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT_FILE)) . '/translations/');
+        load_plugin_textdomain(YABE_WEBFONT::TEXT_DOMAIN, false, dirname(plugin_basename(YABE_WEBFONT::FILE)) . '/translations/');
 
         add_action('admin_notices', static function () {
             $messages = Notice::get_lists();
@@ -230,7 +240,7 @@ final class Plugin
                     echo sprintf(
                         '<div class="notice notice-%s is-dismissible %s">%s</div>',
                         esc_attr($message['status']),
-                        YABE_WEBFONT_OPTION_NAMESPACE,
+                        YABE_WEBFONT::WP_OPTION,
                         esc_html($message['message'])
                     );
                 }
@@ -251,14 +261,22 @@ final class Plugin
         array_unshift($links, sprintf(
             '<a href="%s">%s</a>',
             esc_url(sprintf('%s#/settings', $base_url)),
-            esc_html__('Settings', 'yabe-webfont')
+            esc_html__('Settings', YABE_WEBFONT::TEXT_DOMAIN)
         ));
 
         array_unshift($links, sprintf(
             '<a href="%s">%s</a>',
             esc_url(sprintf('%s#/fonts/index', $base_url)),
-            esc_html__('Fonts', 'yabe-webfont')
+            esc_html__('Fonts', YABE_WEBFONT::TEXT_DOMAIN)
         ));
+
+        if (! class_exists(PluginUpdater::class)) {
+            array_unshift($links, sprintf(
+                '<a href="%s" style="color:#067b34;font-weight:600;" target="_blank">%s</a>',
+                esc_url(Common::plugin_data('PluginURI') . '?utm_source=WordPress&utm_campaign=liteplugin&utm_medium=plugin-action-links&utm_content=Upgrade#pricing'),
+                esc_html__('Upgrade to Pro', YABE_WEBFONT::TEXT_DOMAIN)
+            ));
+        }
 
         return $links;
     }
@@ -271,29 +289,29 @@ final class Plugin
      */
     public function maybe_update_plugin()
     {
-        if (!class_exists(PluginUpdater::class)) {
+        if (! class_exists(PluginUpdater::class)) {
             return null;
         }
 
-        if ($this->plugin_updater !== null) {
+        if ($this->plugin_updater instanceof \EDD_SL\PluginUpdater) {
             return $this->plugin_updater;
         }
 
-        $license = get_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
+        $license = get_option(YABE_WEBFONT::WP_OPTION . '_license', [
             'key' => '',
             'opt_in_pre_release' => false,
         ]);
 
         $this->plugin_updater = new PluginUpdater(
-            YABE_WEBFONT_OPTION_NAMESPACE,
+            YABE_WEBFONT::WP_OPTION,
             [
-                'version' => self::VERSION,
+                'version' => YABE_WEBFONT::VERSION,
                 'license' => $license['key'] ? trim($license['key']) : false,
                 'beta' => $license['opt_in_pre_release'],
-                'plugin_file' => YABE_WEBFONT_FILE,
-                'item_id' => YABE_WEBFONT_EDD_STORE['item_id'],
-                'store_url' => YABE_WEBFONT_EDD_STORE['url'],
-                'author' => YABE_WEBFONT_EDD_STORE['author'],
+                'plugin_file' => YABE_WEBFONT::FILE,
+                'item_id' => YABE_WEBFONT::EDD_STORE['item_id'],
+                'store_url' => YABE_WEBFONT::EDD_STORE['store_url'],
+                'author' => YABE_WEBFONT::EDD_STORE['author'],
             ]
         );
 
@@ -306,27 +324,27 @@ final class Plugin
      */
     private function maybe_embedded_license(): void
     {
-        if (!class_exists(PluginUpdater::class)) {
+        if (! class_exists(PluginUpdater::class)) {
             return;
         }
 
-        $license_file = dirname(YABE_WEBFONT_FILE) . '/license-data.php';
+        $license_file = dirname(YABE_WEBFONT::FILE) . '/license-data.php';
 
-        if (!file_exists($license_file)) {
+        if (! file_exists($license_file)) {
             return;
         }
 
         require_once $license_file;
 
-        $const_name = 'ROSUA_EMBEDDED_LICENSE_KEY_' . YABE_WEBFONT_EDD_STORE['item_id'];
+        $const_name = 'ROSUA_EMBEDDED_LICENSE_KEY_' . YABE_WEBFONT::EDD_STORE['item_id'];
 
-        if (!defined($const_name)) {
+        if (! defined($const_name)) {
             return;
         }
 
         $license_key = constant($const_name);
 
-        update_option(YABE_WEBFONT_OPTION_NAMESPACE . '_license', [
+        update_option(YABE_WEBFONT::WP_OPTION . '_license', [
             'key' => $license_key,
             'opt_in_pre_release' => false,
         ]);

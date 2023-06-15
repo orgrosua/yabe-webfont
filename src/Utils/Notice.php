@@ -3,7 +3,7 @@
 /*
  * This file is part of the Yabe package.
  *
- * (c) Joshua <id@rosua.org>
+ * (c) Joshua Gugun Siagian <suabahasa@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,10 +13,12 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Utils;
 
+use YABE_WEBFONT;
+
 /**
  * Manage the plugin's notices for the wp-admin page.
  *
- * @author Joshua <id@rosua.org>
+ * @author Joshua Gugun Siagian <suabahasa@gmail.com>
  */
 class Notice
 {
@@ -43,7 +45,7 @@ class Notice
     /**
      * @var string
      */
-    public const OPTION_NAME = YABE_WEBFONT_OPTION_NAMESPACE . '_notices';
+    public const OPTION_NAME = YABE_WEBFONT::WP_OPTION . '_notices';
 
     /**
      * Get lists of notices.

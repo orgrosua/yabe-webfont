@@ -5,7 +5,10 @@
     "autoload": {
         "psr-4": {
             "Yabe\\Webfont\\": "src/"
-        }
+        },
+        "files": [
+            "constant.php"
+        ]
     },
     "config": {
         "preferred-install": "dist",
@@ -16,25 +19,18 @@
     "prefer-stable": true,
     "scripts": {
         "complete-check": [
-            "@check-rector",
-            "@check-ecs"
+            "@check-ecs",
+            "@phpstan",
+            "phpunit"
         ],
-        "check-ecs": [
-            "vendor/bin/ecs check --ansi"
-        ],
-        "fix-ecs": [
-            "vendor/bin/ecs check --fix --ansi"
-        ],
-        "check-rector": [
-            "vendor/bin/rector process --dry-run"
-        ],
-        "fix-rector": [
-            "vendor/bin/rector process"
-        ]
+        "phpstan": "vendor/bin/phpstan analyse --ansi --error-format symplify",
+        "rector": "vendor/bin/rector process --ansi",
+        "check-ecs": "vendor/bin/ecs check --ansi",
+        "fix-ecs": "vendor/bin/ecs check --fix --ansi"
     },
     "require-dev": {
-        "rector/rector": "^0.15",
-        "symplify/easy-coding-standard": "^11.1"
+        "rector/rector": "^0.17.1",
+        "symplify/easy-coding-standard": "^11.3"
     },
     "require": {
         "php": ">=7.4",
