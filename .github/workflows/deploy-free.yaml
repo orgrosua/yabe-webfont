@@ -110,6 +110,7 @@ jobs:
             SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
             SLUG: yabe-webfont
             BUILD_DIR: orgrosua-prefixed
+            VERSION: ${{ env.TAG_NAME }}
 
         # clone remote repository, so we can push it
         - uses: "actions/checkout@v3"
