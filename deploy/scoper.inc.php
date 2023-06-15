@@ -62,8 +62,10 @@ return [
         // 'src/a-whitelisted-file.php',
 
         // we don't want our file get namespaced
-        'yabe-webfont.php',
-        'constant.php',
+        // 'yabe-webfont.php',
+        // 'constant.php',
+
+        // still not working, try with expose class
     ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
@@ -98,7 +100,9 @@ return [
             // 'ReflectionClassConstant',
 
             // as our file is not namespaced, we need to exclude the class name
-            'YABE_WEBFONT',
+            // 'YABE_WEBFONT',
+
+            // try with expose-classes
         ]
     ),
     'exclude-functions' => array_merge(
@@ -152,7 +156,10 @@ return [
         // '~^$~',                        // The root namespace only
         // '',                            // Any namespace
     ],
-    'expose-classes' => [],
+    'expose-classes' => [
+        // here we expose our class, because we can't make php-scoper to not namespace it
+        'YABE_WEBFONT',
+    ],
     'expose-functions' => [],
     'expose-constants' => [],
 ];
