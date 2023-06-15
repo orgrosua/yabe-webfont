@@ -58,9 +58,13 @@ return [
     // Paths are relative to the configuration file unless if they are already absolute
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
-    // 'exclude-files' => [
-    //     'src/a-whitelisted-file.php',
-    // ],
+    'exclude-files' => [
+        // 'src/a-whitelisted-file.php',
+
+        // we don't want our file get namespaced
+        'yabe-webfont.php',
+        'constant.php',
+    ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
     // original namespace. These will include, for example, strings or string manipulations. PHP-Scoper has limited
@@ -93,6 +97,7 @@ return [
         [
             // 'ReflectionClassConstant',
 
+            // as our file is not namespaced, we need to exclude the class name
             'YABE_WEBFONT',
         ]
     ),

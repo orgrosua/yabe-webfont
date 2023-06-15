@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Core;
 
-use Yabe\Webfont\Plugin;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
