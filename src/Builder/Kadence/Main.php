@@ -127,7 +127,7 @@ class Main implements BuilderInterface
                 ];
             }
 
-            wp_enqueue_script('yabe-webfont-for-kadence-blocks', plugin_dir_url(__FILE__) . '/assets/script/kadence-blocks.js', ['kadence-blocks-js'], YABE_WEBFONT::VERSION, true);
+            wp_enqueue_script('yabe-webfont-for-kadence-blocks', plugin_dir_url(__FILE__) . 'assets/script/kadence-blocks.js', ['kadence-blocks-js'], YABE_WEBFONT::VERSION, true);
             wp_localize_script('yabe-webfont-for-kadence-blocks', 'yabeWebfontKadenceBlocks', [
                 'fonts' => $yabe_fonts,
             ]);
