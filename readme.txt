@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.33-DEV
+Stable tag: 2.0.33
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -13,21 +13,21 @@ Self-host Google Fonts and the dedicated custom fonts manager for WordPress with
 
 == Description ==
 
-### Yabe Webfont: the #1 Self-host Google Fonts and Custom Fonts Manager for WordPress
+### Yabe Webfont: the #1 Self-hosted Google Fonts and Custom Fonts Manager for WordPress
 
 Yabe Webfont is a GDPR-friendly font WordPress plugin made for designers and developers that is advanced, easy to use, and intuitive to give you complete control over your fonts and typography in WordPress.
 
 ### FEATURES
 
-Yabe Webfont is packed full of features, designed to streamline your workflow. Some of our favorites are:
+Yabe Webfont is packed full of features designed to streamline your workflow. Some of our favorites are:
 
-* **GDPR / DSGVO friendly**: Allows you to import/self-hosting Google Fonts files from your server through your WordPress admin page. Fewer reasons to worry about GDPR / DSGVO compliance.
+* **GDPR / DSGVO friendly**: You can import/self-host Google Fonts files from your server through your WordPress admin page. Fewer reasons to worry about GDPR / DSGVO compliance.
 * **Google Fonts and Adobe Fonts ready**: Start using any available fonts on Google Fonts and Adobe Fonts.
 * **Custom Fonts**: A dedicated custom fonts manager for WordPress. The central place to manage all your fonts and typography. 
 * **Easy to use**: Add custom fonts to your WordPress site with a simple and intuitive interface. No coding knowledge is needed. You can upload the font files using the WordPress media uploader. No FTP is required.
 * **Fine-tuning**: Complete control over your fonts and typography. On 90% of use cases, the default one is good to go.
 * **Lightweight and blazingly fast**: The font management system uses WordPress REST API and a modern JavaScript framework for an instant, responsive user experience. The front page cache ensures fast loading and reduces database queries.
-* **Variable Fonts support**: Variable fonts format allow a single font file to contain multiple stylistic variations.
+* **Variable Fonts support**: The format allows a single font file to contain multiple stylistic variations.
 
 ### SEAMLESS INTEGRATION
 
@@ -47,17 +47,31 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]** 
 * [Greenshift](https://greenshiftwp.com/) **[Pro]** 
 * [Oxygen](https://oxygenbuilder.com/) **[Pro]** 
+* [Pinegrow](https://pinegrow.com/wordpress) **[Pro]** 
 * [Spectra](https://wpspectra.com/) **[Pro]** 
-* [Zion Builder](https://zionbuilder.io/) **[Pro]** 
+* [Zion Builder](https://zionbuilder.io/) **[Pro]**
 
-= Liked Yabe Webfont? =
-- Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943).
-- Or rate us on [WordPress](https://wordpress.org/support/plugin/yabe-webfont/reviews/?filter=5/#new-post/) :)
+Visit [our website](https://webfont.yabe.land) for more information.
+
+= Love Yabe Webfont? =
+- Purchase the [Pro version](http://webfont.yabe.land)
+- Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
+- Or rate us on [WordPress](https://wordpress.org/support/plugin/yabe-webfont/reviews/?filter=5/#new-post/)
 
 = Credits =
 - Image by [Freepik](https://www.flaticon.com/free-icon/windmill_5137991?related_id=5137991) on Flaticon
 
 == Changelog ==
+
+Note: The Pro version has a version number with one higher first digit than the Free version. 
+
+For instance:
+Free version **1**.0.5
+Pro version **2**.0.5
+
+
+= 2.0.33 =
+* **New**: [Pinegrow](https://pinegrow.com/wordpress) integration **[Pro]** 
 
 = 2.0.32 =
 * **New**: Yabe Webfont Lite is now available on [WordPress.org](https://wordpress.org/plugins/yabe-webfont/).
@@ -76,7 +90,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 
 = 2.0.24 =
 * **New**: The website has been redesigned, and the documentation is now available at [webfont.yabe.land](https://webfont.yabe.land)
-* **New**: [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) integration
+* **New**: [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) integration **[Pro]** 
 * **Improve**: Performance optimization
 * **[Beaver Builder] Improve**: Disable built-in Google Fonts programmatically
 * **[Breakdance] Improve**: Ensure compatibility with Breakdance 1.3.0 and later
@@ -92,7 +106,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * **[Breakdance] Fix**: CSS file loaded twice
 
 = 2.0.21 =
-* **New**: [Builderius](https://builderius.io/) integration
+* **New**: [Builderius](https://builderius.io/) integration **[Pro]** 
 
 = 2.0.20 =
 * **New**: [Spectra](https://wpspectra.com/) integration
@@ -115,9 +129,9 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * **[Bricks] Improve**: Ensure compatibility with Bricks 1.7.1 and later
 
 = 2.0.16 =
-* **Improve**: Regenerate the font files url with the new attachment url
-* **Fix**: Import Google Fonts form is not resetting properly after successful import
-* **[Bricks] Improve**: Font items on the Bricks editor is now grouped under the `Yabe Webfont` category
+* **Improve**: Regenerate the font file URL with the new attachment URL
+* **Fix**: Import Google Fonts form is not resetting properly after a successful import
+* **[Bricks] Improve**: Font items on the Bricks editor are now grouped under the `Yabe Webfont` category
 
 = 2.0.15 =
 * **New**: Hide font files from Media Library
@@ -132,7 +146,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 = 2.0.12 =
 * **New**: Bulk file upload and auto-organize the font files to the matching variants
 * **Improve**: Bulk select variants on the Google Fonts import page
-* **Fix**: Setting doesn't save properly on the plugin settings page
+* **Fix**: The setting doesn't save properly on the plugin settings page
 
 = 2.0.11 =
 * **New**: [Kadence WP](https://kadencewp.com) integration
@@ -144,7 +158,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * **[GeneratePress] Improve**: Register fonts on the Theme Customize page
 
 = 2.0.8 =
-* **New**: [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) integration
+* **New**: [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) integration **[Pro]** 
 
 = 2.0.7 =
 * **[Oxygen] Fix**: Gutenberg editor compatibility
@@ -164,14 +178,14 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * **[Oxygen] Improve**: Force disable the built-in Google Fonts and override the `Oxygen > Settings > Bloat Eliminator: Disable Google Fonts` setting
 
 = 2.0.4 =
-* **New**: [Greenshift](https://greenshiftwp.com/) integration
+* **New**: [Greenshift](https://greenshiftwp.com/) integration **[Pro]** 
 * **Improve**: Better variable fonts support for Google Fonts
 * **Improve**: Delete all fonts file associated with the deleted font
 * **Fix**: Scheduled cache generation not cleared properly on manual action
 * **[Oxygen] Improve**: Disable Elegant Custom Fonts plugin
 
 = 2.0.3 =
-* **New**: [Breakdance](https://breakdance.com/ref/165/) integration
+* **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]** 
 * **[Gutenberg] Fix**: Font CSS not loaded on the FSE editor
 
 = 2.0.2 =
@@ -189,15 +203,15 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * **New**: Editable imported Google Fonts
 * **Fix**: Some Google Fonts with variable fonts are not loaded properly
 * **Change**: Plugin admin menu moved to `Appearance → Yabe Webfont`
-* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration
-* **New**: [Bricks](https://bricksbuilder.io/) integration
-* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration
+* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration **[Pro]** 
+* **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]** 
+* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration **[Pro]** 
 * **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
 * **New**: [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) integration
 * **New**: [GeneratePress](https://generatepress.com/?ref=7954) integration
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
-* **New**: [Oxygen](https://oxygenbuilder.com/) integration
-* **New**: [Zion Builder](https://zionbuilder.io/) integration
+* **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]** 
+* **New**: [Zion Builder](https://zionbuilder.io/) integration **[Pro]** 
 
 = 1.0.0 =
 * 🐣 Initial release.
