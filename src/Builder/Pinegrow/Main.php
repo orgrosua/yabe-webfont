@@ -47,7 +47,7 @@ class Main implements BuilderInterface
     {
         wp_enqueue_script('yabe-webfont-for-pinegrow', plugin_dir_url(__FILE__) . 'assets/script/pinegrow.js', [], YABE_WEBFONT::VERSION, true);
         wp_localize_script('yabe-webfont-for-pinegrow', 'yabeWebfontPinegrow', [
-            'stylesheet_url' => Cache::get_cache_url(Cache::CSS_CACHE_FILE) . '?ver=' . YABE_WEBFONT::VERSION,
+            'stylesheet_url' => Cache::get_cache_url(Cache::CSS_CACHE_FILE),
             'font_families' => array_map(static fn ($f) => [
                 'name' => $f['title'],
                 'key' => $f['css']['variable'],

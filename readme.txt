@@ -72,6 +72,9 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
+= 2.0.35 =
+* **[Pinegrow] Improve**: Remove version number from the font URL to avoid duplicate .css file link in the page source code. 
+
 = 2.0.34 =
 * **New**: [Pinegrow](https://pinegrow.com/wordpress) integration **[Pro]** 
 
