@@ -17,6 +17,31 @@ $wp_classes   = json_decode(file_get_contents('deploy/php-scoper-wordpress-exclu
 $wp_functions = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-functions.json'));
 $wp_constants = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-constants.json'));
 
+/**
+ * @see https://github.com/humbug/php-scoper/blob/main/docs/further-reading.md#polyfills
+ */
+$polyfillsBootstraps = array_map(
+    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    iterator_to_array(
+        Finder::create()
+            ->files()
+            ->in('vendor/symfony/polyfill-*')
+            ->name('bootstrap*.php'),
+        false,
+    ),
+);
+
+$polyfillsStubs = array_map(
+    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    iterator_to_array(
+        Finder::create()
+            ->files()
+            ->in('vendor/symfony/polyfill-*/Resources/stubs')
+            ->name('*.php'),
+        false,
+    ),
+);
+
 return [
     // The prefix configuration. If a non null value is be used, a random prefix
     // will be generated instead.
@@ -61,11 +86,8 @@ return [
     'exclude-files' => [
         // 'src/a-whitelisted-file.php',
 
-        // we don't want our file get namespaced
-        // 'yabe-webfont.php',
-        // 'constant.php',
-
-        // still not working, try with expose class
+        ...$polyfillsBootstraps,
+        ...$polyfillsStubs,
     ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
@@ -94,6 +116,7 @@ return [
         'Yabe\Webfont',
         'Breakdance',
         'WP_CLI',
+        'Symfony\Polyfill',
     ],
     'exclude-classes' => array_merge(
         $wp_classes,
@@ -125,6 +148,9 @@ return [
     'exclude-constants' => array_merge(
         $wp_constants,
         [
+            // Symfony global constants
+            '/^SYMFONY\_[\p{L}_]+$/',
+
             'WP_CONTENT_DIR',
             'WP_CONTENT_URL',
             'ABSPATH',
