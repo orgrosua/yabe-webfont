@@ -69,7 +69,7 @@ class Cache
         if (! array_key_exists('minutely', $schedules)) {
             $schedules['minutely'] = [
                 'interval' => MINUTE_IN_SECONDS,
-                'display' => __('Once Minutely', YABE_WEBFONT::TEXT_DOMAIN),
+                'display' => __('Once Minutely', 'yabe-webfont'),
             ];
         }
 

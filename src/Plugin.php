@@ -202,7 +202,7 @@ final class Plugin
      */
     public function plugins_loaded_admin(): void
     {
-        load_plugin_textdomain(YABE_WEBFONT::TEXT_DOMAIN, false, dirname(plugin_basename(YABE_WEBFONT::FILE)) . '/translations/');
+        // load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT::FILE)) . '/translations/');
 
         add_action('admin_notices', static function () {
             $messages = Notice::get_lists();
@@ -232,20 +232,20 @@ final class Plugin
         array_unshift($links, sprintf(
             '<a href="%s">%s</a>',
             esc_url(sprintf('%s#/settings', $base_url)),
-            esc_html__('Settings', YABE_WEBFONT::TEXT_DOMAIN)
+            esc_html__('Settings', 'yabe-webfont')
         ));
 
         array_unshift($links, sprintf(
             '<a href="%s">%s</a>',
             esc_url(sprintf('%s#/fonts/index', $base_url)),
-            esc_html__('Fonts', YABE_WEBFONT::TEXT_DOMAIN)
+            esc_html__('Fonts', 'yabe-webfont')
         ));
 
         if (! class_exists(PluginUpdater::class)) {
             array_unshift($links, sprintf(
                 '<a href="%s" style="color:#067b34;font-weight:600;" target="_blank">%s</a>',
                 esc_url(Common::plugin_data('PluginURI') . '?utm_source=WordPress&utm_campaign=liteplugin&utm_medium=plugin-action-links&utm_content=Upgrade#pricing'),
-                esc_html__('Upgrade to Pro', YABE_WEBFONT::TEXT_DOMAIN)
+                esc_html__('Upgrade to Pro', 'yabe-webfont')
             ));
         }
 

@@ -64,6 +64,9 @@ class YABE_WEBFONT
     public const DB_TABLE_PREFIX = 'yabe_webfont';
 
     /**
+     * The text domain should use the literal string 'yabe-webfont' as the text domain.
+     * This constant is used for reference only and should not be used as the actual text domain.
+     * 
      * @var string
      */
     public const TEXT_DOMAIN = 'yabe-webfont';

@@ -43,16 +43,11 @@ unzip "php-scoper-wordpress-excludes-master.zip" -d "$DEPLOY_DIRECTORY/deploy"
 
 # 2. scope it
 note "Download php-scoper"
-wget https://github.com/humbug/php-scoper/releases/download/0.17.5/php-scoper.phar -N --no-verbose
+wget https://github.com/humbug/php-scoper/releases/download/0.18.3/php-scoper.phar -N --no-verbose
 
 # Work around possible PHP memory limits
 note "Running scoper to $RESULT_DIRECTORY"
-if test -z ${PHP80_BIN_PATH+y}; then
-    php -d memory_limit=-1 php-scoper.phar add-prefix --output-dir "../$RESULT_DIRECTORY" --config "deploy/scoper.inc.php" --force --ansi --working-dir "$DEPLOY_DIRECTORY";
-else
-    echo "scoping with specify PHP80_BIN_PATH env";
-    $PHP80_BIN_PATH -d memory_limit=-1 php-scoper.phar add-prefix --output-dir "../$RESULT_DIRECTORY" --config "deploy/scoper.inc.php" --force --ansi --working-dir "$DEPLOY_DIRECTORY";
-fi
+php -d memory_limit=-1 php-scoper.phar add-prefix --output-dir "../$RESULT_DIRECTORY" --config "deploy/scoper.inc.php" --force --ansi --working-dir "$DEPLOY_DIRECTORY";
 
 # note "Dumping Composer Autoload"
 composer dump-autoload --working-dir "$RESULT_DIRECTORY" --ansi --classmap-authoritative --no-dev

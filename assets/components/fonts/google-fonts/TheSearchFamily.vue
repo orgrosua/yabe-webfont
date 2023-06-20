@@ -52,8 +52,6 @@ const limit = ref(50);
 
 const vueSelectEl = ref(null);
 
-
-
 const categories = computed(() => {
     return [...new Set(props.catalog.map(({ category }) => category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase()))];
 });

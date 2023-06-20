@@ -11,7 +11,7 @@ use Isolated\Symfony\Component\Finder\Finder;
 // to auto-load any code here: it can result in a conflict or even corrupt
 // the PHP-Scoper analysis.
 
-$timestamp = date('Ymd');
+// $timestamp = date('Ymd');
 
 $wp_classes   = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-classes.json'));
 $wp_functions = json_decode(file_get_contents('deploy/php-scoper-wordpress-excludes-master/generated/exclude-wordpress-functions.json'));

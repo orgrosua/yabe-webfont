@@ -69,6 +69,12 @@ jobs:
         # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
         - run: rsync --exclude orgrosua-deploy -av * orgrosua-deploy --quiet
 
+        # humbug/php-scoper requires php ^8.1
+        - uses: shivammathur/setup-php@v2
+          with:
+            php-version: 8.1
+            coverage: none
+          
         # prefix the namespaces
         - run: sh deploy/deploy-scoped.sh orgrosua-deploy orgrosua-prefixed
 
