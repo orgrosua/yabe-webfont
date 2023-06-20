@@ -93,6 +93,7 @@ return [
 
         'Yabe\Webfont',
         'Breakdance',
+        'WP_CLI',
     ],
     'exclude-classes' => array_merge(
         $wp_classes,
@@ -109,8 +110,6 @@ return [
     'exclude-functions' => array_merge(
         $wp_functions,
         [
-            'trigger_deprecation',
-
             // 'mb_str_split',
             'Breakdance\Fonts\registerFont',
             'bricks_is_builder',

@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.36
+Stable tag: 2.0.37
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -72,7 +72,7 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
-= 2.0.36 =
+= 2.0.37 =
 * **Fix**: Plugin i18n doesn't use string literal for the text domain.
 * **[Pinegrow] Improve**: Ensure compatibility with Pinegrow 1.0.11
 * **[Pinegrow] Improve**: Remove version number from the font URL to avoid duplicate .css file link in the page source code. 
