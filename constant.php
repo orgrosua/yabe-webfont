@@ -26,7 +26,7 @@ class YABE_WEBFONT
     /**
      * @var string
      */
-    public const VERSION = '2.0.35-DEV';
+    public const VERSION = '2.0.35';
 
     /**
      * @var int
@@ -51,7 +51,7 @@ class YABE_WEBFONT
     /**
      * @var string
      */
-    public const EXTRA_VERSION = 'DEV';
+    public const EXTRA_VERSION = '';
 
     /**
      * @var string
