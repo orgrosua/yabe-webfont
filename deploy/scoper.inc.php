@@ -149,7 +149,8 @@ return [
             'SHOW_CT_BUILDER',
             'CWICLY_VERSION',
             'BRICKS_VERSION',
-            '__BREAKDANCE_VERSION'
+            '__BREAKDANCE_VERSION',
+            'SLINGBLOCKS_PLUGIN_VERSION',
         ]
     ),
 
