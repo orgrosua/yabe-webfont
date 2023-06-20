@@ -357,7 +357,7 @@ class Cache
          * WordPress Object Cache
          * @see https://developer.wordpress.org/reference/classes/wp_object_cache/
          */
-        wp_cache_flush();
+        \wp_cache_flush();
 
         /**
          * WP Rocket

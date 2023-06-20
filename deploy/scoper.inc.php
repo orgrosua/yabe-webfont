@@ -97,6 +97,7 @@ return [
     'exclude-classes' => array_merge(
         $wp_classes,
         [
+            'WP_CLI',
             // 'ReflectionClassConstant',
 
             // as our file is not namespaced, we need to exclude the class name
@@ -108,9 +109,17 @@ return [
     'exclude-functions' => array_merge(
         $wp_functions,
         [
+            'trigger_deprecation',
+
             // 'mb_str_split',
             'Breakdance\Fonts\registerFont',
             'bricks_is_builder',
+
+            'wp_cache_flush',
+            'rocket_clean_domain',
+            'wp_cache_clear_cache',
+            'w3tc_flush_all',
+            'wpfc_clear_all_cache',
         ]
     ),
     'exclude-constants' => array_merge(
@@ -147,9 +156,9 @@ return [
     // List of symbols to expose.
     //
     // For more information see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposed-symbols
-    'expose-global-constants' => true,
-    'expose-global-classes' => true,
-    'expose-global-functions' => true,
+    'expose-global-constants' => false,
+    'expose-global-classes' => false,
+    'expose-global-functions' => false,
     'expose-namespaces' => [
         // 'Acme\Foo'                     // The Acme\Foo namespace (and sub-namespaces)
         // '~^PHPUnit\\\\Framework$~',    // The whole namespace PHPUnit\Framework (but not sub-namespaces)
