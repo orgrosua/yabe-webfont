@@ -99,6 +99,7 @@ return [
         $wp_classes,
         [
             'WP_CLI',
+            'WP_CLI_Command',
             // 'ReflectionClassConstant',
 
             // as our file is not namespaced, we need to exclude the class name
