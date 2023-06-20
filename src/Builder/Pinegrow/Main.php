@@ -51,6 +51,7 @@ class Main implements BuilderInterface
             'font_families' => array_map(static fn ($f) => [
                 'name' => $f['title'],
                 'key' => $f['css']['variable'],
+                'family' => $f['family'],
             ], Font::get_fonts()),
         ]);
     }
