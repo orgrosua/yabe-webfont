@@ -111,7 +111,6 @@ class Main implements BuilderInterface
 
         $yabe_fonts = array_map(static fn ($f) => [
             'label' => $f['title'],
-            // 'value' => Font::css_variable($f['family']),
             'value' => $f['family'],
         ], $fonts);
 
