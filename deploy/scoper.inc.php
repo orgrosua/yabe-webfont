@@ -25,7 +25,7 @@ $polyfillsBootstraps = array_map(
     iterator_to_array(
         Finder::create()
             ->files()
-            ->in('vendor/symfony/polyfill-*')
+            ->in(dirname(__DIR__) . '/vendor/symfony/polyfill-*')
             ->name('bootstrap*.php'),
         false,
     ),
@@ -36,7 +36,7 @@ $polyfillsStubs = array_map(
     iterator_to_array(
         Finder::create()
             ->files()
-            ->in('vendor/symfony/polyfill-*/Resources/stubs')
+            ->in(dirname(__DIR__) . '/vendor/symfony/polyfill-*/Resources/stubs')
             ->name('*.php'),
         false,
     ),
