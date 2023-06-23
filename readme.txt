@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.40
+Stable tag: 2.0.41
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -39,6 +39,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [Gutenberg](https://wordpress.org/gutenberg)
 * [Kadence WP](https://kadencewp.com)
 * [Beaver Builder](https://www.wpbeaverbuilder.com/) **[Pro]** 
+* [Blocksy](https://creativethemes.com/blocksy) **[Pro]** 
 * [Breakdance](https://breakdance.com/ref/165/) **[Pro]** 
 * [Bricks](https://bricksbuilder.io/) **[Pro]** 
 * [Builderius](https://builderius.io/) **[Pro]** 
@@ -63,6 +64,8 @@ Visit [our website](https://webfont.yabe.land) for more information.
 
 [youtube https://www.youtube.com/watch?v=uMj0x0ucnOw]
 
+[youtube https://www.youtube.com/watch?v=A0JZzEVIUzQ]
+
 == Changelog ==
 
 Note: The Pro version has a version number with one higher first digit than the Free version. 
@@ -71,6 +74,9 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.41 =
+* **New**: [Blocksy](https://creativethemes.com/blocksy) integration **[Pro]** 
 
 = 2.0.40 =
 * **[Bricks] Improve**: Ensure compatibility with Bricks

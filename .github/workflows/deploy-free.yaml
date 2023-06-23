@@ -71,6 +71,7 @@ jobs:
 
         # remove this folders, as it exclusive for the premium version
         # - src/Builder/Beaver
+        # - src/Builder/Blocksy
         # - src/Builder/Breakdance
         # - src/Builder/Bricks
         # - src/Builder/Builderius
@@ -82,7 +83,7 @@ jobs:
         # - src/Builder/Pinegrow
         # - src/Builder/Spectra
         # - src/Builder/Zion
-        - run: rm -rf src/Builder/{Beaver,Breakdance,Bricks,Builderius,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,Pinegrow,Spectra,Zion}
+        - run: rm -rf src/Builder/{Beaver,Blocksy,Breakdance,Bricks,Builderius,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,Pinegrow,Spectra,Zion}
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi
