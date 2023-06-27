@@ -96,13 +96,28 @@ return [
     // heart contents.
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
-    // 'patchers' => [
-    //     static function (string $filePath, string $prefix, string $contents): string {
-    //         // Change the contents here.
+    'patchers' => [
+        // static function (string $filePath, string $prefix, string $contents): string {
+        //     // Change the contents here.
 
-    //         return $contents;
-    //     },
-    // ],
+        //     return $contents;
+        // },
+
+        /**
+         * @see https://github.com/humbug/php-scoper/issues/841
+         */
+        static function (string $filePath, string $prefix, string $contents): string {
+            if (preg_match('/vendor\/composer\/autoload_(classmap|static)\.php$/', $filePath)) {
+                return preg_replace(
+                    "/'Composer\\\\\\\\InstalledVersions'/",
+                    "'{$prefix}\\\\\\\\Composer\\\\\\\\InstalledVersions'",
+                    $contents
+                );
+            }
+
+            return $contents;
+        },
+    ],
 
     // List of symbols to consider internal i.e. to leave untouched.
     //
