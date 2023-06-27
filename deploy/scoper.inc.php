@@ -109,9 +109,7 @@ return [
         static function (string $filePath, string $prefix, string $contents): string {
 
             echo $filePath . PHP_EOL;
-            echo 'Match? ' . preg_match('/vendor\/composer\/autoload_(classmap|static)\.php$/', $filePath) . PHP_EOL;
-
-            if (preg_match('/vendor\/composer\/autoload_(classmap|static)\.php$/', $filePath)) {
+            if (preg_match('/vendor\/composer\/autoload_real\.php$/', $filePath)) {
 
                 echo 'Matched' . PHP_EOL;
                 // return preg_replace(
@@ -124,9 +122,31 @@ return [
 
                 echo $contents . PHP_EOL;
 
+                // $contents = preg_replace(
+                //     "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
+                //     "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
+                //     $contents,
+                //     -1,
+                //     $count
+                // );
+
+                // $contents = preg_replace(
+                //     "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
+                //     "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
+                //     $contents,
+                //     -1,
+                //     $count
+                // );
+
                 $contents = preg_replace(
-                    "/'Composer\\\\\\\\InstalledVersions'/",
-                    "'{$prefix}\\\\\\\\Composer\\\\\\\\InstalledVersions'",
+                    [
+                        "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
+                        "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
+                    ],
+                    [
+                        "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
+                        "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
+                    ],
                     $contents,
                     -1,
                     $count
