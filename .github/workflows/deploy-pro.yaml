@@ -67,7 +67,7 @@ jobs:
         - run: rm deploy/decrease-version.php
 
         # install only prod dependencies
-        - run: composer install --no-dev --ansi
+        - run: composer install --no-dev --classmap-authoritative --ansi
 
         # copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
         - run: rsync --exclude orgrosua-deploy -av * orgrosua-deploy --quiet

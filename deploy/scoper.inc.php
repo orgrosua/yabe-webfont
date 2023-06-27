@@ -107,12 +107,36 @@ return [
          * @see https://github.com/humbug/php-scoper/issues/841
          */
         static function (string $filePath, string $prefix, string $contents): string {
+
+            echo $filePath . PHP_EOL;
+            echo 'Match? ' . preg_match('/vendor\/composer\/autoload_(classmap|static)\.php$/', $filePath) . PHP_EOL;
+
             if (preg_match('/vendor\/composer\/autoload_(classmap|static)\.php$/', $filePath)) {
-                return preg_replace(
+
+                echo 'Matched' . PHP_EOL;
+                // return preg_replace(
+                //     "/'Composer\\\\\\\\InstalledVersions'/",
+                //     "'{$prefix}\\\\\\\\Composer\\\\\\\\InstalledVersions'",
+                //     $contents
+                // );
+
+                $count = 0;
+
+                echo $contents . PHP_EOL;
+
+                $contents = preg_replace(
                     "/'Composer\\\\\\\\InstalledVersions'/",
                     "'{$prefix}\\\\\\\\Composer\\\\\\\\InstalledVersions'",
-                    $contents
+                    $contents,
+                    -1,
+                    $count
                 );
+
+                echo 'Count: ' .$count . PHP_EOL;
+
+                echo $contents . PHP_EOL;
+
+                return $contents;
             }
 
             return $contents;
