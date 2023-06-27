@@ -97,48 +97,12 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'patchers' => [
-        // static function (string $filePath, string $prefix, string $contents): string {
-        //     // Change the contents here.
-
-        //     return $contents;
-        // },
-
         /**
          * @see https://github.com/humbug/php-scoper/issues/841
          */
         static function (string $filePath, string $prefix, string $contents): string {
-
-            echo $filePath . PHP_EOL;
             if (preg_match('/vendor\/composer\/autoload_real\.php$/', $filePath)) {
-
-                echo 'Matched' . PHP_EOL;
-                // return preg_replace(
-                //     "/'Composer\\\\\\\\InstalledVersions'/",
-                //     "'{$prefix}\\\\\\\\Composer\\\\\\\\InstalledVersions'",
-                //     $contents
-                // );
-
-                $count = 0;
-
-                echo $contents . PHP_EOL;
-
-                // $contents = preg_replace(
-                //     "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
-                //     "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
-                //     $contents,
-                //     -1,
-                //     $count
-                // );
-
-                // $contents = preg_replace(
-                //     "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
-                //     "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
-                //     $contents,
-                //     -1,
-                //     $count
-                // );
-
-                $contents = preg_replace(
+                return preg_replace(
                     [
                         "/'Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'/",
                         "/spl_autoload_unregister\(array\('ComposerAutoloaderInit/",
@@ -147,16 +111,8 @@ return [
                         "'{$prefix}\\\\\\\\Composer\\\\\\\\Autoload\\\\\\\\ClassLoader'",
                         "spl_autoload_unregister(array('{$prefix}\\\\\\\\ComposerAutoloaderInit",
                     ],
-                    $contents,
-                    -1,
-                    $count
+                    $contents
                 );
-
-                echo 'Count: ' .$count . PHP_EOL;
-
-                echo $contents . PHP_EOL;
-
-                return $contents;
             }
 
             return $contents;
@@ -183,11 +139,6 @@ return [
             'WP_CLI',
             'WP_CLI_Command',
             // 'ReflectionClassConstant',
-
-            // as our file is not namespaced, we need to exclude the class name
-            // 'YABE_WEBFONT',
-
-            // try with expose-classes
         ]
     ),
     'exclude-functions' => array_merge(
@@ -252,7 +203,6 @@ return [
         // '',                            // Any namespace
     ],
     'expose-classes' => [
-        // here we expose our class, because we can't make php-scoper to not namespace it
         'YABE_WEBFONT',
     ],
     'expose-functions' => [],
