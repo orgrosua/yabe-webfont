@@ -38,16 +38,22 @@ class Main implements BuilderInterface
 
         /**
          * Add custom font to GeneratePress.
+         * Append the data on the pre_option, and rewrite the data on the option and pre_update_option.
          */
-
-        add_filter('option_generate_settings', fn ($value, $option) => $this->generate_settings($value), 1_000_001, 2);
-        add_filter('pre_update_option_generate_settings', fn ($value, $old_value, $option) => $this->generate_settings($value), 1_000_001, 3);
+        add_filter('generate_option_defaults', fn ($opt) => $this->filter_generate_option_defaults($opt), 1_000_001);
 
         /**
          * @deprecated version 2.0.11
          * @see https://github.com/tomusborne/generatepress/blob/e7fbf5693bfe4325a41cae988e3eda16550d4025/inc/defaults.php#L412
          */
         // add_filter('generate_typography_default_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_fonts(), 'family')), 1_000_001);
+
+        /**
+         * @deprecated version 2.0.46
+         */
+        // add_filter('pre_option_generate_settings', fn ($value, $option) => $this->generate_settings($value), 1_000_001, 2);
+        // add_filter('option_generate_settings', fn ($value, $option) => $this->generate_settings($value), 1_000_001, 2);
+        // add_filter('pre_update_option_generate_settings', fn ($value, $old_value, $option) => $this->generate_settings($value), 1_000_001, 3);
 
         /**
          * Add custom font to GenerateBlocks.
@@ -64,8 +70,6 @@ class Main implements BuilderInterface
 
     public function generate_settings($opt)
     {
-        $fonts = Font::get_fonts();
-
         if (! is_array($opt)) {
             $opt = [];
         }
@@ -118,5 +122,26 @@ class Main implements BuilderInterface
             'label' => 'Yabe Webfont',
             'options' => $yabe_fonts,
         ]], is_array($gb_fonts) ? $gb_fonts : iterator_to_array($gb_fonts));
+    }
+
+    public function filter_generate_option_defaults($opt)
+    {
+        $fonts = Font::get_fonts();
+
+        if (! array_key_exists('font_manager', $opt) || ! is_array($opt['font_manager'])) {
+            $opt['font_manager'] = [];
+        }
+
+        foreach ($fonts as $font) {
+            if (! in_array($font['family'], array_column($opt['font_manager'], 'fontFamily'), true)) {
+                $opt['font_manager'][] = [
+                    'fontFamily' => $font['family'],
+                    'googleFont' => false,
+                    'googleFontApi' => 0,
+                ];
+            }
+        }
+
+        return $opt;
     }
 }
