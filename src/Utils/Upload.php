@@ -102,6 +102,9 @@ class Upload
             'size' => filesize($temp_file),
         ];
 
+        // changing the directory
+        add_filter('upload_dir', [self::class, 'wpse_custom_upload_dir']);
+
         $sideload = wp_handle_sideload($file, [
             'test_form' => false,
             'test_size' => false,
@@ -124,6 +127,9 @@ class Upload
             ],
             $sideload['file']
         );
+
+        // remove so it doesn't apply to all uploads
+        remove_filter('upload_dir', [self::class, 'wpse_custom_upload_dir']);
 
         if (is_wp_error($attachment_id)) {
             return $attachment_id;
@@ -283,5 +289,16 @@ class Upload
         }
 
         return $font_files;
+    }
+
+    public static function wpse_custom_upload_dir($dir_data)
+    {
+        $custom_dir = 'yabe-webfont/fonts';
+
+        $dir_data['path'] = $dir_data['basedir'] . '/' . $custom_dir;
+        $dir_data['subdir'] = '/' . $custom_dir;
+        $dir_data['url'] = $dir_data['baseurl'] . '/' . $custom_dir;
+
+        return $dir_data;
     }
 }

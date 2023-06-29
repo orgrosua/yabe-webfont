@@ -10,7 +10,7 @@
                 </button>
             </li>
         </template>
-        <template #option="{family, category}">
+        <template #option="{ family, category }">
             <div class="tw-flex tw-justify-between">
                 <span class="">{{ family }}</span>
 
@@ -57,22 +57,32 @@ const categories = computed(() => {
 });
 
 const filteredCatalog = computed(() => {
-    if (searchFontFamily.value) {
+    let ctg = props.catalog;
 
-        if (searchFontFamily.value.toLowerCase().startsWith(':')) {
-            const queryCategory = searchFontFamily.value.slice(1).trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase();
+    if (searchFontFamily.value) {
+        let query = searchFontFamily.value.trim().toLowerCase();
+
+        if (query.startsWith(':')) {
+            const queryCategory = query.split(' ')[0].slice(1);
             if (categories.value.includes(queryCategory)) {
-                return props.catalog.filter(({ category }) =>  category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() === queryCategory);
+                ctg = ctg.filter(({ category }) => category.trim().replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() === queryCategory);
             }
+
+            // remove the first word from the query
+            query = query.slice(queryCategory.length + 1).trim();
         }
 
-        const fuse = new Fuse(props.catalog, {
-            keys: ['family']
+        const fuse = new Fuse(ctg, {
+            keys: ['family'],
+            useExtendedSearch: true,
+            findAllMatches: true,
         });
 
-        return fuse.search(searchFontFamily.value).map(({ item }) => item);
+        if (query.trim()) {
+            return fuse.search(query).map(({ item }) => item);
+        }
     }
-    return props.catalog;
+    return ctg;
 });
 
 const paginatedCatalog = computed(() => {

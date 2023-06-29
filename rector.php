@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\Config\RectorConfig;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -14,6 +15,15 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->parallel(300);
+
+    $rectorConfig->skip([
+        ClosureToArrowFunctionRector::class => [
+            __DIR__ . '/src/Utils/Upload.php',
+        ],
+        CallableThisArrayToAnonymousFunctionRector::class => [
+            __DIR__ . '/src/Utils/Upload.php',
+        ],
+    ]);
 
     // define sets of rules
     $rectorConfig->sets([

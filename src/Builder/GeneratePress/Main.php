@@ -70,6 +70,8 @@ class Main implements BuilderInterface
 
     public function generate_settings($opt)
     {
+        $fonts = Font::get_fonts();
+
         if (! is_array($opt)) {
             $opt = [];
         }

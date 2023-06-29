@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.46
+Stable tag: 2.0.47
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -74,6 +74,11 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.47 =
+* **Improve**: Uploaded font files are now stored in the `wp-content/uploads/yabe-webfont` folder instead of the `wp-content/uploads/yyyy/mm` folder.
+* **New**: Search Google Fonts by categories with syntax `:category name`. For example, `:handwriting` will return all fonts with the `handwriting` category and `:sans Open` will return all fonts with the `sans` category and the word `Open` in the font name.
+* **New**: Search Google Fonts with extended syntax. Check out the [documentation](https://fusejs.io/examples.html#extended-search) for more information.
 
 = 2.0.46 =
 * **[GeneratePress] Improve**: Ensure compatibility with GeneratePress
