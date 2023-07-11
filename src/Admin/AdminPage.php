@@ -26,6 +26,7 @@ class AdminPage
     {
         add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
         add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types), 1_000_001);
+        add_filter('upload_dir', fn ($uploads) => $this->upload_dir($uploads), 1_000_001);
 
         add_action('admin_menu', fn () => $this->add_admin_menu());
 
@@ -146,5 +147,14 @@ class AdminPage
             __('Thank you for using <b>Yabe Webfont</b>! Join us on the <a href="%s" target="_blank">Facebook Group</a>.', 'yabe-webfont'),
             'https://www.facebook.com/groups/1142662969627943'
         );
+    }
+
+    private function upload_dir($uploads)
+    {
+        if (! isset($_POST['yabe_webfont_font_upload'])) {
+            return $uploads;
+        }
+
+        return Upload::wpse_custom_upload_dir($uploads);
     }
 }
