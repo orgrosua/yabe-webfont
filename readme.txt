@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.2
-Stable tag: 2.0.48
+Stable tag: 2.0.49
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -55,9 +55,9 @@ The font must be available for use across different platforms. Yabe Webfont is f
 Visit [our website](https://webfont.yabe.land) for more information.
 
 = Love Yabe Webfont? =
-- Purchase the [Pro version](http://webfont.yabe.land)
+- Purchase the [Pro version](https://webfont.yabe.land)
 - Join our [Facebook Group](https://www.facebook.com/groups/1142662969627943)
-- Or rate us on [WordPress](https://wordpress.org/support/plugin/yabe-webfont/reviews/?filter=5/#new-post/)
+- Or rate us on [WordPress](https://wordpress.org/support/plugin/yabe-webfont/reviews/?filter=5/#new-post)
 
 = Credits =
 - Image by [Freepik](https://www.flaticon.com/free-icon/windmill_5137991?related_id=5137991) on Flaticon
@@ -74,6 +74,9 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.49 =
+* **Change**: The preload font files are now limited to `woff2` file format only.
 
 = 2.0.48 =
 * **Improve**: Ensure the uploaded font files are now stored in the `wp-content/uploads/yabe-webfont` folder.

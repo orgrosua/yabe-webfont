@@ -307,6 +307,10 @@ class Cache
             foreach ($font_faces as $font_face) {
                 if ($metadata->preload || (property_exists($font_face, 'preload') && $font_face->preload)) {
                     foreach ($font_face->files as $file) {
+                        if ($file->mime !== 'font/woff2') {
+                            continue;
+                        }
+
                         $preload_files[] = [
                             'href' => $file->attachment_url,
                             'type' => $file->mime,
