@@ -37,6 +37,7 @@ class Main implements BuilderInterface
         add_filter('wp_theme_json_data_theme', fn ($theme_json) => $this->filter_theme_json_data_theme($theme_json), 1_000_001);
         add_filter('wp_theme_json_data_user', fn ($theme_json) => $this->filter_theme_json_data_user($theme_json), 1_000_001);
         add_filter('f!yabe/webfont/core/cache:build_css.append_content', fn ($css, $rows) => $this->filter_append_build_css_content($css, $rows), 1_000_001, 2);
+        add_filter('f!yabe/webfont/core/cache:build_css.append_content', fn ($css, $rows) => $this->filter_ensure_block_editor($css, $rows), 1_000_001, 2);
 
         add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
         add_action('after_setup_theme', fn () => $this->after_setup_theme(), 1_000_001);
@@ -55,6 +56,10 @@ class Main implements BuilderInterface
     public function filter_theme_json_data_user($theme_json)
     {
         $theme_json_data = $theme_json->get_data();
+
+        if (! isset($theme_json_data['settings']['typography'])) {
+            return $theme_json;
+        }
 
         $theme_json_font_families = $theme_json_data['settings']['typography']['fontFamilies'] ?? [];
 
@@ -131,7 +136,17 @@ class Main implements BuilderInterface
 
     public function after_setup_theme()
     {
+        // Add support for editor styles.
+        add_theme_support('editor-styles');
         add_editor_style(Cache::get_cache_url(Cache::CSS_CACHE_FILE));
+    }
+
+    /**
+     * ensure the css file is loaded to the block editor, template editor, or site editor
+     */
+    public function filter_ensure_block_editor($css, $rows): string
+    {
+        return $css . ".wp-block, .editor-styles-wrapper { } \n\n";
     }
 
     /**

@@ -3,8 +3,8 @@ Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
-Tested up to: 6.2
-Stable tag: 2.0.49
+Tested up to: 6.3
+Stable tag: 2.0.50
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -23,7 +23,7 @@ Yabe Webfont is packed full of features designed to streamline your workflow. So
 
 * **GDPR / DSGVO friendly**: You can import/self-host Google Fonts files from your server through your WordPress admin page. Fewer reasons to worry about GDPR / DSGVO compliance.
 * **Google Fonts and Adobe Fonts ready**: Start using any available fonts on Google Fonts and Adobe Fonts.
-* **Custom Fonts**: A dedicated custom fonts manager for WordPress. The central place to manage all your fonts and typography. 
+* **Custom Fonts**: A dedicated custom fonts manager for WordPress. The central place to manage all your fonts and typography.
 * **Easy to use**: Add custom fonts to your WordPress site with a simple and intuitive interface. No coding knowledge is needed. You can upload the font files using the WordPress media uploader. No FTP is required.
 * **Fine-tuning**: Complete control over your fonts and typography. On 90% of use cases, the default one is good to go.
 * **Lightweight and blazingly fast**: The font management system uses WordPress REST API and a modern JavaScript framework for an instant, responsive user experience. The front page cache ensures fast loading and reduces database queries.
@@ -33,23 +33,23 @@ Yabe Webfont is packed full of features designed to streamline your workflow. So
 
 The font must be available for use across different platforms. Yabe Webfont is famous for seamlessly integrating with the most popular visual/page builders:
 
+* [Builderius](https://builderius.io/?referral=afdfca82c8)
 * [Classic Editor](https://wordpress.org/plugins/classic-editor/)
 * [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor)
 * [GeneratePress](https://generatepress.com/?ref=7954)
 * [Gutenberg](https://wordpress.org/gutenberg)
 * [Kadence WP](https://kadencewp.com)
-* [Beaver Builder](https://www.wpbeaverbuilder.com/) **[Pro]** 
-* [Blocksy](https://creativethemes.com/blocksy) **[Pro]** 
-* [Breakdance](https://breakdance.com/ref/165/) **[Pro]** 
-* [Bricks](https://bricksbuilder.io/) **[Pro]** 
-* [Builderius](https://builderius.io/) **[Pro]** 
-* [Cwicly](https://cwicly.com/?ref=suabahasa) **[Pro]** 
-* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Pro]** 
-* [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]** 
-* [Greenshift](https://greenshiftwp.com/) **[Pro]** 
-* [Oxygen](https://oxygenbuilder.com/) **[Pro]** 
-* [Pinegrow](https://pinegrow.com/wordpress) **[Pro]** 
-* [Spectra](https://wpspectra.com/) **[Pro]** 
+* [Beaver Builder](https://www.wpbeaverbuilder.com/) **[Pro]**
+* [Blocksy](https://creativethemes.com/blocksy) **[Pro]**
+* [Breakdance](https://breakdance.com/ref/165/) **[Pro]**
+* [Bricks](https://bricksbuilder.io/) **[Pro]**
+* [Cwicly](https://cwicly.com/?ref=suabahasa) **[Pro]**
+* [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Pro]**
+* [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]**
+* [Greenshift](https://greenshiftwp.com/) **[Pro]**
+* [Oxygen](https://oxygenbuilder.com/) **[Pro]**
+* [Pinegrow](https://pinegrow.com/wordpress) **[Pro]**
+* [Spectra](https://wpspectra.com/) **[Pro]**
 * [Zion Builder](https://zionbuilder.io/) **[Pro]**
 
 Visit [our website](https://webfont.yabe.land) for more information.
@@ -68,12 +68,18 @@ Visit [our website](https://webfont.yabe.land) for more information.
 
 == Changelog ==
 
-Note: The Pro version has a version number with one higher first digit than the Free version. 
+Note: The Pro version has a version number with one higher first digit than the Free version.
 
 For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.50 =
+* **New**: Added option to disable Google Fonts API that loaded manually by the theme or plugin
+* **Improve**: Ensure compatibility with WordPress 6.3 and later.
+* **[Builderius] Change**: Builderius now available on the Free version.
+* **[Gutenberg] Improve**: Ensure compatibility with Twenty Twenty-Two theme.
 
 = 2.0.49 =
 * **Change**: The preload font files are now limited to `woff2` file format only.
@@ -93,7 +99,7 @@ Pro version **2**.0.5
 * **Fix**: Plugin not properly deployed
 
 = 2.0.41 =
-* **New**: [Blocksy](https://creativethemes.com/blocksy) integration **[Pro]** 
+* **New**: [Blocksy](https://creativethemes.com/blocksy) integration **[Pro]**
 
 = 2.0.40 =
 * **[Bricks] Improve**: Ensure compatibility with Bricks
@@ -104,10 +110,10 @@ Pro version **2**.0.5
 = 2.0.37 =
 * **Fix**: Plugin i18n doesn't use string literal for the text domain.
 * **[Pinegrow] Improve**: Ensure compatibility with Pinegrow 1.0.11
-* **[Pinegrow] Improve**: Remove version number from the font URL to avoid duplicate .css file link in the page source code. 
+* **[Pinegrow] Improve**: Remove version number from the font URL to avoid duplicate .css file link in the page source code.
 
 = 2.0.34 =
-* **New**: [Pinegrow](https://pinegrow.com/wordpress) integration **[Pro]** 
+* **New**: [Pinegrow](https://pinegrow.com/wordpress) integration **[Pro]**
 
 = 2.0.32 =
 * **New**: Yabe Webfont Lite is now available on [WordPress.org](https://wordpress.org/plugins/yabe-webfont/).
@@ -126,7 +132,7 @@ Pro version **2**.0.5
 
 = 2.0.24 =
 * **New**: The website has been redesigned, and the documentation is now available at [webfont.yabe.land](https://webfont.yabe.land)
-* **New**: [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) integration **[Pro]** 
+* **New**: [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) integration **[Pro]**
 * **Improve**: Performance optimization
 * **[Beaver Builder] Improve**: Disable built-in Google Fonts programmatically
 * **[Breakdance] Improve**: Ensure compatibility with Breakdance 1.3.0 and later
@@ -142,7 +148,7 @@ Pro version **2**.0.5
 * **[Breakdance] Fix**: CSS file loaded twice
 
 = 2.0.21 =
-* **New**: [Builderius](https://builderius.io/) integration **[Pro]** 
+* **New**: [Builderius](https://builderius.io/?referral=afdfca82c8) integration **[Pro]**
 
 = 2.0.20 =
 * **New**: [Spectra](https://wpspectra.com/) integration
@@ -194,7 +200,7 @@ Pro version **2**.0.5
 * **[GeneratePress] Improve**: Register fonts on the Theme Customize page
 
 = 2.0.8 =
-* **New**: [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) integration **[Pro]** 
+* **New**: [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) integration **[Pro]**
 
 = 2.0.7 =
 * **[Oxygen] Fix**: Gutenberg editor compatibility
@@ -214,14 +220,14 @@ Pro version **2**.0.5
 * **[Oxygen] Improve**: Force disable the built-in Google Fonts and override the `Oxygen > Settings > Bloat Eliminator: Disable Google Fonts` setting
 
 = 2.0.4 =
-* **New**: [Greenshift](https://greenshiftwp.com/) integration **[Pro]** 
+* **New**: [Greenshift](https://greenshiftwp.com/) integration **[Pro]**
 * **Improve**: Better variable fonts support for Google Fonts
 * **Improve**: Delete all fonts file associated with the deleted font
 * **Fix**: Scheduled cache generation not cleared properly on manual action
 * **[Oxygen] Improve**: Disable Elegant Custom Fonts plugin
 
 = 2.0.3 =
-* **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]** 
+* **New**: [Breakdance](https://breakdance.com/ref/165/) integration **[Pro]**
 * **[Gutenberg] Fix**: Font CSS not loaded on the FSE editor
 
 = 2.0.2 =
@@ -239,15 +245,15 @@ Pro version **2**.0.5
 * **New**: Editable imported Google Fonts
 * **Fix**: Some Google Fonts with variable fonts are not loaded properly
 * **Change**: Plugin admin menu moved to `Appearance → Yabe Webfont`
-* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration **[Pro]** 
-* **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]** 
-* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration **[Pro]** 
+* **New**: [Beaver Builder](https://www.wpbeaverbuilder.com/) integration **[Pro]**
+* **New**: [Bricks](https://bricksbuilder.io/) integration **[Pro]**
+* **New**: [Cwicly](https://cwicly.com/?ref=suabahasa) integration **[Pro]**
 * **New**: [Classic Editor](https://wordpress.org/plugins/classic-editor/) integration
 * **New**: [Elementor](https://be.elementor.com/visit/?bta=209150&brand=elementor) integration
 * **New**: [GeneratePress](https://generatepress.com/?ref=7954) integration
 * **New**: [Gutenberg](https://wordpress.org/gutenberg) integration
-* **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]** 
-* **New**: [Zion Builder](https://zionbuilder.io/) integration **[Pro]** 
+* **New**: [Oxygen](https://oxygenbuilder.com/) integration **[Pro]**
+* **New**: [Zion Builder](https://zionbuilder.io/) integration **[Pro]**
 
 = 1.0.0 =
 * 🐣 Initial release.

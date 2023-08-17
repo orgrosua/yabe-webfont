@@ -101,6 +101,17 @@
                         </p>
                     </td>
                 </tr>
+
+                <tr>
+                    <th scope="row"><label>Disable user's Google Fonts</label></th>
+                    <td>
+                        <input id="disable-user-google-fonts" name="disable_user_google_fonts" type="checkbox" :checked="get(options, 'misc.disable_user_google_fonts', false)" :value="get(options, 'misc.disable_user_google_fonts', false)" @input="set(options, 'misc.disable_user_google_fonts', !options?.misc?.disable_user_google_fonts)">
+                        <label for="disable-user-google-fonts"> Disable Google Fonts API that loaded manually </label>
+                        <p class="description">
+                            Scan and disable Google Fonts API that loaded manually by the theme or plugin through <code>wp_enqueue_style</code> function.
+                        </p>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
