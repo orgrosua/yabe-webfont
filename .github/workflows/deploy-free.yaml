@@ -79,10 +79,9 @@ jobs:
         # - src/Builder/FunnelKit
         # - src/Builder/Greenshift
         # - src/Builder/Oxygen
-        # - src/Builder/Pinegrow
         # - src/Builder/Spectra
         # - src/Builder/Zion
-        - run: rm -rf src/Builder/{Beaver,Blocksy,Breakdance,Bricks,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,Pinegrow,Spectra,Zion}
+        - run: rm -rf src/Builder/{Beaver,Blocksy,Breakdance,Bricks,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,Spectra,Zion}
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi

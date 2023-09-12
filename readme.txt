@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.3
-Stable tag: 2.0.51
+Stable tag: 2.0.52
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -39,6 +39,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [GeneratePress](https://generatepress.com/?ref=7954)
 * [Gutenberg](https://wordpress.org/gutenberg)
 * [Kadence WP](https://kadencewp.com)
+* [Pinegrow](https://pinegrow.com/wordpress)
 * [Beaver Builder](https://www.wpbeaverbuilder.com/) **[Pro]**
 * [Blocksy](https://creativethemes.com/blocksy) **[Pro]**
 * [Breakdance](https://breakdance.com/ref/165/) **[Pro]**
@@ -48,7 +49,6 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]**
 * [Greenshift](https://greenshiftwp.com/) **[Pro]**
 * [Oxygen](https://oxygenbuilder.com/) **[Pro]**
-* [Pinegrow](https://pinegrow.com/wordpress) **[Pro]**
 * [Spectra](https://wpspectra.com/) **[Pro]**
 * [Zion Builder](https://zionbuilder.io/) **[Pro]**
 
