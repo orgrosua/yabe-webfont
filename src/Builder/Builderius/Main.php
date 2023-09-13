@@ -38,10 +38,6 @@ class Main implements BuilderInterface
 
     public function enqueue_scripts()
     {
-        if (! (isset($_GET['builderius']) && isset($_GET['builderius_template']) && ! empty($_GET['builderius_template']))) {
-            return;
-        }
-
         if (! wp_script_is('builderius-builder', 'registered')) {
             return;
         }
