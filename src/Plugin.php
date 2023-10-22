@@ -174,6 +174,8 @@ final class Plugin
 
         $this->maybe_embedded_license();
 
+        delete_transient('yabe_webfont_scanned_apis_' . YABE_WEBFONT::VERSION);
+
         do_action('a!yabe/webfont/plugins:activate_plugin_end');
     }
 

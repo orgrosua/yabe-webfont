@@ -10,36 +10,36 @@
                 <strong>{{ item.title }}</strong> was successfully restored.
             </td>
         </tr>
-        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': (!item.status || item.deleted_at != null) }" class="tw-group">
-            <th scope="row" :class="{ 'tw-pl-1.5': !item.status, 'tw-pl-2': item.deleted_at !== null }" class="tw-align-middle tw-py-2 ywf-check-column">
+        <tr v-else :class="{ 'active': item.status && item.deleted_at == null, 'inactive': (!item.status || item.deleted_at != null) }" class="group">
+            <th scope="row" :class="{ 'pl-1.5': !item.status, 'pl-2': item.deleted_at !== null }" class="align-middle py-2 ywf-check-column">
                 <input v-model="selectedItems" type="checkbox" :value="item.id" :disabled="busy.isBusy" />
             </th>
-            <td v-if="item.deleted_at == null" width="1%" class="manage-column tw-align-middle">
-                <Switch :aria-disabled="busy.isBusy" :checked="item.status" @click="$emit('updateStatus')" @keyup="handleKeyUp" :class="[item.status ? 'tw-bg-sky-600' : 'tw-opacity-50 tw-bg-gray-200']" class="tw-relative tw-inline-flex tw-p-0 tw-h-6 tw-w-11 tw-shrink-0 tw-cursor-pointer tw-rounded-full tw-border-2 tw-border-transparent tw-transition-colors tw-duration-200 tw-ease-in-out focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-sky-500 focus:tw-ring-offset-2">
-                    <span :class="[item.status ? 'tw-translate-x-5' : 'tw-translate-x-0']" class="tw-pointer-events-none tw-relative tw-inline-block tw-h-5 tw-w-5 tw-transform tw-rounded-full tw-bg-white tw-shadow tw-ring-0 tw-transition tw-duration-200 tw-ease-in-out">
-                        <span aria-hidden="true" :class="[item.status ? 'tw-opacity-0 tw-ease-out tw-duration-100' : 'tw-opacity-100 tw-ease-in tw-duration-200']" class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-transition-opacity">
-                            <svg v-if="!item.isUpdatingStatus" class="tw-h-3 tw-w-3 tw-text-gray-400" fill="none" viewBox="0 0 12 12">
+            <td v-if="item.deleted_at == null" width="1%" class="manage-column align-middle">
+                <Switch :aria-disabled="busy.isBusy" :checked="item.status" @click="$emit('updateStatus')" @keyup="handleKeyUp" :class="[item.status ? 'bg-sky-600' : 'opacity-50 bg-gray-200']" class="relative inline-flex p-0 h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
+                    <span :class="[item.status ? 'translate-x-5' : 'translate-x-0']" class="pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
+                        <span aria-hidden="true" :class="[item.status ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200']" class="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity">
+                            <svg v-if="!item.isUpdatingStatus" class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
                                 <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="tw-animate-spin tw-h-3 tw-w-3 tw-text-gray-400" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="animate-spin h-3 w-3 text-gray-400" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z" />
                             </svg>
                         </span>
-                        <span aria-hidden="true" :class="[item.status ? 'tw-opacity-100 tw-ease-in tw-duration-200' : 'tw-opacity-0 tw-ease-out tw-duration-100']" class="tw-absolute tw-inset-0 tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-transition-opacity">
-                            <svg v-if="!item.isUpdatingStatus" class="tw-h-3 tw-w-3 tw-text-sky-600" fill="currentColor" viewBox="0 0 12 12">
+                        <span aria-hidden="true" :class="[item.status ? 'opacity-100 ease-in duration-200' : 'opacity-0 ease-out duration-100']" class="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity">
+                            <svg v-if="!item.isUpdatingStatus" class="h-3 w-3 text-sky-600" fill="currentColor" viewBox="0 0 12 12">
                                 <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
                             </svg>
-                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="tw-animate-spin tw-h-3 tw-w-3 tw-text-sky-600" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="animate-spin h-3 w-3 text-sky-600" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                 <path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z" />
                             </svg>
                         </span>
                     </span>
                 </Switch>
             </td>
-            <td width="20%" class="tw-align-middle tw-relative">
-                <div class="tw-flex tw-items-center">
-                    <div v-if="item.type === 'google-fonts'" title="Google Fonts" class="tw-flex tw-items-center tw-mr-1.5">
-                        <svg class="tw-w-5 tw-h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+            <td width="20%" class="align-middle relative">
+                <div class="flex items-center">
+                    <div v-if="item.type === 'google-fonts'" title="Google Fonts" class="flex items-center mr-1.5">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                             <path fill="none" d="M0 0h16v16H0z" />
                             <path fill="#F29900" d="M13.5 2H8L1 13h5.5z" />
                             <path fill="#1A73E8" d="M8 2h5v11H8z" />
@@ -50,8 +50,8 @@
                             <path fill="#34A853" d="M13 7c1.66 0 3 1.34 3 3s-1.34 3-3 3" />
                         </svg>
                     </div>
-                    <div v-else-if="item.type === 'adobe-fonts'" title="Adobe Fonts" class="tw-flex tw-items-center tw-mr-1.5">
-                        <svg class="tw-w-5 tw-h-5" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                    <div v-else-if="item.type === 'adobe-fonts'" title="Adobe Fonts" class="flex items-center mr-1.5">
+                        <svg class="w-5 h-5" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                             <g>
                                 <rect class="cls-1" fill="#000b1d" y="0.5" width="32" height="31" rx="5.64848"></rect>
                                 <path class="cls-2" fill="#fff" d="M17.63921,13.46488c-.74711,2.504-1.37579,4.91772-2.12289,7.28029a12.90012,12.90012,0,0,1-1.47406,3.41265,4.1921,4.1921,0,0,1-3.31166,1.777c-1.02992,0-2.03957-.48468-2.03957-1.5549A1.40176,1.40176,0,0,1,9.92281,23.0876a.61424.61424,0,0,1,.56539.32311c.50483.90867.98951,1.43364,1.21164,1.43364s.40383-.30284.76725-1.61534l2.65045-9.76247-1.90691-.00211a.91358.91358,0,0,1,.30208-1.03289h1.89816a17.53964,17.53964,0,0,1,1.3978-3.43866,5.04817,5.04817,0,0,1,4.36161-2.928c1.51448,0,2.14044.72695,2.14044,1.65589A1.52543,1.52543,0,0,1,22.01837,9.215c-.323,0-.48456-.24228-.58555-.58555-.34326-1.29235-.78752-1.676-1.05007-1.676s-.66638.48456-1.11052,1.49421a25.74394,25.74394,0,0,0-1.343,3.99058l2.30933-.003a.86867.86867,0,0,1-.31678,1.02946Z"></path>
@@ -59,34 +59,34 @@
                         </svg>
                     </div>
 
-                    <a v-if="item.type === 'adobe-fonts'" :href="`https://fonts.adobe.com/fonts/${item.slug}`" target="_blank" class="tw-font-semibold">
+                    <a v-if="item.type === 'adobe-fonts'" :href="`https://fonts.adobe.com/fonts/${item.slug}`" target="_blank" class="font-semibold">
                         {{ item.title }}
                     </a>
                     <router-link v-else-if="item.deleted_at == null" :to="{ name: getRouteName(), params: { id: item.id } }" :class="{
-                        'tw-font-semibold': item.status
+                        'font-semibold': item.status
                     }">
                         {{ item.title }}
                     </router-link>
                     <template v-else>
                         {{ item.title }}
                     </template>
-                    <span class="tw-invisible group-hover:tw-visible tw-text-gray-400 tw-font-normal tw-pl-1">ID: {{ item.id }}</span>
+                    <span class="invisible group-hover:visible text-gray-400 font-normal pl-1">ID: {{ item.id }}</span>
                 </div>
                 <div class="row-actions visible">
                     <template v-if="item.type !== 'adobe-fonts'">
                         <template v-if="item.deleted_at == null">
                             <router-link :to="{ name: getRouteName(), params: { id: item.id } }"> {{ __('Edit', 'yabe-webfont') }} </router-link>
                             |
-                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
+                            <a :class="{ 'cursor-wait': busy.isBusy }" class="text-red-700 cursor-pointer hover:text-red-800" @click="$emit('delete')">
                                 {{ item.isDeleting ? 'Deleting...' : 'Trash' }}
                             </a>
                         </template>
                         <template v-else>
-                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-cursor-pointer " @click="$emit('restore')">
+                            <a :class="{ 'cursor-wait': busy.isBusy }" class="cursor-pointer " @click="$emit('restore')">
                                 {{ item.isRestoring ? 'Restoring...' : 'Restore' }}
                             </a>
                             |
-                            <a :class="{ 'tw-cursor-wait': busy.isBusy }" class="tw-text-red-700 tw-cursor-pointer hover:tw-text-red-800" @click="$emit('delete')">
+                            <a :class="{ 'cursor-wait': busy.isBusy }" class="text-red-700 cursor-pointer hover:text-red-800" @click="$emit('delete')">
                                 {{ item.isDeleting ? 'Deleting...' : 'Delete Permanently' }}
                             </a>
                         </template>
@@ -94,23 +94,23 @@
 
                 </div>
             </td>
-            <td width="20%" class="tw-align-middle">
-                <div class="group tw-flex tw-items-center">
-                    <span class="group-hover:tw-hidden">
+            <td width="20%" class="align-middle">
+                <div class="group flex items-center">
+                    <span class="group-hover:hidden">
                         {{ item.family }}
                     </span>
-                    <div class="tw-hidden group-hover:tw-block tw-font-semibold">
-                        <span class="tw-text-[#0050ff]">var</span>(<span class="tw-text-[#1fa87a]">--ywf--family-{{ item.family.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>)
+                    <div class="hidden group-hover:block font-semibold">
+                        <span class="text-[#0050ff]">var</span>(<span class="text-[#1fa87a]">--ywf--family-{{ item.family.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>)
                     </div>
                 </div>
             </td>
-            <td width="10%" class="tw-align-middle">
-                <div class="tw-flex tw-items-center tw-space-x-3">
-                    <span :title="new Date(item.updated_at * 1000)" class="tw-underline tw-decoration-dotted tw-text-gray-700">{{ ago(new Date(item.updated_at * 1000)) }}</span>
+            <td width="10%" class="align-middle">
+                <div class="flex items-center space-x-3">
+                    <span :title="new Date(item.updated_at * 1000)" class="underline decoration-dotted text-gray-700">{{ ago(new Date(item.updated_at * 1000)) }}</span>
                 </div>
             </td>
-            <td class="tw-align-middle ">
-                <ContentEditable tag="div" v-model="preview.text" :style="previewInlineStyle()" class="preview-text tw-leading-tight" />
+            <td class="align-middle ">
+                <ContentEditable tag="div" v-model="preview.text" :style="previewInlineStyle()" class="preview-text leading-tight" />
             </td>
         </tr>
     </transition>

@@ -1,13 +1,13 @@
 <template>
-    <div v-if="!yabeWebfont.lite_edition" class="tw-mb-6">
+    <div v-if="!yabeWebfont.lite_edition" class="mb-6">
         <table class="form-table" role="presentation">
             <tbody>
                 <tr>
                     <th scope="row"><label>License Key</label></th>
                     <td>
-                        <input name="license_key" type="password" v-model.lazy="license.key" class="tw-min-w-[25rem]">
-                        <div v-if="license.is_activated" class="tw-flex tw-my-2.5 tw-items-center tw-font-medium">
-                            Status: <span class="tw-font-normal tw-text-white tw-bg-green-700 tw-px-1.5 tw-py-1 tw-rounded tw-ml-2.5">active</span>
+                        <input name="license_key" type="password" v-model.lazy="license.key" class="min-w-[25rem]">
+                        <div v-if="license.is_activated" class="flex my-2.5 items-center font-medium">
+                            Status: <span class="font-normal text-white bg-green-700 px-1.5 py-1 rounded ml-2.5">active</span>
                         </div>
                         <p v-else class="description">Enter your <a href="https://webfont.yabe.land/#pricing-plans" target="_blank">license key</a> receive the update of the latest version.</p>
                     </td>
@@ -17,14 +17,14 @@
                     <td>
                         <input id="pre-release" name="opt_in_pre_release" type="checkbox" v-model="license.opt_in_pre_release">
                         <label for="pre-release"> Enable</label>
-                        <p class="description">Opt-in to get the pre-release version update. <span class="tw-text-red-700">Pre-release version may unstable.</span></p>
+                        <p class="description">Opt-in to get the pre-release version update. <span class="text-red-700">Pre-release version may unstable.</span></p>
                     </td>
                 </tr> -->
             </tbody>
         </table>
     </div>
 
-    <div class="tw-mb-6">
+    <div class="mb-6">
         <h2 class="title">Performance</h2>
 
         <table class="form-table" role="presentation">
@@ -32,30 +32,30 @@
                 <tr>
                     <th scope="row"> Cached CSS </th>
                     <td>
-                        <p class="tw-flex tw-gap-x-1">
-                            <span class="tw-font-medium"> Last generated: </span>
+                        <p class="flex gap-x-1">
+                            <span class="font-medium"> Last generated: </span>
                             <template v-if="css_cache.last_generated">
                                 {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                                 <a :href="`${css_cache.file_url}?ver=${css_cache.last_generated}`" target="_blank">
-                                    <svg class="tw-w-[15px] tw-h-[15px]" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 100 100">
+                                    <svg class="w-[15px] h-[15px]" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 100 100">
                                         <path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path>
                                         <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon>
                                     </svg>
                                 </a>
                             </template>
-                            <span :class="busy.isBusy && (busy.hasTask('settings:generate-cache') || busy.hasTask('settings:fetch-cache')) ? 'tw-visible' : 'tw-hidden'" class="spinner"></span>
+                            <span :class="busy.isBusy && (busy.hasTask('settings:generate-cache') || busy.hasTask('settings:fetch-cache')) ? 'visible' : 'hidden'" class="spinner"></span>
                         </p>
                         <p class="description">
                             Serve the CSS file from the cache instead of generating it on the fly.
                         </p>
-                        <div class="tw-flex tw-items-center tw-my-2">
+                        <div class="flex items-center my-2">
                             <button type="button" @click="doGenerateCache" class="button button-secondary"> Re-generate cache </button>
 
                             <template v-if="css_cache.pending_task">
-                                <svg class="tw-ml-3 tw-h-5 tw-w-5 tw-text-gray-400 tw-fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                                <svg class="ml-3 h-5 w-5 text-gray-400 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
                                     <path d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V75c0 42.4 16.9 83.1 46.9 113.1L146.7 256 78.9 323.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 320h10.8C285.6 480.1 256 427.5 256 368c0-27.2 6.2-53 17.2-76l-36-36 67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H320 64 32zM96 75V64H288V75c0 19-5.6 37.4-16 53H112c-10.3-15.6-16-34-16-53zM576 368c0-79.5-64.5-144-144-144s-144 64.5-144 144s64.5 144 144 144s144-64.5 144-144zM432 288c8.8 0 16 7.2 16 16v48h32c8.8 0 16 7.2 16 16s-7.2 16-16 16H432c-8.8 0-16-7.2-16-16V304c0-8.8 7.2-16 16-16z" />
                                 </svg>
-                                <span class="tw-text-gray-400 tw-pl-1">
+                                <span class="text-gray-400 pl-1">
                                     There is a scheduled task to generate the cache.
                                 </span>
                             </template>
@@ -76,7 +76,7 @@
         </table>
     </div>
 
-    <div class="tw-mb-6">
+    <div class="mb-6">
         <h2 class="title">Misc.</h2>
 
         <table class="form-table" role="presentation">
@@ -116,7 +116,7 @@
         </table>
     </div>
 
-    <div class="tw-mb-6">
+    <div class="mb-6">
         <h2 class="title">Adobe Fonts</h2>
 
         <table class="form-table" role="presentation">
@@ -124,10 +124,10 @@
                 <tr>
                     <th scope="row"><label>Project ID</label></th>
                     <td>
-                        <div class="tw-flex tw-items-center">
+                        <div class="flex items-center">
                             <input type="text" id="adobe-font-project-id" name="adobe_font_project_id" :value="get(options, 'adobe_fonts.project_id', null)" @change="$event => set(options, 'adobe_fonts.project_id', $event.target.value === '' ? null : $event.target.value)" class="">
                             <button v-if="adobe_font_kit" type="button" @click="doSyncAdobeFonts" class="button button-secondary"> Sync fonts </button>
-                            <span :class="busy.isBusy && (busy.hasTask('settings:fetch-adobe-fonts-kits') || busy.hasTask('settings:sync-adobe-fonts-kits')) ? 'tw-visible' : 'tw-hidden'" class="spinner"></span>
+                            <span :class="busy.isBusy && (busy.hasTask('settings:fetch-adobe-fonts-kits') || busy.hasTask('settings:sync-adobe-fonts-kits')) ? 'visible' : 'hidden'" class="spinner"></span>
                         </div>
                         <p class="description">
                             Get your Project ID from <a href="https://fonts.adobe.com/my_fonts#web_projects-section" target="_blank">https://fonts.adobe.com/my_fonts#web_projects-section</a>

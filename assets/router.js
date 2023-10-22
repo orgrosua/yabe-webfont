@@ -11,6 +11,10 @@ import FonstGoogleFontsEdit from './pages/fonts/google-fonts/Edit.vue';
 
 import SettingsIndex from './pages/settings/Index.vue';
 
+import MigrationsBase from './pages/migrations/Base.vue';
+import MigrationsIndex from './pages/migrations/Index.vue';
+import CustomFontsBricks from './pages/migrations/CustomFontsBricks.vue';
+
 const router = createRouter({
     history: createWebHistory(`${yabeWebfont.web_history}#/`),
     scrollBehavior(_, _2, savedPosition) {
@@ -53,6 +57,30 @@ const router = createRouter({
             path: '/settings',
             name: 'settings',
             component: SettingsIndex,
+        },
+        {
+            path: '/migrations',
+            name: 'migrations',
+            component: MigrationsBase,
+            redirect: { name: 'migrations.index' },
+            children: [
+                {
+                    path: 'index',
+                    name: 'migrations.index',
+                    component: MigrationsIndex,
+                },
+                {
+                    path: 'custom-fonts-bricks',
+                    name: 'migrations.custom-fonts-bricks',
+                    component: () => import('./pages/migrations/CustomFontsBricks.vue'),
+                },
+                {
+                    path: 'font-hero-dplugins',
+                    name: 'migrations.font-hero-dplugins',
+                    // component: FontsIndex,
+                    component: null,
+                },
+            ],
         },
         { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
     ]

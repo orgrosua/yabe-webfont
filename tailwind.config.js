@@ -5,7 +5,7 @@ module.exports = {
         './src/**/*.{js,php,html}',
     ],
     important: '#yabe-webfont-app',
-    prefix: 'tw-',
+    prefix: '',
     theme: {
         extend: {},
     },

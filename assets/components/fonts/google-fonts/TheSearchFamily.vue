@@ -1,20 +1,20 @@
 <template>
-    <VueSelect ref="vueSelectEl" :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" :autoscroll="true" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
+    <VueSelect ref="vueSelectEl" :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" :loading="busy.isBusy" :autoscroll="true" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
         <template #list-footer>
-            <li class="tw-flex tw-my-0 tw-w-full">
-                <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button tw-flex-1" v-ripple>
+            <li class="flex my-0 w-full">
+                <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button flex-1" v-ripple>
                     Prev
                 </button>
-                <button type="button" :disabled="!hasNextPage" @click="offset += limit" class="button tw-flex-1" v-ripple>
+                <button type="button" :disabled="!hasNextPage" @click="offset += limit" class="button flex-1" v-ripple>
                     Next
                 </button>
             </li>
         </template>
         <template #option="{ family, category }">
-            <div class="tw-flex tw-justify-between">
+            <div class="flex justify-between">
                 <span class="">{{ family }}</span>
 
-                <span class="tw-text-xs tw-text-gray-500 tw-bg-gray-100 tw-px-1 tw-py-0.5 tw-rounded">{{ category.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>
+                <span class="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">{{ category.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>
             </div>
         </template>
     </VueSelect>
@@ -23,6 +23,7 @@
 <script setup>
 import Fuse from 'fuse.js';
 import { ref, computed, onMounted } from 'vue';
+import { useBusy } from '../../../stores/busy';
 
 const props = defineProps({
     catalog: {
@@ -36,6 +37,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const busy = useBusy();
+
 const fontData = computed({
     get() {
         return props.modelValue
@@ -43,7 +46,8 @@ const fontData = computed({
     set(value) {
         emit('update:modelValue', value);
     }
-})
+});
+
 
 // Font search
 const searchFontFamily = ref('');
