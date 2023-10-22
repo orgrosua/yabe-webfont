@@ -5,6 +5,8 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
+import './public-path.js';
+
 // any CSS you import will output into a single css file (app.css in this case)
 import 'highlight.js/styles/stackoverflow-light.css';
 import 'vue-select/dist/vue-select.css';

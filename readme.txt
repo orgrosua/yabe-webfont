@@ -28,6 +28,7 @@ Yabe Webfont is packed full of features designed to streamline your workflow. So
 * **Fine-tuning**: Complete control over your fonts and typography. On 90% of use cases, the default one is good to go.
 * **Lightweight and blazingly fast**: The font management system uses WordPress REST API and a modern JavaScript framework for an instant, responsive user experience. The front page cache ensures fast loading and reduces database queries.
 * **Variable Fonts support**: The format allows a single font file to contain multiple stylistic variations.
+* **Multisite support**: The plugin is compatible with WordPress Multisite (Activate the plugin on the site level).
 
 ### SEAMLESS INTEGRATION
 
