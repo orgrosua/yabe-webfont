@@ -60,7 +60,7 @@ class Main implements BuilderInterface
     {
         $theme_json_data = $theme_json->get_data();
 
-        if (!isset($theme_json_data['settings']['typography'])) {
+        if (! isset($theme_json_data['settings']['typography'])) {
             return $theme_json;
         }
 
@@ -152,13 +152,10 @@ class Main implements BuilderInterface
 
     public function enqueue_block_assets()
     {
-        if (is_admin()) {
-            if (file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE))) {
-                $handle = YABE_WEBFONT::WP_OPTION . '-cache';
-                $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
-
-                wp_enqueue_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
-            }
+        if (is_admin() && file_exists(Cache::get_cache_path(Cache::CSS_CACHE_FILE))) {
+            $handle = YABE_WEBFONT::WP_OPTION . '-cache';
+            $version = (string) filemtime(Cache::get_cache_path(Cache::CSS_CACHE_FILE));
+            wp_enqueue_style($handle, Cache::get_cache_url(Cache::CSS_CACHE_FILE), [], $version);
         }
     }
 

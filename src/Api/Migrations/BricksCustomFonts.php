@@ -77,7 +77,7 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
      */
     public function import_fonts(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        if (!defined('BRICKS_DB_CUSTOM_FONTS')) {
+        if (! defined('BRICKS_DB_CUSTOM_FONTS')) {
             return new WP_REST_Response([
                 'message' => 'Bricks theme not activated',
             ], 404);
@@ -88,10 +88,10 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
 
         $font_ids = get_posts(
             [
-                'post_type'      => BRICKS_DB_CUSTOM_FONTS,
+                'post_type' => BRICKS_DB_CUSTOM_FONTS,
                 'posts_per_page' => -1,
-                'fields'         => 'ids',
-                'no_found_rows'  => true, // Skip the 'found_posts' calculation
+                'fields' => 'ids',
+                'no_found_rows' => true, // Skip the 'found_posts' calculation
             ]
         );
 
@@ -118,13 +118,13 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
             // $key: font-weight + variant (e.g.: 700italic)
             foreach ($bricks_font_faces as $key => $bricks_font_face) {
                 $font_weight = filter_var($key, FILTER_SANITIZE_NUMBER_INT);
-                $font_style  = str_replace($font_weight, '', $key);
+                $font_style = str_replace($font_weight, '', $key);
 
                 $font_face = [
                     'id' => Common::random_slug(10),
                     'weight' => $font_weight,
                     'width' => '',
-                    'style' => !empty($font_style) ? $font_style : 'normal',
+                    'style' => empty($font_style) ? 'normal' : $font_style,
                     'display' => '',
                     'selector' => '',
                     'comment' => '',
@@ -138,7 +138,7 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
                         '%s-%s-%s-%s-%s',
                         $post->post_title,
                         $font_weight,
-                        !empty($font_style) ? $font_style : 'normal',
+                        empty($font_style) ? 'normal' : $font_style,
                         Common::random_slug(5),
                         time()
                     )) . '.' . $key_format;
@@ -199,7 +199,7 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
 
     public function clean_up(WP_REST_Request $wprestRequest): WP_REST_Response
     {
-        if (!defined('BRICKS_DB_CUSTOM_FONTS')) {
+        if (! defined('BRICKS_DB_CUSTOM_FONTS')) {
             return new WP_REST_Response([
                 'message' => 'Bricks theme not activated',
             ], 404);
@@ -207,10 +207,10 @@ class BricksCustomFonts extends AbstractApi implements ApiInterface
 
         $font_ids = get_posts(
             [
-                'post_type'      => BRICKS_DB_CUSTOM_FONTS,
+                'post_type' => BRICKS_DB_CUSTOM_FONTS,
                 'posts_per_page' => -1,
-                'fields'         => 'ids',
-                'no_found_rows'  => true, // Skip the 'found_posts' calculation
+                'fields' => 'ids',
+                'no_found_rows' => true, // Skip the 'found_posts' calculation
             ]
         );
 

@@ -27,7 +27,7 @@ function doImport() {
     let promise = api
         .request({
             method: 'POST',
-            url: '/migrations/bricks-custom-fonts/import-fonts',
+            url: '/migrations/font-hero-dplugins/import-fonts',
         })
         .then((response) => {
             completedActions.value.import = true;
@@ -47,11 +47,11 @@ function doImport() {
 function doCleanUp() {
     if (!confirm(
         !completedActions.value.import
-            ? 'You have not imported the fonts data. Are you sure you want to clean up the Custom Fonts [Bricks] data?'
+            ? 'You have not imported the fonts data. Are you sure you want to clean up the Font Hero [Dplugins] data?'
             : (
                 completedActions.value.cleanup
-                    ? 'You have already cleaned up the Custom Fonts [Bricks] data. Are you sure you want to clean it up again?'
-                    : 'Are you sure you want to clean up the Custom Fonts [Bricks] data?'
+                    ? 'You have already cleaned up the Font Hero [Dplugins] data. Are you sure you want to clean it up again?'
+                    : 'Are you sure you want to clean up the Font Hero [Dplugins] data?'
             )
     )) {
         return;
@@ -62,7 +62,7 @@ function doCleanUp() {
     let promise = api
         .request({
             method: 'POST',
-            url: '/migrations/bricks-custom-fonts/clean-up',
+            url: '/migrations/font-hero-dplugins/clean-up',
         })
         .then((response) => {
             completedActions.value.cleanup = true;
@@ -73,23 +73,23 @@ function doCleanUp() {
 
     notifier.async(
         promise,
-        'Custom Fonts [Bricks] data cleaned up successfully.',
-        'Failed to clean up Custom Fonts [Bricks] data.',
-        'Cleaning up Custom Fonts [Bricks] data...'
+        'Font Hero [Dplugins] data cleaned up successfully.',
+        'Failed to clean up Font Hero [Dplugins] data.',
+        'Cleaning up Font Hero [Dplugins] data...'
     );
 }
 </script>
 
 <template>
-    <span class="mr-2 text-2xl">» {{ __('Custom Fonts [Bricks]', 'yabe-webfont') }} </span>
+    <span class="mr-2 text-2xl">» {{ __('Font Hero [Dplugins]', 'yabe-webfont') }} </span>
 
     <div class="mt-4 rounded group relative bg-white p-6">
         <div class="mx-auto max-w-lg">
             <h2 class="m-0 text-base font-semibold leading-6 text-gray-900">
-                Custom Fonts [Bricks] → Yabe Webfont
+                Font Hero [Dplugins] → Yabe Webfont
             </h2>
             <p class="m-0 mt-1 text-sm text-gray-500">
-                Migrate your custom fonts from Bricks to Yabe Webfont. Manage your fonts in one place, and use them across visual builders.
+                Migrate your custom fonts from Font Hero to Yabe Webfont. Manage your fonts in one place, and use them across visual builders.
             </p>
             <ul role="list" class="m-0 mt-6 [&>li]:border-solid [&>li]:border-0 divide-y divide-gray-200 border-0 border-b border-t border-solid border-gray-200">
                 <li class="m-0">
@@ -106,7 +106,7 @@ function doCleanUp() {
                                 Import fonts
                             </p>
                             <p class="m-0 text-sm text-gray-500">
-                                Import the fonts data from the Custom Fonts [Bricks] feature.
+                                Import the fonts data from the Font Hero [Dplugins] plugin.
                             </p>
                         </div>
                         <div class="flex-shrink-0 self-center">
@@ -136,7 +136,7 @@ function doCleanUp() {
                                 Clean up
                             </p>
                             <p class="m-0 text-sm text-gray-500">
-                                Remove the fonts data from the Custom Fonts [Bricks] feature.
+                                Remove the fonts data from the Font Hero [Dplugins] plugin.
                             </p>
                         </div>
                         <div class="flex-shrink-0 self-center">

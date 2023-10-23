@@ -76,6 +76,11 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
+= 2.0.55 =
+* **New**: Added migration tool to import data from other font plugins
+* **New**: [Custom Fonts - Bricks] migration tool.
+* **New**: [Font Hero - Dplugins] migration tool.
+
 = 2.0.54 =
 * **[Builderius] Improve**: Ensure compatibility with the latest Builderius version.
 
