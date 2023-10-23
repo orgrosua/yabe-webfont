@@ -4,9 +4,9 @@
         top: `${y ?? 0}px`,
         left: `${x ?? 0}px`,
         width: 'max-content',
-    }" ref="floating" class="floating">
+    }" ref="floating" class="floating-ui">
         <div v-html="props.content"></div>
-        <div ref="floatingArrow" class="floating-arrow"></div>
+        <div ref="floatingArrow" class="floating-ui-arrow"></div>
     </div>
 </template>
 
@@ -60,25 +60,4 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-.floating-arrow {
-    position: absolute;
-    background: #222;
-    width: 8px;
-    height: 8px;
-    transform: rotate(45deg);
-}
-
-.floating {
-    width: max-content;
-    /* position: absolute; */
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: #222;
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 4px;
-    font-size: 90%;
-}
 </style>

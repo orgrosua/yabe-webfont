@@ -1,3 +1,27 @@
+@import 'awesome-notifications/dist/style.css';
+
+.floating-ui-arrow {
+    position: absolute;
+    background: #222;
+    width: 8px;
+    height: 8px;
+    transform: rotate(45deg);
+}
+
+.floating-ui {
+    width: max-content;
+    /* position: absolute; */
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #222;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 90%;
+}
+
 .vs--single {
     &.v-select {
         box-shadow: 0 0 0 transparent;

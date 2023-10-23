@@ -1,4 +1,3 @@
-import 'awesome-notifications/dist/style.css';
 import AWN from 'awesome-notifications';
 
 import iconAsync from '../images/icons/gear-solid.svg';
