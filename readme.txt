@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.3
-Stable tag: 2.0.56
+Stable tag: 2.0.57
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -76,7 +76,7 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
-= 2.0.56 =
+= 2.0.57 =
 * **New**: Added migration tool to import data from other font plugins
 * **New**: [Custom Fonts - Bricks] migration tool.
 * **New**: [Font Hero - Dplugins] migration tool.

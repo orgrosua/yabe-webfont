@@ -187,6 +187,10 @@ return [
             'BRICKS_VERSION',
             '__BREAKDANCE_VERSION',
             'SLINGBLOCKS_PLUGIN_VERSION',
+
+            'BRICKS_DB_CUSTOM_FONTS',
+            'BRICKS_DB_CUSTOM_FONT_FACES',
+            'DP_FH_BASE',
         ]
     ),
 
