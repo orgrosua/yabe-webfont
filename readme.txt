@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.3
-Stable tag: 2.0.57
+Stable tag: 2.0.58
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -50,7 +50,9 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]**
 * [Greenshift](https://greenshiftwp.com/) **[Pro]**
 * [Oxygen](https://oxygenbuilder.com/) **[Pro]**
+* [Slider Revolution](https://www.sliderrevolution.com/) **[Pro]**
 * [Spectra](https://wpspectra.com/) **[Pro]**
+* [YellowPencil](https://yellowpencil.waspthemes.com/) **[Pro]**
 * [Zion Builder](https://zionbuilder.io/) **[Pro]**
 
 Visit [our website](https://webfont.yabe.land) for more information.
@@ -75,6 +77,10 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.58 =
+* **New**: [Slider Revolution](https://www.sliderrevolution.com/) integration **[Pro]**
+* **New**: [YellowPencil](https://yellowpencil.waspthemes.com/) integration **[Pro]**
 
 = 2.0.57 =
 * **New**: Added migration tool to import data from other font plugins
