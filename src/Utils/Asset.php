@@ -121,10 +121,16 @@ class Asset
      * @param string $key The manifest key.
      * @param array $deps The dependencies.
      * @param string $src The source.
-     * @param bool $in_footer Whether to enqueue the script before </body> instead of in the <head>.
+     * @param bool|array $args {
+     *      Optional. An array of additional script loading strategies. Default empty array.
+     *      Otherwise, it may be a boolean in which case it determines whether the script is printed in the footer. Default false.
+     *
+     *      @type string    $strategy     Optional. If provided, may be either 'defer' or 'async'.
+     *      @type bool      $in_footer    Optional. Whether to print the script in the footer. Default 'false'.
+     * }
      * @return bool|string The handle on success, false on failure.
      */
-    public static function register_script(string $key, array $deps = [], string $src = '', bool $in_footer = false)
+    public static function register_script(string $key, array $deps = [], string $src = '', $args = false)
     {
         $handle = YABE_WEBFONT::WP_OPTION . ':' . $key;
 
@@ -142,7 +148,7 @@ class Asset
             }
         }
 
-        $is_registered = wp_register_script($handle, $src, $deps, YABE_WEBFONT::VERSION, $in_footer);
+        $is_registered = wp_register_script($handle, $src, $deps, YABE_WEBFONT::VERSION, $args);
 
         if ($is_registered) {
             return $handle;
@@ -157,11 +163,18 @@ class Asset
      * @param string $key The manifest key.
      * @param array $deps The dependencies.
      * @param string $src The source.
-     * @param bool $in_footer Whether to enqueue the script before </body> instead of in the <head>.
+     * @param bool|array $args {
+     *      Optional. An array of additional script loading strategies. Default empty array.
+     *      Otherwise, it may be a boolean in which case it determines whether the script is printed in the footer. Default false.
+     *
+     *      @type string    $strategy     Optional. If provided, may be either 'defer' or 'async'.
+     *      @type bool      $in_footer    Optional. Whether to print the script in the footer. Default 'false'.
+     * }
+     * @return bool|string The handle on success, false on failure.
      */
-    public static function enqueue_script(string $key, array $deps = [], string $src = '', bool $in_footer = false)
+    public static function enqueue_script(string $key, array $deps = [], string $src = '', $args = false)
     {
-        $handle = static::register_script($key, $deps, $src, $in_footer);
+        $handle = static::register_script($key, $deps, $src, $args);
 
         if ($handle !== false) {
             if (wp_script_is($handle, 'enqueued')) {
