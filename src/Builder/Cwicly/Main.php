@@ -26,8 +26,7 @@ class Main implements BuilderInterface
 {
     public function __construct()
     {
-        add_filter('rest_request_before_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->deregister_fonts($response, $handler, $wprestRequest), 1_000_001, 3);
-        add_filter('rest_request_after_callbacks', fn ($response, array $handler, \WP_REST_Request $wprestRequest) => $this->register_fonts($response, $handler, $wprestRequest), 1_000_001, 3);
+        add_action('enqueue_block_editor_assets', fn () => $this->enqueue_block_editor_assets(), 1_000_001);
 
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('cwicly'), 1_000_001);
     }
@@ -37,73 +36,50 @@ class Main implements BuilderInterface
         return 'cwicly';
     }
 
-    /**
-     * @see https://github.com/WordPress/wordpress-develop/blob/ea08277674413b9853aa19df6ecc23841de894b6/src/wp-includes/rest-api/class-wp-rest-server.php#L1197
-     * @param \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed $response
-     * @param array $handler  Route handler used for the request.
-     * @param \WP_REST_Request $request
-     * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
-     */
-    public function register_fonts($response, $handler, $request)
+    public function enqueue_block_editor_assets()
     {
-        if ($request->get_route() === '/cwicly/v1/editor_start' && is_array($response)) {
-            $fonts = Font::get_fonts();
-
-            if (is_bool($response['localactivefonts'])) {
-                $response['localactivefonts'] = [];
-            }
-
-            foreach ($fonts as $font) {
-                $key = sprintf('custom-yabe-%s', Font::slugify($font['family']));
-
-                $f = [
-                    'family' => $font['family'],
-                    'fonts' => [],
-                    'type' => 'custom',
-                    'category' => 'Sans Serif',
-                    'display' => 'swap',
-                    'subsets' => [],
-                    'axes' => [],
-                ];
-
-                $response['localfonts'][$key] = $f;
-
-                $response['localactivefonts'][] = $key;
-            }
+        if (!wp_script_is('cwicly_editor_blocks', 'registered')) {
+            return;
         }
 
-        return $response;
-    }
+        $fonts = Font::get_fonts();
 
-    /**
-     * @see https://github.com/WordPress/wordpress-develop/blob/ea08277674413b9853aa19df6ecc23841de894b6/src/wp-includes/rest-api/class-wp-rest-server.php#L1197
-     * @param \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed $response
-     * @param array $handler  Route handler used for the request.
-     * @param \WP_REST_Request $request
-     * @return \WP_REST_Response|\WP_HTTP_Response|\WP_Error|mixed
-     */
-    public function deregister_fonts($response, $handler, $request)
-    {
-        if ($request->get_route() === '/cwicly/v1/options') {
-            if ($request->get_param('option') === 'cwicly_local_fonts') {
-                $value = $request->get_param('value');
+        $localFonts = [];
 
-                // remove array element with key 'custom-yabe-'
-                $value = array_filter($value, static fn ($k) => strncmp($k, 'custom-yabe-', strlen('custom-yabe-')) !== 0, ARRAY_FILTER_USE_KEY);
+        foreach ($fonts as $font) {
+            $key = sprintf('custom-yabe-%s', Font::slugify($font['family']));
 
-                $request->set_param('value', $value);
-            }
-
-            if ($request->get_param('option') === 'cwicly_local_active_fonts') {
-                $value = $request->get_param('value');
-
-                // remove array element with value 'custom-yabe-'
-                $value = array_filter($value, static fn ($v) => strncmp($v, 'custom-yabe-', strlen('custom-yabe-')) !== 0);
-
-                $request->set_param('value', $value);
-            }
+            $localFonts[$key] = [
+                'family' => $font['family'],
+                'fonts' => [],
+                'type' => 'custom',
+                'category' => 'Sans Serif',
+                'display' => 'swap',
+                'subsets' => [],
+                'axes' => [],
+            ];
         }
 
-        return $response;
+        wp_add_inline_script('cwicly_editor_blocks', 'var yabeWebfontCwiclyLocalFonts = ' . json_encode($localFonts, JSON_THROW_ON_ERROR), 'before');
+
+        wp_add_inline_script('cwicly_editor_blocks', "
+            if (typeof cwicly_info.starters.localfonts !== 'object') {
+                cwicly_info.starters.localfonts = {};
+            }
+
+            if (!Array.isArray(cwicly_info.starters.localactivefonts)) {
+                cwicly_info.starters.localactivefonts = [];
+            }
+
+            Object.entries(yabeWebfontCwiclyLocalFonts).forEach(function ([key, value]) {
+                cwicly_info.starters.localfonts[key] = value;
+                cwicly_info.starters.localactivefonts.push(key);
+            });
+
+            setTimeout(function () {
+                wp.data.dispatch('cwicly/base').writeLocalActiveFonts(cwicly_info.starters.localactivefonts);
+                wp.data.dispatch('cwicly/base').writeLocalFonts(cwicly_info.starters.localfonts);
+            }, 1000);
+        ", 'before');
     }
 }
