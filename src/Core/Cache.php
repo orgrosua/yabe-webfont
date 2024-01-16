@@ -42,6 +42,11 @@ class Cache
      */
     public const CACHE_DIR = '/yabe-webfont/cache/';
 
+    /**
+     * @var string
+     */
+    public static $typekit_embed = 'css';
+
     public function __construct()
     {
         add_filter('cron_schedules', fn ($schedules) => $this->filter_cron_schedules($schedules));
@@ -287,7 +292,7 @@ class Cache
         $html = '';
 
         $sql = "
-            SELECT metadata, font_faces FROM {$wpdb->prefix}yabe_webfont_fonts
+            SELECT metadata, font_faces, type FROM {$wpdb->prefix}yabe_webfont_fonts
             WHERE status = 1
                 AND deleted_at IS NULL
         ";
@@ -330,6 +335,19 @@ class Cache
             );
         }
 
+        // Adobe Fonts
+        if (self::$typekit_embed === 'js') {
+            $project_id = Config::get('adobe_fonts.project_id', null);
+            if ($project_id !== null) {
+                // check if the $result array contain item.type = 'adobe-fonts'
+                $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
+    
+                if ($any_adobe_fonts !== false) {
+                    $html .= self::get_kit_js($project_id);
+                }
+            }
+        }        
+
         return $html;
     }
 
@@ -339,7 +357,12 @@ class Cache
 
         $response = wp_remote_get(sprintf('https://use.typekit.net/%s.css', $kit_id));
 
-        if (is_wp_error($response)) {
+        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+            // The kit is only available in JS
+            if (wp_remote_retrieve_response_code($response) === 412) {
+                self::$typekit_embed = 'js';
+            }
+
             return $css;
         }
 
@@ -350,6 +373,25 @@ class Cache
         }
 
         return $css . ($body . "\n\n");
+    }
+
+    public static function get_kit_js($kit_id): string
+    {
+        $js = '';
+
+        $response = wp_remote_get(sprintf('https://use.typekit.net/%s.js', $kit_id));
+
+        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+            return $js;
+        }
+
+        $body = wp_remote_retrieve_body($response);
+
+        if (is_wp_error($body)) {
+            return $js;
+        }
+
+        return $js . ("\n\n" . '<script type="text/javascript">' . $body . '</script>' . "\n\n");
     }
 
     /**
