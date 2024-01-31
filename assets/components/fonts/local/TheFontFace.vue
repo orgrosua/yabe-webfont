@@ -1,3 +1,165 @@
+<script setup>
+import { ref } from 'vue';
+import { nanoid } from 'nanoid';
+import prettyBytes from 'pretty-bytes';
+import { parse as otParse } from '@konghayao/opentype.js';
+import decompress from 'wawoff2/decompress.mjs';
+
+import { useLocalFontStore } from '../../../stores/font/localFont';
+
+import ContentEditable from 'vue-contenteditable';
+import TheTooltip from '../../../components/TheTooltip.vue';
+
+const props = defineProps({
+    item: {
+        type: Object,
+        required: true,
+    },
+    preview: {
+        type: Object,
+        required: true,
+    },
+});
+
+const store = useLocalFontStore();
+
+let mediaFrame = null;
+
+function uploadFont(e) {
+    e.preventDefault();
+
+    if (mediaFrame) {
+        mediaFrame.open();
+        return;
+    }
+
+    mediaFrame = wp.media.frames.file_frame = wp.media({
+        title: 'Upload Fonts',
+        multiple: true,
+        library: {
+            type: 'font',
+            uploadedTo: null, // Attached to a specific post (ID).
+        }
+    });
+
+    mediaFrame.on('ready', () => {
+        _wpPluploadSettings.defaults.filters.mime_types[0].extensions = 'woff2,woff,ttf,otf,eot';
+    });
+
+    mediaFrame.on('insert select', async () => {
+        let attachments = mediaFrame.state().get('selection').toJSON();
+
+        attachments.forEach(async (attachment) => {
+            // Detect variable font axes
+            if (props.item.files.length === 0 && (attachment.mime === 'font/woff2' || attachment.mime === 'font/ttf')) {
+                const buffer = await fetch(attachment.url)
+                    .then(res => res.arrayBuffer())
+                    .then(async ab => {
+                        return attachment.mime !== 'font/woff2' ? ab : await decompress(ab).then(ab => Uint8Array.from(ab).buffer);
+                    });
+
+                const otFont = otParse(buffer);
+
+                const axes = otFont.tables['fvar']?.axes;
+
+                const wghtVar = axes?.find(axis => axis.tag === 'wght');
+                const wdthVar = axes?.find(axis => axis.tag === 'wdth');
+                const slntVar = axes?.find(axis => axis.tag === 'slnt');
+
+                if (wghtVar) {
+                    props.item.weight = `${wghtVar.minValue} ${wghtVar.maxValue}`;
+                }
+
+                if (wdthVar) {
+                    props.item.width = `${wdthVar.minValue}% ${wdthVar.maxValue}%`;
+                }
+
+                if (slntVar) {
+                    props.item.style = `oblique ${slntVar.maxValue*-1}deg ${slntVar.minValue*-1}deg`;
+                }
+            }
+
+            props.item.files.push({
+                uid: nanoid(10),
+                attachment_id: attachment.id,
+                attachment_url: attachment.url,
+                extension: attachment.subtype,
+                mime: attachment.mime,
+                filesize: attachment.filesizeInBytes,
+                name: attachment.name,
+            });
+        });
+    });
+
+    mediaFrame.open();
+    mediaFrame.uploader.uploader.param('yabe_webfont_font_upload', true);
+}
+
+const isShowBody = ref(false);
+const isShowConfirmDeleteBtn = ref(false);
+
+function deleteFontFace() {
+    if (isShowConfirmDeleteBtn.value === false) {
+        isShowConfirmDeleteBtn.value = true;
+
+        setTimeout(() => {
+            isShowConfirmDeleteBtn.value = false;
+        }, 3000);
+        return;
+    }
+
+    if (props.item.files.length > 0 && !confirm('Are you sure you want to delete this font file?')) {
+        isShowConfirmDeleteBtn.value = false;
+        return;
+    }
+
+    store.delete(props.item.id);
+}
+
+function deleteFontFile(uid) {
+    props.item.files = props.item.files.filter(file => file.uid !== uid);
+}
+
+const weightTooltip = ref(null);
+const styleTooltip = ref(null);
+const previewTextTooltip = ref(null);
+
+const editTooltip = ref(null);
+const deleteTooltip = ref(null);
+
+function previewInlineStyle() {
+    let stretch = props.item.width;
+
+    if (props.item.width) {
+        if (props.item.width.indexOf(' ') > -1) {
+            stretch = `${props.preview.width.current}%`;
+        }
+    } else {
+        stretch = '100%';
+    }
+
+    return {
+        fontFamily: `'${props.preview.fontFamily}'`,
+        fontSize: `${props.preview.fontSize}px`,
+        fontWeight: typeof props.item.weight === 'string' && props.item.weight.indexOf(' ') > -1 ? props.preview.weight.current : props.item.weight,
+        fontStyle: props.item.style,
+        fontStretch: `${stretch}`,
+    };
+}
+
+const weightOptions = [
+    { label: '100 (Thin)', value: 100, },
+    { label: '200 (Extra Light)', value: 200, },
+    { label: '300 (Light)', value: 300, },
+    { label: '400 (Regular)', value: 400, },
+    { label: '500 (Medium)', value: 500, },
+    { label: '600 (Semi Bold)', value: 600, },
+    { label: '700 (Bold)', value: 700, },
+    { label: '800 (Extra Bold)', value: 800, },
+    { label: '900 (Black)', value: 900, },
+];
+</script>
+
 <template>
     <Transition>
         <div class="font-item relative bg-white border border-solid border-gray-300 divide-y divide-x-0 divide-solid divide-gray-300">
@@ -107,138 +269,6 @@
         </div>
     </Transition>
 </template>
-
-<script setup>
-import { reactive, ref } from 'vue';
-import { nanoid } from 'nanoid';
-import prettyBytes from 'pretty-bytes';
-
-import { useLocalFontStore } from '../../../stores/font/localFont';
-
-import ContentEditable from 'vue-contenteditable';
-import TheTooltip from '../../../components/TheTooltip.vue';
-
-const props = defineProps({
-    item: {
-        type: Object,
-        required: true,
-    },
-    preview: {
-        type: Object,
-        required: true,
-    },
-});
-
-const store = useLocalFontStore();
-
-let mediaFrame = null;
-
-function uploadFont(e) {
-    e.preventDefault();
-
-    if (mediaFrame) {
-        mediaFrame.open();
-        return;
-    }
-
-    mediaFrame = wp.media.frames.file_frame = wp.media({
-        title: 'Upload Fonts',
-        multiple: true,
-        library: {
-            type: 'font',
-            uploadedTo: null, // Attached to a specific post (ID).
-        }
-    });
-
-    mediaFrame.on('ready', () => {
-        _wpPluploadSettings.defaults.filters.mime_types[0].extensions = 'woff2,woff,ttf,otf,eot';
-    });
-
-    mediaFrame.on('insert select', () => {
-        let attachments = mediaFrame.state().get('selection').toJSON();
-
-        attachments.forEach(attachment => {
-            props.item.files.push({
-                uid: nanoid(10),
-                attachment_id: attachment.id,
-                attachment_url: attachment.url,
-                extension: attachment.subtype,
-                mime: attachment.mime,
-                filesize: attachment.filesizeInBytes,
-                name: attachment.name,
-            });
-        });
-    });
-
-    mediaFrame.open();
-    mediaFrame.uploader.uploader.param('yabe_webfont_font_upload', true);
-}
-
-const isShowBody = ref(false);
-const isShowConfirmDeleteBtn = ref(false);
-
-function deleteFontFace() {
-    if (isShowConfirmDeleteBtn.value === false) {
-        isShowConfirmDeleteBtn.value = true;
-
-        setTimeout(() => {
-            isShowConfirmDeleteBtn.value = false;
-        }, 3000);
-        return;
-    }
-
-    if (props.item.files.length > 0 && !confirm('Are you sure you want to delete this font file?')) {
-        isShowConfirmDeleteBtn.value = false;
-        return;
-    }
-
-    store.delete(props.item.id);
-}
-
-function deleteFontFile(uid) {
-    props.item.files = props.item.files.filter(file => file.uid !== uid);
-}
-
-const weightTooltip = ref(null);
-const styleTooltip = ref(null);
-const previewTextTooltip = ref(null);
-
-const editTooltip = ref(null);
-const deleteTooltip = ref(null);
-
-function previewInlineStyle() {
-    let stretch = props.item.width;
-
-    if (props.item.width) {
-        if (props.item.width.indexOf(' ') > -1) {
-            stretch = `${props.preview.width.current}%`;
-        }
-    } else {
-        stretch = '100%';
-    }
-
-    return {
-        fontFamily: `'${props.preview.fontFamily}'`,
-        fontSize: `${props.preview.fontSize}px`,
-        fontWeight: typeof props.item.weight === 'string' && props.item.weight.indexOf(' ') > -1 ? props.preview.weight.current : props.item.weight,
-        fontStyle: props.item.style,
-        fontStretch: `${stretch}`,
-    };
-}
-
-const weightOptions = [
-    { label: '100 (Thin)', value: 100, },
-    { label: '200 (Extra Light)', value: 200, },
-    { label: '300 (Light)', value: 300, },
-    { label: '400 (Regular)', value: 400, },
-    { label: '500 (Medium)', value: 500, },
-    { label: '600 (Semi Bold)', value: 600, },
-    { label: '700 (Bold)', value: 700, },
-    { label: '800 (Extra Bold)', value: 800, },
-    { label: '900 (Black)', value: 900, },
-];
-</script>
-
 
 <style scoped>
 /* Transition for font file list */

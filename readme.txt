@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.4
-Stable tag: 2.0.62
+Stable tag: 2.0.63
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -77,6 +77,9 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.63 =
+* **Improve**: Apply weight and width axes automatically for variable font (ttf/woff2) only if no existing file is found in the current variant.
 
 = 2.0.62 =
 * **Improve**: Ensure compatibility with all Adobe Fonts embed approach
