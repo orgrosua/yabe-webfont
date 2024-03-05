@@ -36,6 +36,7 @@ class Font
                 SELECT * FROM {$wpdb->prefix}yabe_webfont_fonts 
                 WHERE status = 1
                     AND deleted_at IS NULL
+                ORDER BY title ASC
             ";
 
             $result = $wpdb->get_results($sql);

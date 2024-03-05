@@ -5,9 +5,9 @@
 
     <span v-if="route.query.search" class="subtitle"> {{ __('Search results for', 'yabe-webfont') }}: <strong> {{ route.query.search }} </strong> </span>
 
-    <button type="button" :disabled="busy.isBusy" @click="doRefreshItems" v-ripple class=" button float-right"> refresh 🔄️</button>
+    <button type="button" :disabled="busy.isBusy" @click="doRefreshItems" v-ripple class="button float:right"> refresh 🔄️</button>
 
-    <hr class="invisible m-0 -mt-0.5" />
+    <hr class="invisible m:0 mt:-2" />
 
 
     <div class="upload-plugin-wrap">
@@ -32,7 +32,7 @@
             }" :class="{ current: !Boolean(query.soft_deleted) }"> {{ __('All', 'yabe-webfont') }} <span class="count"> ({{ meta.total_exists }}) </span> </router-link>
             |
         </li>
-        <li class="trash pl-1">
+        <li class="trash pl:4">
             <router-link :to="{
                 name: 'fonts.index',
                 query: {
@@ -44,25 +44,25 @@
         </li>
     </ul>
 
-    <p class="search-box relative">
+    <p class="search-box rel">
         <input type="search" id="searchInput" name="s" v-model.trim.lazy="query.search" @keyup.enter="$refs.searchBtn.click()" :disabled="busy.isBusy" />
         <button type="button" class="button" :disabled="busy.isBusy" ref="searchBtn" @click="doSearch()" v-ripple>{{ __('Search', 'yabe-webfont') }} 🔍</button>
     </p>
 
     <div class="tablenav top">
         <TheBulkAction :actions="bulkActions" @bulk-actions="doBulkActions" />
-        <div class="tablenav-pages pb-3">
+        <div class="tablenav-pages pb:12">
             <span class="displaying-num"> {{ `${meta.total_filtered} ${__('items', 'yabe-webfont')}` }} </span>
             <ThePagination v-if="meta.last_page > 1" :is-enable-goto="true" :current-page="meta.current_page" :first-page="meta.current_page - 1 > 1" :previous-page="meta.current_page > 1" :next-page="meta.current_page < meta.last_page" :last-page="meta.current_page + 1 < meta.last_page" :total-page="meta.last_page" @change-page="doChangePage" />
         </div>
         <br class="clear" />
     </div>
 
-    <table class="wp-list-table widefat table-auto min-w-full plugins">
+    <table class="wp-list-table widefat table-auto min-w:full plugins">
         <thead>
             <tr>
-                <td class="manage-column column-cb ywf-check-column px-0.5 align-middle">
-                    <input v-model="selectAll" class="ml-3" type="checkbox" />
+                <td class="manage-column column-cb ywf-check-column px:2 vertical:middle">
+                    <input v-model="selectAll" class="ml:12" type="checkbox" />
                 </td>
                 <td v-if="!Boolean(query.soft_deleted)" class="manage-column">
                 </td>
@@ -75,17 +75,17 @@
                 <th scope="col">
                     {{ __('Modified', 'yabe-webfont') }}
                 </th>
-                <th scope="col" class="flex items-center">
+                <th scope="col" class="flex align-items:center">
                     {{ __('Preview', 'yabe-webfont') }}
                     <template v-if="items.length > 0">
-                        <div class="px-4 h-fit flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center rounded-l-md border border-solid !border-r-0 !border-gray-300 bg-gray-50 px-3 text-gray-500 !text-xs">size</span>
-                            <input type="number" v-model="preview.fontSize" class="!block !min-w-0 w-16 !min-h-0 !h-6 mx-0 !py-0 !px-2 !border !border-solid !rounded-none !border-gray-300 !text-xs" />
-                            <span class="inline-flex items-center rounded-r-md border border-solid !border-l-0 !border-gray-300 bg-gray-50 px-3 text-gray-500 !text-xs">px</span>
+                        <div class="px:16 h:fit flex r:6 shadow-sm">
+                            <span class="inline-flex align-items:center rl:6 b:1|solid|gray-30/.5 br:0 bg:gray-5 px:12 fg:gray-40 font:12 lh:16px">size</span>
+                            <input type="number" v-model="preview.fontSize" class="block min-w:0 w:64 min-h:0 h:24 mx:0 py:0 px:8 b:1|solid|gray-30/.5 r:0 font:12 lh:16px" />
+                            <span class="inline-flex align-items:center rr:6 b:1|solid|gray-30/.5 bl:0 bg:gray-5 px:12 fg:gray-40 font:12 lh:16px">px</span>
                         </div>
-                        <div class="h-fit flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center rounded-l-md border border-solid !border-r-0 !border-gray-300 bg-gray-50 px-3 text-gray-500 !text-xs">weight</span>
-                            <input type="number" min="1" max="1000" v-model="preview.fontWeight" class="!block !min-w-0 w-16 !min-h-0 !h-6 mx-0 !py-0 !px-2 !border !border-solid !rounded-r-md !border-gray-300 !text-xs" />
+                        <div class="h:fit flex r:6 shadow-sm">
+                            <span class="inline-flex align-items:center rl:6 b:1|solid|gray-30/.5 br:0 bg:gray-5 px:12 fg:gray-40 font:12 lh:16px">weight</span>
+                            <input type="number" min="1" max="1000" v-model="preview.fontWeight" class="block min-w:0 w:64 min-h:0 h:24 mx:0 py:0 px:8 r:0 rr:6 b:1|solid|gray-30/.5 font:12 lh:16px" />
                         </div>
                     </template>
                 </th>
@@ -95,57 +95,46 @@
             <TheFontIndexRow v-for="item in items" :key="item.id" :item="item" :preview="preview" @delete="doDelete(item)" @restore="doRestore(item)" @update-status="doUpdateStatus(item, null)" />
         </tbody>
         <tbody v-else-if="getBusyHasTask('fonts.index:fetch-items')">
-            <tr v-for="skeleton in meta.skeleton" class="inactive animate-pulse">
-                <th scope="row" class="align-middle py-2 ywf-check-column">
+            <tr v-for="skeleton in meta.skeleton" class="inactive animation:skeleton|2s|infinite">
+                <th scope="row" class="vertical:middle py:8 ywf-check-column">
                     <input type="checkbox" value="0" disabled />
                 </th>
-                <td v-if="!Boolean(query.soft_deleted)" width="1%" class="manage-column align-middle">
-                    <Switch :checked="false" class="opacity-50 bg-gray-200 relative inline-flex p-0 h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-                        <span class="translate-x-0 pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
-                            <span aria-hidden="true" class="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity opacity-100 ease-in duration-200">
-                                <!-- <svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
-                                    <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg> -->
-
-                                <svg xmlns="http://www.w3.org/2000/svg" class="animate-spin h-3 w-3 text-gray-400" fill="currentColor" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                    <path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z" />
-                                </svg>
-                            </span>
-                            <span aria-hidden="true" class="absolute inset-0 flex h-full w-full items-center justify-center transition-opacity opacity-0 ease-out duration-100">
-                                <svg class="h-3 w-3 text-sky-600" fill="currentColor" viewBox="0 0 12 12">
-                                    <path d="M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z" />
-                                </svg>
+                <td v-if="!Boolean(query.soft_deleted)" width="1%" class="manage-column vertical:middle">
+                    <Switch :checked="false" class="opacity:.5 bg:gray-85 rel inline-flex p:0 h:24 w:44 flex-shrink:0 cursor:pointer rounded b:2 b:transparent">
+                        <span class="translateX(0) pointer-events:none rel inline-block h:20 w:20 rounded bg:white box-shadow:0|0">
+                            <span aria-hidden="true" class="abs inset:0 flex h:full w:full align-items:center justify-content:center opacity:1">
+                                <font-awesome-icon :icon="['fas', 'spinner']" class="animation:rotate|linear|1s|infinite font:12 fg:gray-60"/>
                             </span>
                         </span>
                     </Switch>
                 </td>
                 <td width="20%">
-                    <div class="h-3 bg-slate-400 rounded w-1/2"></div>
-                    <div class="row-actions visible mt-1 items-center flex">
+                    <div class="h:12 bg:slate-30 r:4 w:1/2"></div>
+                    <div class="row-actions visible mt-1 align-items:center flex">
                         <template v-if="!Boolean(query.soft_deleted)">
-                            <a class="px-1 cursor-pointer"> Edit </a>
+                            <a class="px:4 cursor:pointer"> Edit </a>
                             |
-                            <a class="px-1 text-red-700 cursor-wait hover:text-red-800">
+                            <a class="px:4 fg:red-80 cursor:wait fg:red-90:hover">
                                 Trash
                             </a>
                         </template>
                         <template v-else="!Boolean(query.soft_deleted)">
-                            <a class="px-1 cursor-pointer"> Restore </a>
+                            <a class="px:4 cursor:pointer"> Restore </a>
                             |
-                            <a class="px-1 text-red-700 cursor-wait hover:text-red-800">
+                            <a class="px:4 fg:red-80 cursor:wait fg:red-90:hover">
                                 Delete Permanently
                             </a>
                         </template>
                     </div>
                 </td>
-                <td width="20%" class="items-center align-middle">
-                    <div class="h-3 bg-slate-400 rounded w-1/2"></div>
+                <td width="20%" class="align-items:center vertical:middle">
+                    <div class="h:12 bg:slate-30 r:4 w:1/2"></div>
                 </td>
-                <td width="10%" class="items-center align-middle">
-                    <div class="h-3 bg-slate-400 rounded w-full"></div>
+                <td width="10%" class="align-items:center vertical:middle">
+                    <div class="h:12 bg:slate-30 r:4 w:full"></div>
                 </td>
-                <td class="align-middle">
-                    <div class="h-3 bg-slate-400 rounded w-11/12"></div>
+                <td class="vertical:middle">
+                    <div class="h:12 bg:slate-30 r:4 w:11/12"></div>
                 </td>
             </tr>
         </tbody>
@@ -159,8 +148,8 @@
         </tbody>
         <tfoot>
             <tr>
-                <td class="manage-column column-cb ywf-check-column px-0.5 align-middle">
-                    <input v-model="selectAll" class="ml-3" type="checkbox" />
+                <td class="manage-column column-cb ywf-check-column px:2 vertical:middle">
+                    <input v-model="selectAll" class="ml:12" type="checkbox" />
                 </td>
                 <td v-if="!Boolean(query.soft_deleted)" class="manage-column">
                 </td>

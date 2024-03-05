@@ -204,8 +204,6 @@ final class Plugin
      */
     public function plugins_loaded_admin(): void
     {
-        // load_plugin_textdomain('yabe-webfont', false, dirname(plugin_basename(YABE_WEBFONT::FILE)) . '/translations/');
-
         add_action('admin_notices', static function () {
             $messages = Notice::get_lists();
             if ($messages && is_array($messages)) {

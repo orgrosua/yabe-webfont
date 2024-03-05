@@ -5,15 +5,11 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
-import './public-path.js';
+// import './public-path.js';
 
 // any CSS you import will output into a single css file (app.css in this case)
-import 'highlight.js/styles/stackoverflow-light.css';
-import 'vue-select/dist/vue-select.css';
-import './styles/app.css';
-import './styles/custom.scss';
-
-require('./bootstrap');
+import './styles/app.scss';
+import './master.css.js';
 
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { createApp } from 'vue';
@@ -28,6 +24,9 @@ import hljsVuePlugin from '@highlightjs/vue-plugin';
 import vRipple from './directives/ripple/ripple.js';
 import VueSelect from 'vue-select';
 import draggable from 'zhyswan-vuedraggable';
+import InlineSvg from 'vue-inline-svg';
+import FloatingVue from 'floating-vue';
+import { FontAwesomeIcon } from './font-awesome.js';
 
 hljs.registerLanguage('css', hljsCssLang);
 
@@ -42,12 +41,17 @@ app.config.globalProperties.yabeWebfont = window.yabeWebfont;
 app
     .use(pinia)
     .use(router)
-    .use(hljsVuePlugin);
+    .use(hljsVuePlugin)
+    .use(FloatingVue, {
+        container: '#webfont-app',
+    });
 
 app
+    .component('font-awesome-icon', FontAwesomeIcon)
+    .component('inline-svg', InlineSvg)
     .component('VueSelect', VueSelect)
     .component('Draggable', draggable);
 
 app.directive('ripple', vRipple);
 
-app.mount('#yabe-webfont-app');
+app.mount('#webfont-app');

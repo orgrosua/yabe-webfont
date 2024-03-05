@@ -1,100 +1,86 @@
+<script setup></script>
+
 <template>
-    <div class="">
-        <main class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="mx-auto max-w-xl py-16 sm:py-24">
-                <div class="text-center">
-                    <p class="text-base font-semibold text-sky-600">404</p>
-                    <h1 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">{{ __('This page does not exist.', 'yabe-webfont') }}</h1>
-                    <p class="mt-2 text-lg text-gray-500">{{ __('The page you are looking for could not be found.', 'yabe-webfont') }}</p>
+    <div>
+        <main class="max-w:lg mx:auto px:24 px:32@md">
+            <div class="max-w:screen-xs mx:auto py:64 py:96@xs">
+                <div class="text:center">
+                    <p class="f:16 fg:sky-80 font:semibold line-height:24px">404</p>
+                    <h1 class="f:36 f:48@xs fg:gray-95 font:bold letter-spacing:-0.025em line-height:40px line-height:1@xs mt:8">{{ __('This page does not exist.', 'yabe-webfont') }}</h1>
+                    <p class="f:18 fg:gray-50 line-height:28px mt:8">{{ __('Sorry, we couldn\'t find the page you\'re looking for.', 'yabe-webfont') }}</p>
                 </div>
-                <div class="mt-12">
-                    <h2 class="text-base font-semibold text-gray-500">{{ __('Popular pages', 'yabe-webfont') }}</h2>
-                    <ul role="list" class="mt-4 border-solid border-0 divide-solid divide-x-0 divide-y divide-gray-300 border-t border-b border-gray-300">
-                        <li class="relative flex items-start space-x-4 py-6">
-                            <div class="shrink-0">
-                                <span class="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200">
-                                    <svg class="h-6 w-6 text-sky-700 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                        <path d="M96 0C43 0 0 43 0 96V416c0 53 43 96 96 96H384h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V384c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H384 96zm0 384H352v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-240c0-8.8 7.2-16 16-16H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16zm16 48H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H144c-8.8 0-16-7.2-16-16s7.2-16 16-16z" />
-                                    </svg>
+                <div class="mt:48">
+                    <h2 class="f:16 fg:gray-50 font:semibold line-height:24px">{{ __('Popular pages', 'yabe-webfont') }}</h2>
+                    <ul role="list" class="{bt:1|solid|gray-20}>:not([hidden])~:not([hidden]) bl:0>:not([hidden])~:not([hidden]) bx:0 by:1|solid|gray-20 mt:16">
+                        <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
+                            <div class="flex-shrink:0">
+                                <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
+                                    <font-awesome-icon :icon="['fas', 'book']" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="my-0 text-base font-medium text-gray-900">
-                                    <span class="rounded-sm focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2">
-                                        <a href="#" class="no-underline focus:shadow-none focus:outline-none text-inherit">
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <div class="flex:1|1|0 min-w:0">
+                                <h3 class="f:16 fg:gray-95 font:medium line-height:24px my:0">
+                                    <span class="{box-shadow:#ffffff|0|0|0|2,|#0ea5e9|0|0|0|4,|#000000|0|0|0|0}:focus-within r:2">
+                                        <a href="https://webfont.yabe.land/docs" target="_blank" class="box-shadow:0|0|#000000:focus fg:inherit outline-offset:2:focus outline:2px|solid|transparent:focus text-decoration-line:none">
+                                            <span class="abs inset:0" aria-hidden="true"></span>
                                             {{ __('Documentation', 'yabe-webfont') }}
                                         </a>
                                     </span>
                                 </h3>
-                                <p class="my-0 text-base text-gray-500">{{ __('A complete knowledge-base of the product','yabe-webfont') }}</p>
+                                <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('A complete knowledge-base of the product', 'yabe-webfont') }}</p>
                             </div>
-                            <div class="shrink-0 self-center">
-                                <!-- Heroicon name: mini/chevron-right -->
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                </svg>
+                            <div class="flex align-items:center align-self:center flex-shrink:0">
+                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
                             </div>
                         </li>
 
-                        <li class="relative flex items-start space-x-4 py-6">
-                            <div class="shrink-0">
-                                <span class="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200">
-                                    <svg class="h-6 w-6 text-sky-700 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                        <path d="M256 48C141.1 48 48 141.1 48 256v40c0 13.3-10.7 24-24 24s-24-10.7-24-24V256C0 114.6 114.6 0 256 0S512 114.6 512 256V400.1c0 48.6-39.4 88-88.1 88L313.6 488c-8.3 14.3-23.8 24-41.6 24H240c-26.5 0-48-21.5-48-48s21.5-48 48-48h32c17.8 0 33.3 9.7 41.6 24l110.4 .1c22.1 0 40-17.9 40-40V256c0-114.9-93.1-208-208-208zM144 208h16c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H144c-35.3 0-64-28.7-64-64V272c0-35.3 28.7-64 64-64zm224 0c35.3 0 64 28.7 64 64v48c0 35.3-28.7 64-64 64H352c-17.7 0-32-14.3-32-32V240c0-17.7 14.3-32 32-32h16z" />
-                                    </svg>
+                        <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
+                            <div class="flex-shrink:0">
+                                <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
+                                    <font-awesome-icon :icon="['fas', 'user-headset']" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="my-0 text-base font-medium text-gray-900">
-                                    <span class="rounded-sm focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2">
-                                        <a href="https://l.suabahasa.dev/EyJym" class="no-underline focus:shadow-none focus:outline-none text-inherit">
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <div class="flex:1|1|0 min-w:0">
+                                <h3 class="f:16 fg:gray-95 font:medium line-height:24px my:0">
+                                    <span class="{box-shadow:#ffffff|0|0|0|2,|#0ea5e9|0|0|0|4,|#000000|0|0|0|0}:focus-within r:2">
+                                        <a href="https://webfont.yabe.land/support" target="_blank" class="box-shadow:0|0|#000000:focus fg:inherit outline-offset:2:focus outline:2px|solid|transparent:focus text-decoration-line:none">
+                                            <span class="abs inset:0" aria-hidden="true"></span>
                                             {{ __('Support', 'yabe-webfont') }}
                                         </a>
                                     </span>
                                 </h3>
-                                <p class="my-0 text-base text-gray-500">{{ __('How can we help you?', 'yabe-webfont') }} </p>
+                                <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('How can we help you?', 'yabe-webfont') }} </p>
                             </div>
-                            <div class="shrink-0 self-center">
-                                <!-- Heroicon name: mini/chevron-right -->
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                </svg>
+                            <div class="flex align-items:center align-self:center flex-shrink:0">
+                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
                             </div>
                         </li>
 
-                        <li class="relative flex items-start space-x-4 py-6">
-                            <div class="shrink-0">
-                                <span class="flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200">
-                                    <!-- rss -->
-                                    <svg class="h-6 w-6 text-sky-700 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-                                        <path d="M0 64C0 46.3 14.3 32 32 32c229.8 0 416 186.2 416 416c0 17.7-14.3 32-32 32s-32-14.3-32-32C384 253.6 226.4 96 32 96C14.3 96 0 81.7 0 64zM128 416c0 35.3-28.7 64-64 64s-64-28.7-64-64s28.7-64 64-64s64 28.7 64 64zM32 160c159.1 0 288 128.9 288 288c0 17.7-14.3 32-32 32s-32-14.3-32-32c0-123.7-100.3-224-224-224c-17.7 0-32-14.3-32-32s14.3-32 32-32z" />
-                                    </svg>
+                        <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
+                            <div class="flex-shrink:0">
+                                <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
+                                    <font-awesome-icon :icon="['fas', 'rss']" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="my-0 text-base font-medium text-gray-900">
-                                    <span class="rounded-sm focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2">
-                                        <a href="https://rosua.org/blog/" class="no-underline focus:shadow-none focus:outline-none text-inherit">
-                                            <span class="absolute inset-0" aria-hidden="true"></span>
+                            <div class="flex:1|1|0 min-w:0">
+                                <h3 class="f:16 fg:gray-95 font:medium line-height:24px my:0">
+                                    <span class="{box-shadow:#ffffff|0|0|0|2,|#0ea5e9|0|0|0|4,|#000000|0|0|0|0}:focus-within r:2">
+                                        <a href="https://webfont.yabe.land/blog" class="box-shadow:0|0|#000000:focus fg:inherit outline-offset:2:focus outline:2px|solid|transparent:focus text-decoration-line:none">
+                                            <span class="abs inset:0" aria-hidden="true"></span>
                                             {{ __('Blog', 'yabe-webfont') }}
                                         </a>
                                     </span>
                                 </h3>
-                                <p class="my-0 text-base text-gray-500">{{ __('Read our latest news and articles', 'yabe-webfont') }}</p>
+                                <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('Read our latest news and articles', 'yabe-webfont') }}</p>
                             </div>
-                            <div class="shrink-0 self-center">
-                                <!-- Heroicon name: mini/chevron-right -->
-                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-                                </svg>
+                            <div class="flex align-items:center align-self:center flex-shrink:0">
+                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
                             </div>
                         </li>
                     </ul>
-                    <div class="mt-8">
-                        <router-link :to="{ name: 'home' }" class="no-underline text-base font-medium text-sky-600 hover:text-sky-500">
-                            {{ __('Or go back home', 'yabe-webfont') }}
+                    <div class="mt:32">
+                        <router-link :to="{ name: 'home' }" class="{box-shadow:#ffffff|0|0|0|2,|#0ea5e9|0|0|0|4,|#000000|0|0|0|0}:focus-within f:16 fg:sky-40:hover fg:sky-80 font:medium line-height:24px text-decoration-line:none">
+                            {{ __('Or go back to home', 'yabe-webfont') }}
                             <span aria-hidden="true"> &rarr;</span>
                         </router-link>
                     </div>
@@ -102,8 +88,4 @@
             </div>
         </main>
     </div>
-
-
 </template>
-
-<script setup></script>

@@ -1,20 +1,20 @@
 <template>
     <VueSelect ref="vueSelectEl" :options="paginatedCatalog" v-model="fontData" label="family" :filterable="false" :loading="busy.isBusy" :autoscroll="true" @search="onSearch" @keyup.ctrl.left="offset -= limit * hasPrevPage" @keyup.ctrl.right="offset += limit * hasNextPage" placeholder="Choose Font Family" class="ywf-google-search-family">
         <template #list-footer>
-            <li class="flex my-0 w-full">
-                <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button flex-1" v-ripple>
+            <li class="flex my:0 w:full">
+                <button type="button" :disabled="!hasPrevPage" @click="offset -= limit" class="button flex:1|1|0%" v-ripple>
                     Prev
                 </button>
-                <button type="button" :disabled="!hasNextPage" @click="offset += limit" class="button flex-1" v-ripple>
+                <button type="button" :disabled="!hasNextPage" @click="offset += limit" class="button flex:1|1|0%" v-ripple>
                     Next
                 </button>
             </li>
         </template>
         <template #option="{ family, category }">
-            <div class="flex justify-between">
+            <div class="flex justify-content:space-between">
                 <span class="">{{ family }}</span>
 
-                <span class="text-xs text-gray-500 bg-gray-100 px-1 py-0.5 rounded">{{ category.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>
+                <span class="font:12 lh:16px fg:gray-60 bg:gray-10 px:4 py:0.5 rounded">{{ category.replace(/[^a-zA-Z0-9\-_]+/g, '-').toLowerCase() }}</span>
             </div>
         </template>
     </VueSelect>
@@ -47,7 +47,6 @@ const fontData = computed({
         emit('update:modelValue', value);
     }
 });
-
 
 // Font search
 const searchFontFamily = ref('');

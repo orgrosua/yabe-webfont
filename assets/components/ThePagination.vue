@@ -1,21 +1,21 @@
 <template>
     <span class="pagination-links">
-        <button type="button" :disabled="busy.isBusy || !firstPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', 1)" v-ripple>
+        <button type="button" :disabled="busy.isBusy || !firstPage" class="tablenav-pages-navspan button mx:0.5" @click="$emit('changePage', 1)" v-ripple>
             «
         </button>
-        <button type="button" :disabled="busy.isBusy || !previousPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', currentPage - 1)" v-ripple>
+        <button type="button" :disabled="busy.isBusy || !previousPage" class="tablenav-pages-navspan button mx:0.5" @click="$emit('changePage', currentPage - 1)" v-ripple>
             ‹
         </button>
-        <span class="paging-input mx-0.5">
+        <span class="paging-input mx:0.5">
             <input v-if="isEnableGoto" v-model.number="thePage" class="current-page w-14" type="number" :disabled="busy.isBusy" min="1" :max="totalPage" />
-            <span class="tablenav-paging-text mx-0.5">
+            <span class="tablenav-paging-text mx:0.5">
                 {{ isEnableGoto === false ? currentPage : '' }} of <span class="total-pages"> {{ totalPage }} </span>
             </span>
         </span>
-        <button type="button" :disabled="busy.isBusy || !nextPage" class="next-page button mx-0.5" @click="$emit('changePage', currentPage + 1)" v-ripple>
+        <button type="button" :disabled="busy.isBusy || !nextPage" class="next-page button mx:0.5" @click="$emit('changePage', currentPage + 1)" v-ripple>
             ›
         </button>
-        <button type="button" :disabled="busy.isBusy || !lastPage" class="tablenav-pages-navspan button mx-0.5" @click="$emit('changePage', totalPage)" v-ripple>
+        <button type="button" :disabled="busy.isBusy || !lastPage" class="tablenav-pages-navspan button mx:0.5" @click="$emit('changePage', totalPage)" v-ripple>
             »
         </button>
     </span>

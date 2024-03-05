@@ -78,6 +78,10 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
+= unreleased =
+* **Improve**: Sort the font list by the font name in the visual builder's font picker.
+* **Change**: Freshen up the plugin's admin page UI.
+
 = 2.0.63 =
 * **Improve**: Apply weight and width axes automatically for variable font (ttf/woff2) only if no existing file is found in the current variant.
 

@@ -16,6 +16,7 @@ namespace Yabe\Webfont\Admin;
 use EDD_SL\PluginUpdater;
 use WP_Query;
 use Yabe\Webfont\Utils\Asset;
+use Yabe\Webfont\Utils\AssetVite;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Upload;
@@ -79,8 +80,9 @@ class AdminPage
 
     private function render()
     {
-        add_filter('admin_footer_text', fn ($text) => $this->admin_footer_text($text), 10001);
-        echo '<div id="yabe-webfont-app" class=""></div>';
+        add_filter('admin_footer_text', static fn ($text) => 'Thank you for using <b>Yabe Webfont</b>! Join us on the <a href="https://www.facebook.com/groups/1142662969627943" target="_blank">Facebook Group</a>.', 1_000_001);
+        add_filter('update_footer', static fn ($text) => $text . ' | Yabe Webfont ' . YABE_WEBFONT::VERSION, 1_000_001);
+        echo '<div id="webfont-app" class=""></div>';
     }
 
     private function init_hooks()
@@ -94,11 +96,16 @@ class AdminPage
     {
         wp_enqueue_media();
 
-        Asset::enqueue_entry('app', [], true);
+        $handle = YABE_WEBFONT::WP_OPTION . ':app';
 
-        wp_set_script_translations(YABE_WEBFONT::WP_OPTION . ':app.js', 'yabe-webfont');
+        AssetVite::get_instance()->enqueue_asset('assets/app.js', [
+            'handle' => $handle,
+            'in_footer' => true,
+        ]);
 
-        wp_localize_script(YABE_WEBFONT::WP_OPTION . ':app.js', 'yabeWebfont', [
+        wp_set_script_translations($handle, 'yabe-webfont');
+
+        wp_localize_script($handle, 'yabeWebfont', [
             '_version' => YABE_WEBFONT::VERSION,
             '_wpnonce' => wp_create_nonce(YABE_WEBFONT::WP_OPTION),
             'option_namespace' => YABE_WEBFONT::WP_OPTION,
@@ -113,7 +120,7 @@ class AdminPage
             'assets' => [
                 'url' => Asset::asset_base_url(),
             ],
-            'lite_edition' => ! class_exists(PluginUpdater::class),
+            'lite_edition' => !class_exists(PluginUpdater::class),
             'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', YABE_WEBFONT::HOSTED_WAKUFONT), '/'),
         ]);
     }
@@ -124,7 +131,7 @@ class AdminPage
             return $query;
         }
 
-        if (! isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
+        if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
             $all_mimes = get_allowed_mime_types();
 
             $query['post_mime_type'] = $all_mimes;
@@ -135,24 +142,16 @@ class AdminPage
 
     private function load_upload_pre_get_posts(WP_Query $wpQuery): void
     {
-        if (! isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
+        if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], 'page=yabe_webfont') === false) {
             $all_mimes = get_allowed_mime_types();
 
             $wpQuery->set('post_mime_type', $all_mimes);
         }
     }
 
-    private function admin_footer_text($text): string
-    {
-        return sprintf(
-            __('Thank you for using <b>Yabe Webfont</b>! Join us on the <a href="%s" target="_blank">Facebook Group</a>.', 'yabe-webfont'),
-            'https://www.facebook.com/groups/1142662969627943'
-        );
-    }
-
     private function upload_dir($uploads)
     {
-        if (! isset($_POST['yabe_webfont_font_upload'])) {
+        if (!isset($_POST['yabe_webfont_font_upload'])) {
             return $uploads;
         }
 

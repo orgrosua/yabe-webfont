@@ -1,6 +1,103 @@
 import './ripple.css';
 
-import { DomHandler } from 'primevue/utils';
+const DomHandler = {
+    hasClass(element, className) {
+        if (element) {
+            if (element.classList) return element.classList.contains(className);
+            else return new RegExp('(^| )' + className + '( |$)', 'gi').test(element.className);
+        }
+
+        return false;
+    },
+
+    addClass(element, className) {
+        if (element && className && !this.hasClass(element, className)) {
+            if (element.classList) element.classList.add(className);
+            else element.className += ' ' + className;
+        }
+    },
+
+    removeClass(element, className) {
+        if (element && className) {
+            if (element.classList) element.classList.remove(className);
+            else element.className = element.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
+        }
+    },
+
+    getHeight(el) {
+        if (el) {
+            let height = el.offsetHeight;
+            let style = getComputedStyle(el);
+
+            height -= parseFloat(style.paddingTop) + parseFloat(style.paddingBottom) + parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+
+            return height;
+        }
+
+        return 0;
+    },
+
+    getWidth(el) {
+        if (el) {
+            let width = el.offsetWidth;
+            let style = getComputedStyle(el);
+
+            width -= parseFloat(style.paddingLeft) + parseFloat(style.paddingRight) + parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+
+            return width;
+        }
+
+        return 0;
+    },
+
+    getOuterWidth(el, margin) {
+        if (el) {
+            let width = el.offsetWidth;
+
+            if (margin) {
+                let style = getComputedStyle(el);
+
+                width += parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+            }
+
+            return width;
+        }
+
+        return 0;
+    },
+
+    getOuterHeight(el, margin) {
+        if (el) {
+            let height = el.offsetHeight;
+
+            if (margin) {
+                let style = getComputedStyle(el);
+
+                height += parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+            }
+
+            return height;
+        }
+
+        return 0;
+    },
+
+    getOffset(el) {
+        if (el) {
+            let rect = el.getBoundingClientRect();
+
+            return {
+                top: rect.top + (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0),
+                left: rect.left + (window.pageXOffset || document.documentElement.scrollLeft || document.body.scrollLeft || 0)
+            };
+        }
+
+        return {
+            top: 'auto',
+            left: 'auto'
+        };
+    },
+}
 
 let timeout;
 

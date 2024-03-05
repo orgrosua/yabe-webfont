@@ -1,5 +1,5 @@
 <template>
-    <button type="button" @click="uploadFonts" v-ripple class="button my-4">Bulk upload</button>
+    <button type="button" @click="uploadFonts" v-ripple class="button my:16">Bulk upload</button>
 </template>
 
 <script setup>
