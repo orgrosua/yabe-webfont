@@ -118,7 +118,7 @@ class AdminPage
                 'url' => esc_url_raw(rest_url(YABE_WEBFONT::REST_NAMESPACE)),
             ],
             'assets' => [
-                'url' => Asset::asset_base_url(),
+                'url' => AssetVite::asset_base_url(),
             ],
             'lite_edition' => !class_exists(PluginUpdater::class),
             'hostedWakufont' => rtrim(apply_filters('f!yabe/webfont/font:wakufont_self_hosted', YABE_WEBFONT::HOSTED_WAKUFONT), '/'),

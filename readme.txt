@@ -3,8 +3,8 @@ Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
-Tested up to: 6.4
-Stable tag: 2.0.64
+Tested up to: 6.5
+Stable tag: 2.0.65
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -77,6 +77,9 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.65 =
+* **Improve**: Test compatibility with WordPress 6.4
 
 = 2.0.64 =
 * **Improve**: Sort the font list by the font name in the visual builder's font picker.

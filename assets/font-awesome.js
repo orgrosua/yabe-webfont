@@ -40,8 +40,6 @@ import {
     faBroom,
 } from '@fortawesome/pro-regular-svg-icons';
 
-
-
 import {
     faNpm,
     faFacebook,
