@@ -172,7 +172,10 @@ final class Plugin
 
         update_option(YABE_WEBFONT::WP_OPTION . '_version', YABE_WEBFONT::VERSION);
 
-        $this->maybe_embedded_license();
+        if (class_exists(PluginUpdater::class)) {
+            $this->maybe_embedded_license();
+            $this->maybe_update_plugin()->clear_cache();
+        }
 
         delete_transient('yabe_webfont_scanned_apis_' . YABE_WEBFONT::VERSION);
 
@@ -295,10 +298,6 @@ final class Plugin
      */
     private function maybe_embedded_license(): void
     {
-        if (! class_exists(PluginUpdater::class)) {
-            return;
-        }
-
         $license_file = dirname(YABE_WEBFONT::FILE) . '/license-data.php';
 
         if (! file_exists($license_file)) {
