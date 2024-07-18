@@ -44,7 +44,7 @@ class Main implements BuilderInterface
 
         foreach ($fonts as $font) {
             $yabe_fonts[$font['family']] = [
-                'fallback' => '',
+                'fallback' => 'system-ui, sans-serif',
                 'weights' => ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
             ];
         }
