@@ -466,58 +466,100 @@ const cssFontFaceRule = computed(() => {
                 return;
             }
 
+            let files = [];
+
             subsets.value.forEach(subset => {
-                let files = fontFiles.value.filter(
+                let sfiles = fontFiles.value.filter(
                     f => f.weight == fontFace.weight
                         && f.style === fontFace.style
-                        && f.subsets.includes(subset)
                         && format.value.includes(f.format)
+                        && f.subsets.includes(subset)
                 );
 
-                files.forEach(file => {
-                    if (fontFace.comment) {
-                        css += `/* ${fontFace.comment} */\n`;
-                    }
-
-                    css += `/* ${subset} */\n`;
-
-                    css += `@font-face {\n`;
-
-                    css += `\tfont-family: '${family.value}';\n`;
-
-                    if (fontFace.weight !== 0) {
-                        css += `\tfont-weight: ${fontFace.weight};\n`;
-                    } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
-                        css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
-                    } else {
-                        css += `\tfont-weight: 400;\n`;
-                    }
-
-                    let slnt = fontData.value.axes.find(a => a.tag === 'slnt');
-
-                    if (slnt !== undefined) {
-                        css += `\tfont-style: oblique ${slnt.max * -1}deg ${slnt.min * -1}deg;\n`;
-                    } else {
-                        css += `\tfont-style: ${fontFace.style};\n`;
-                    }
-
-                    let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
-
-                    if (wdth !== undefined) {
-                        css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
-                    }
-
-                    css += `\tfont-display: ${fontFace.display || display.value};\n`;
-
-                    css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
-
-                    if (file.unicodeRange) {
-                        css += `\tunicode-range: ${file.unicodeRange};\n`;
-                    }
-
-                    css += `}\n\n`;
+                // add a subset property to sfles,
+                // so we can use it in the next step
+                sfiles.forEach(f => {
+                    f.subset = subset;
                 });
+
+                files.push(...sfiles);
             });
+
+            // if subset contain number/digit, then add it
+            let sfiles = fontFiles.value.filter(
+                f => f.weight == fontFace.weight
+                    && f.style === fontFace.style
+                    && format.value.includes(f.format)
+                    && f.subsets.some(s => s.match(/\d+/))
+            );
+
+            sfiles.forEach(f => {
+                f.subset = f.subsets.join('');
+            });
+
+            files.push(...sfiles);
+
+            let filteredFiles = [];
+
+            // ensure that files array are unique by checking for all properties except the uid property
+            files.forEach(file => {
+                let isUnique = true;
+                filteredFiles.forEach(f => {
+                    if (f.weight === file.weight && f.style === file.style && isEqual(f.subsets, file.subsets) && f.format === file.format) {
+                        isUnique = false;
+                    }
+                });
+
+                if (isUnique) {
+                    filteredFiles.push(file);
+                }
+            });
+
+            filteredFiles.forEach(file => {
+                if (fontFace.comment) {
+                    css += `/* ${fontFace.comment} */\n`;
+                }
+
+                css += `/* ${file.subset} */\n`;
+
+                css += `@font-face {\n`;
+
+                css += `\tfont-family: '${family.value}';\n`;
+
+                if (fontFace.weight !== 0) {
+                    css += `\tfont-weight: ${fontFace.weight};\n`;
+                } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
+                    css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+                } else {
+                    css += `\tfont-weight: 400;\n`;
+                }
+
+                let slnt = fontData.value.axes.find(a => a.tag === 'slnt');
+
+                if (slnt !== undefined) {
+                    css += `\tfont-style: oblique ${slnt.max * -1}deg ${slnt.min * -1}deg;\n`;
+                } else {
+                    css += `\tfont-style: ${fontFace.style};\n`;
+                }
+
+                let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
+
+                if (wdth !== undefined) {
+                    css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
+                }
+
+                css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+                css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
+
+                if (file.unicodeRange) {
+                    css += `\tunicode-range: ${file.unicodeRange};\n`;
+                }
+
+                css += `}\n\n`;
+            });
+
+
         });
     } else {
         fontFaces.value?.forEach(fontFace => {
@@ -592,57 +634,97 @@ const cssFontFaceRuleFiltered = computed(() => {
                 return;
             }
 
+            let files = [];
+
             subsets.value.forEach(subset => {
-                let files = fontFiles.value.filter(
+                let sfiles = fontFiles.value.filter(
                     f => f.weight == fontFace.weight
                         && f.style === fontFace.style
                         && f.subsets.includes(subset)
                         && format.value.includes(f.format)
                 );
 
-                files.forEach(file => {
-                    if (fontFace.comment) {
-                        css += `/* ${fontFace.comment} */\n`;
-                    }
-
-                    css += `/* ${subset} */\n`;
-
-                    css += `@font-face {\n`;
-
-                    css += `\tfont-family: '${family.value}';\n`;
-
-                    if (fontFace.weight !== 0) {
-                        css += `\tfont-weight: ${fontFace.weight};\n`;
-                    } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
-                        css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
-                    } else {
-                        css += `\tfont-weight: 400;\n`;
-                    }
-
-                    let slnt = fontData.value.axes.find(a => a.tag === 'slnt');
-
-                    if (slnt !== undefined) {
-                        css += `\tfont-style: oblique ${slnt.max * -1}deg ${slnt.min * -1}deg;\n`;
-                    } else {
-                        css += `\tfont-style: ${fontFace.style};\n`;
-                    }
-
-                    let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
-
-                    if (wdth !== undefined) {
-                        css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
-                    }
-
-                    css += `\tfont-display: ${fontFace.display || display.value};\n`;
-
-                    css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
-
-                    if (file.unicodeRange) {
-                        css += `\tunicode-range: ${file.unicodeRange};\n`;
-                    }
-
-                    css += `}\n\n`;
+                // add a subset property to sfles,
+                // so we can use it in the next step
+                sfiles.forEach(f => {
+                    f.subset = subset;
                 });
+
+                files.push(...sfiles);
+            });
+
+            // if subset contain number/digit, then add it
+            let sfiles = fontFiles.value.filter(
+                f => f.weight == fontFace.weight
+                    && f.style === fontFace.style
+                    && f.subsets.some(s => s.match(/\d+/))
+                    && format.value.includes(f.format)
+            );
+
+            sfiles.forEach(f => {
+                f.subset = f.subsets.join('');
+            });
+
+            files.push(...sfiles);
+
+            let filteredFiles = [];
+
+            // ensure that files array are unique by checking for all properties except the uid property
+            files.forEach(file => {
+                let isUnique = true;
+                filteredFiles.forEach(f => {
+                    if (f.weight === file.weight && f.style === file.style && isEqual(f.subsets, file.subsets) && f.format === file.format) {
+                        isUnique = false;
+                    }
+                });
+
+                if (isUnique) {
+                    filteredFiles.push(file);
+                }
+            });
+
+            filteredFiles.forEach(file => {
+                if (fontFace.comment) {
+                    css += `/* ${fontFace.comment} */\n`;
+                }
+
+                css += `/* ${file.subset} */\n`;
+
+                css += `@font-face {\n`;
+
+                css += `\tfont-family: '${family.value}';\n`;
+
+                if (fontFace.weight !== 0) {
+                    css += `\tfont-weight: ${fontFace.weight};\n`;
+                } else if (preview.weight.min !== 0 || preview.weight.max !== 0) {
+                    css += `\tfont-weight: ${preview.weight.min} ${preview.weight.max};\n`;
+                } else {
+                    css += `\tfont-weight: 400;\n`;
+                }
+
+                let slnt = fontData.value.axes.find(a => a.tag === 'slnt');
+
+                if (slnt !== undefined) {
+                    css += `\tfont-style: oblique ${slnt.max * -1}deg ${slnt.min * -1}deg;\n`;
+                } else {
+                    css += `\tfont-style: ${fontFace.style};\n`;
+                }
+
+                let wdth = fontData.value.axes.find(a => a.tag === 'wdth');
+
+                if (wdth !== undefined) {
+                    css += `\tfont-stretch: ${wdth.min}% ${wdth.max}%;\n`;
+                }
+
+                css += `\tfont-display: ${fontFace.display || display.value};\n`;
+
+                css += `\tsrc: url('${file.url}') format("${fontFormatMap(file.format)}");\n`;
+
+                if (file.unicodeRange) {
+                    css += `\tunicode-range: ${file.unicodeRange};\n`;
+                }
+
+                css += `}\n\n`;
             });
         });
     } else {
@@ -842,6 +924,23 @@ function sendForm(e) {
 
     busy.add('fonts.create.google-fonts:send-form');
 
+    let filteredFontFiles = [];
+
+    // ensure that files array are unique by checking for all properties except the uid property
+    fontFiles.value.forEach(file => {
+        let isUnique = true;
+
+        filteredFontFiles.forEach(f => {
+            if (f.weight === file.weight && f.style === file.style && isEqual(f.subsets, file.subsets) && f.format === file.format) {
+                isUnique = false;
+            }
+        });
+
+        if (isUnique) {
+            filteredFontFiles.push(file);
+        }
+    });
+
     let promise = api
         .request({
             method: 'POST',
@@ -858,7 +957,8 @@ function sendForm(e) {
                         formats: format.value,
                         font_data: fontData.value,
                         subsets: subsets.value,
-                        font_files: fontFiles.value,
+                        // font_files: fontFiles.value,
+                        font_files: filteredFontFiles,
                         font_faces: fontFaces.value,
                     }
                 }

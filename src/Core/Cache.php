@@ -49,24 +49,24 @@ class Cache
 
     public function __construct()
     {
-        add_filter('cron_schedules', fn ($schedules) => $this->filter_cron_schedules($schedules));
+        add_filter('cron_schedules', fn($schedules) => $this->filter_cron_schedules($schedules));
 
-        add_action('a!yabe/webfont/core/cache:build_cache', fn () => $this->build_cache());
+        add_action('a!yabe/webfont/core/cache:build_cache', fn() => $this->build_cache());
 
         // listen to fonts event for cache build (async/scheduled)
-        add_action('a!yabe/webfont/api/font:fonts_event_async', fn () => $this->schedule_cache(), 10, 1);
+        add_action('a!yabe/webfont/api/font:fonts_event_async', fn() => $this->schedule_cache(), 10, 1);
 
         // listen to fonts event for cache build (sync)
-        add_action('a!yabe/webfont/api/font:fonts_event', fn () => $this->build_cache(), 10, 1);
+        add_action('a!yabe/webfont/api/font:fonts_event', fn() => $this->build_cache(), 10, 1);
 
         // listen to theme switch for cache build (async/scheduled)
-        add_action('switch_theme', fn () => $this->schedule_cache(), 1_000_001);
+        add_action('switch_theme', fn() => $this->schedule_cache(), 1_000_001);
 
         // listen to Config change for cache build (async/scheduled)
-        add_action('f!yabe/webfont/api/setting/option:after_store', fn () => $this->schedule_cache(), 10, 1);
+        add_action('f!yabe/webfont/api/setting/option:after_store', fn() => $this->schedule_cache(), 10, 1);
 
         // listen to plugin upgrade for cache build (async/scheduled)
-        add_action('a!yabe/webfont/plugins:upgrade_plugin_end', fn () => $this->schedule_cache(), 10, 1);
+        add_action('a!yabe/webfont/plugins:upgrade_plugin_end', fn() => $this->schedule_cache(), 10, 1);
     }
 
     public function filter_cron_schedules($schedules)
@@ -166,8 +166,19 @@ class Cache
         }
 
         foreach ($result as $row) {
-            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
-            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            try {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $font_faces = Upload::refresh_font_faces_attachment_url($font_faces);
 
             foreach ($font_faces as $font_face) {
                 if ($font_face->comment) {
@@ -192,11 +203,11 @@ class Cache
                 $css .= "\tfont-display: {$display};\n";
 
                 if ($font_face->files !== []) {
-                    usort($font_face->files, static fn ($a, $b) => $format_precedence[$a->extension] <=> $format_precedence[$b->extension]);
+                    usort($font_face->files, static fn($a, $b) => $format_precedence[$a->extension] <=> $format_precedence[$b->extension]);
 
                     $css .= "\tsrc: ";
 
-                    $files = array_map(static fn ($f) => sprintf("url('%s') format(\"%s\")", $f->attachment_url, Upload::mime_keyword($f->extension)), $font_face->files);
+                    $files = array_map(static fn($f) => sprintf("url('%s') format(\"%s\")", $f->attachment_url, Upload::mime_keyword($f->extension)), $font_face->files);
 
                     $css .= implode(",\n\t\t", $files);
 
@@ -215,7 +226,11 @@ class Cache
         $css .= ":root {\n";
 
         foreach ($result as $row) {
-            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
 
             $selectorParts = [];
             $fallbackFamily = '';
@@ -239,8 +254,19 @@ class Cache
         $css .= "}\n\n";
 
         foreach ($result as $row) {
-            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
-            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            try {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $font_faces = Upload::refresh_font_faces_attachment_url($font_faces);
 
             $selectorParts = [];
 
@@ -306,8 +332,19 @@ class Cache
         $preload_files = [];
 
         foreach ($result as $row) {
-            $font_faces = Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR));
-            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            try {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            $font_faces = Upload::refresh_font_faces_attachment_url($font_faces);
 
             foreach ($font_faces as $font_face) {
                 if ($metadata->preload || (property_exists($font_face, 'preload') && $font_face->preload)) {
@@ -341,12 +378,12 @@ class Cache
             if ($project_id !== null) {
                 // check if the $result array contain item.type = 'adobe-fonts'
                 $any_adobe_fonts = array_search('adobe-fonts', array_column($result, 'type'), true);
-    
+
                 if ($any_adobe_fonts !== false) {
                     $html .= self::get_kit_js($project_id);
                 }
             }
-        }        
+        }
 
         return $html;
     }

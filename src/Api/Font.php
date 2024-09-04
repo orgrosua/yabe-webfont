@@ -61,8 +61,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/index',
             [
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->index($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->index($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -71,8 +71,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/custom/store',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->custom_store($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->custom_store($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -81,12 +81,12 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/update-status/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->update_status($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->update_status($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
                 'args' => [
                     'status' => [
                         'required' => true,
-                        'validate_callback' => static fn ($param): bool => is_bool($param),
+                        'validate_callback' => static fn($param): bool => is_bool($param),
                     ],
                 ],
             ]
@@ -98,8 +98,8 @@ class Font extends AbstractApi implements ApiInterface
             [
                 'methods' => WP_REST_Server::DELETABLE, // not working on IIS server without further configuration
                 'methods' => 'POST, DELETE',
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->destroy($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->destroy($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -108,8 +108,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/restore/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->restore($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->restore($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -118,8 +118,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/export',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->export($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->export($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -128,8 +128,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/import',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->import($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->import($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -138,8 +138,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/detail/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::READABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->detail($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->detail($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -148,8 +148,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/custom/update/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->custom_update($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->custom_update($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -158,8 +158,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/google-fonts/store',
             [
                 'methods' => WP_REST_Server::CREATABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_store($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_store($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
 
@@ -168,8 +168,8 @@ class Font extends AbstractApi implements ApiInterface
             $this->get_prefix() . '/google-fonts/update/(?P<id>\d+)',
             [
                 'methods' => WP_REST_Server::EDITABLE,
-                'callback' => fn (\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_update($wprestRequest),
-                'permission_callback' => fn (\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_update($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
     }
@@ -214,14 +214,26 @@ class Font extends AbstractApi implements ApiInterface
         $result = $wpdb->get_results($sql);
 
         foreach ($result as $row) {
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            try {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
             $items[] = [
                 'id' => $row->id,
                 'type' => $row->type,
                 'title' => $row->title,
                 'slug' => $row->slug,
                 'family' => $row->family,
-                'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-                'font_faces' => Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+                'metadata' => $metadata,
+                'font_faces' => Upload::refresh_font_faces_attachment_url($font_faces),
                 'status' => (bool) $row->status,
                 'created_at' => strtotime($row->created_at),
                 'updated_at' => strtotime($row->updated_at),
@@ -291,14 +303,26 @@ class Font extends AbstractApi implements ApiInterface
             ], 404, []);
         }
 
+        try {
+            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+        }
+
+        try {
+            $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+        }
+
         $payload = [
             'id' => $row->id,
             'type' => $row->type,
             'title' => $row->title,
             'slug' => $row->slug,
             'family' => $row->family,
-            'metadata' => json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR),
-            'font_faces' => Upload::refresh_font_faces_attachment_url(json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR)),
+            'metadata' => $metadata,
+            'font_faces' => Upload::refresh_font_faces_attachment_url($font_faces),
             'status' => (bool) $row->status,
             'created_at' => strtotime($row->created_at),
             'updated_at' => strtotime($row->updated_at),
@@ -574,8 +598,8 @@ class Font extends AbstractApi implements ApiInterface
         $family = $metadata['google_fonts']['font_data']['family'];
         $font_faces = [];
 
-        add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
+        add_filter('wp_check_filetype_and_ext', static fn($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', static fn($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
 
         $font_mime_types = [
             'woff2' => 'font/woff2',
@@ -596,91 +620,112 @@ class Font extends AbstractApi implements ApiInterface
                     continue;
                 }
 
+                $all_filtered_m_font_files = [];
+
                 foreach ($metadata['google_fonts']['subsets'] as $subset) {
                     $filtered_m_font_files = array_filter(
                         $m_font_files,
-                        static fn ($f) => $f['weight'] === $m_face['weight']
+                        static fn($f) => $f['weight'] === $m_face['weight']
                             && $f['style'] === $m_face['style']
                             && in_array($subset, $f['subsets'], true)
                             && in_array($f['format'], $metadata['google_fonts']['formats'], true)
                     );
 
-                    foreach ($filtered_m_font_files as $filtered_m_font_file) {
-                        $wght = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'wght'
-                        );
+                    $all_filtered_m_font_files = array_merge($all_filtered_m_font_files, $filtered_m_font_files);
+                }
 
-                        $wdth = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'wdth'
-                        );
+                // variableFontFiles
+                $var_filtered_m_font_files = array_filter(
+                    $m_font_files,
+                    static fn($f) => $f['weight'] === $m_face['weight']
+                        && $f['style'] === $m_face['style']
+                        && in_array($f['format'], $metadata['google_fonts']['formats'], true)
 
-                        $slnt = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'slnt'
-                        );
+                        // if any of the element in $metadata['google_fonts']['subsets'] has digit/number
+                        && array_reduce(
+                            $metadata['google_fonts']['subsets'],
+                            static fn($carry, $subset) => $carry && ! preg_match('/\d/', $subset),
+                            true
+                        )
+                );
 
-                        $wdth = array_values($wdth);
-                        $wght = array_values($wght);
-                        $slnt = array_values($slnt);
+                $all_filtered_m_font_files = array_merge($all_filtered_m_font_files, $var_filtered_m_font_files);
 
-                        $font_face = [
-                            'id' => Common::random_slug(10),
-                            'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
-                            'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
-                            'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
-                            'display' => $m_face['display'],
-                            'selector' => $m_face['selector'],
-                            'comment' => $m_face['comment'],
-                            'preload' => $m_face['preload'],
-                        ];
+                foreach ($all_filtered_m_font_files as $filtered_m_font_file) {
+                    $wght = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'wght'
+                    );
 
-                        $file_name = sanitize_title_with_dashes(sprintf(
-                            'google-fonts-%s-%s-%s-var-%s-%s',
-                            $metadata['google_fonts']['font_data']['slug'], // family
-                            $metadata['google_fonts']['font_data']['version'],
-                            $subset,
-                            Common::random_slug(5),
-                            time()
-                        )) . '.' . $filtered_m_font_file['format'];
+                    $wdth = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'wdth'
+                    );
 
-                        try {
-                            $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+                    $slnt = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'slnt'
+                    );
 
-                            if (! $attachment_id) {
-                                continue;
-                            }
-                        } catch (\Throwable $throwable) {
-                            //throw $th;
+                    $wdth = array_values($wdth);
+                    $wght = array_values($wght);
+                    $slnt = array_values($slnt);
+
+                    $font_face = [
+                        'id' => Common::random_slug(10),
+                        'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
+                        'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
+                        'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
+                        'display' => $m_face['display'],
+                        'selector' => $m_face['selector'],
+                        'comment' => $m_face['comment'],
+                        'preload' => $m_face['preload'],
+                    ];
+
+                    $file_name = sanitize_title_with_dashes(sprintf(
+                        'google-fonts-%s-%s-%s-var-%s-%s',
+                        $metadata['google_fonts']['font_data']['slug'], // family
+                        $metadata['google_fonts']['font_data']['version'],
+                        implode('_', $filtered_m_font_file['subsets']),
+                        Common::random_slug(5),
+                        time()
+                    )) . '.' . $filtered_m_font_file['format'];
+
+                    try {
+                        $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+
+                        if (! $attachment_id) {
                             continue;
                         }
-
-                        $file = [
-                            'uid' => Common::random_slug(10),
-                            'attachment_id' => $attachment_id,
-                            'attachment_url' => wp_get_attachment_url($attachment_id),
-                            'extension' => $filtered_m_font_file['format'],
-                            'mime' => $font_mime_types[$filtered_m_font_file['format']],
-                            'file_size' => filesize(get_attached_file($attachment_id)),
-                            'name' => substr($file_name, 0, strrpos($file_name, '.')),
-                        ];
-
-                        $metadata['google_fonts']['font_files'] = array_map(
-                            static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
-                                'file' => $file,
-                            ]) : $f,
-                            $metadata['google_fonts']['font_files']
-                        );
-
-                        $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
-
-                        $font_face['files'] = [$file];
-
-                        $font_face['unicodeRange'] = $filtered_m_font_file['unicodeRange'];
-
-                        $font_faces[] = $font_face;
+                    } catch (\Throwable $throwable) {
+                        //throw $th;
+                        continue;
                     }
+
+                    $file = [
+                        'uid' => Common::random_slug(10),
+                        'attachment_id' => $attachment_id,
+                        'attachment_url' => wp_get_attachment_url($attachment_id),
+                        'extension' => $filtered_m_font_file['format'],
+                        'mime' => $font_mime_types[$filtered_m_font_file['format']],
+                        'file_size' => filesize(get_attached_file($attachment_id)),
+                        'name' => substr($file_name, 0, strrpos($file_name, '.')),
+                    ];
+
+                    $metadata['google_fonts']['font_files'] = array_map(
+                        static fn($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                            'file' => $file,
+                        ]) : $f,
+                        $metadata['google_fonts']['font_files']
+                    );
+
+                    $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
+
+                    $font_face['files'] = [$file];
+
+                    $font_face['unicodeRange'] = $filtered_m_font_file['unicodeRange'];
+
+                    $font_faces[] = $font_face;
                 }
             } else {
                 if ($m_face['weight'] === 0) {
@@ -703,7 +748,7 @@ class Font extends AbstractApi implements ApiInterface
 
                 $filtered_m_font_files = array_filter(
                     $m_font_files,
-                    static fn ($f) => $f['weight'] === $m_face['weight']
+                    static fn($f) => $f['weight'] === $m_face['weight']
                         && $f['style'] === $m_face['style']
                         && array_diff($metadata['google_fonts']['subsets'], $f['subsets']) === array_diff($f['subsets'], $metadata['google_fonts']['subsets'])
                         && in_array($f['format'], $metadata['google_fonts']['formats'], true)
@@ -717,7 +762,7 @@ class Font extends AbstractApi implements ApiInterface
                     'eot' => 5,
                 ];
 
-                usort($filtered_m_font_files, static fn ($a, $b) => $format_precedence[$a['format']] <=> $format_precedence[$b['format']]);
+                usort($filtered_m_font_files, static fn($a, $b) => $format_precedence[$a['format']] <=> $format_precedence[$b['format']]);
 
                 foreach ($filtered_m_font_files as $filtered_m_font_file) {
                     $file_name = sanitize_title_with_dashes(sprintf(
@@ -752,7 +797,7 @@ class Font extends AbstractApi implements ApiInterface
                     ];
 
                     $metadata['google_fonts']['font_files'] = array_map(
-                        static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                        static fn($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
                             'file' => $file,
                         ]) : $f,
                         $metadata['google_fonts']['font_files']
@@ -769,6 +814,9 @@ class Font extends AbstractApi implements ApiInterface
             }
         }
 
+        $compressed_metadata = base64_encode(gzcompress(json_encode($metadata, JSON_THROW_ON_ERROR), 9));
+        $compressed_font_faces = base64_encode(gzcompress(json_encode($font_faces, JSON_THROW_ON_ERROR), 9));
+
         $wpdb->insert(
             sprintf('%syabe_webfont_fonts', $wpdb->prefix),
             [
@@ -777,8 +825,8 @@ class Font extends AbstractApi implements ApiInterface
                 'slug' => $slug,
                 'family' => $family,
                 'status' => $status,
-                'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
-                'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+                'metadata' => $compressed_metadata,
+                'font_faces' => $compressed_font_faces, //json_encode($font_faces, JSON_THROW_ON_ERROR),
             ],
             [
                 '%s',
@@ -790,6 +838,9 @@ class Font extends AbstractApi implements ApiInterface
                 '%s',
             ]
         );
+
+        // get wpdb error
+        error_log(print_r($wpdb->last_error, true));
 
         $id = $wpdb->insert_id;
 
@@ -831,18 +882,21 @@ class Font extends AbstractApi implements ApiInterface
         $metadata = $payload['metadata'];
         $font_faces = [];
 
-        add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
+        add_filter('wp_check_filetype_and_ext', static fn($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', static fn($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
 
         $this->google_fonts_update_filter($metadata, $font_faces);
+
+        $compressed_metadata = base64_encode(gzcompress(json_encode($metadata, JSON_THROW_ON_ERROR), 9));
+        $compressed_font_faces = base64_encode(gzcompress(json_encode($font_faces, JSON_THROW_ON_ERROR), 9));
 
         $wpdb->update(
             sprintf('%syabe_webfont_fonts', $wpdb->prefix),
             [
                 'title' => $title,
                 'status' => $status,
-                'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
-                'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+                'metadata' => $compressed_metadata,
+                'font_faces' => $compressed_font_faces, //json_encode($font_faces, JSON_THROW_ON_ERROR),
             ],
             [
                 'id' => $id,
@@ -896,8 +950,17 @@ class Font extends AbstractApi implements ApiInterface
         $items = [];
 
         foreach ($rows as $row) {
-            $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
-            $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            try {
+                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
+            try {
+                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+            }
 
             if ($row->type === 'adobe-fonts') {
                 continue;
@@ -989,8 +1052,8 @@ class Font extends AbstractApi implements ApiInterface
         $font_faces = json_decode(base64_decode($item['font_faces'], true), null, 512, JSON_THROW_ON_ERROR);
         $metadata = json_decode(base64_decode($item['metadata'], true), null, 512, JSON_THROW_ON_ERROR);
 
-        add_filter('wp_check_filetype_and_ext', static fn ($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
-        add_filter('upload_mimes', static fn ($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
+        add_filter('wp_check_filetype_and_ext', static fn($data, $file, $filename, $mimes) => Upload::disable_real_mime_check($data, $file, $filename, $mimes), 10, 4);
+        add_filter('upload_mimes', static fn($mime_types) => Upload::upload_mimes($mime_types, true), 1_000_001);
 
         if ($item['type'] === 'adobe-fonts') {
             return new WP_REST_Response([
@@ -1042,14 +1105,17 @@ class Font extends AbstractApi implements ApiInterface
             ], 400, []);
         }
 
+        $metadata = base64_encode(gzcompress(json_encode($metadata, JSON_THROW_ON_ERROR), 9));
+        $font_faces = base64_encode(gzcompress(json_encode($font_faces, JSON_THROW_ON_ERROR), 9));
+
         $wpdb->insert(sprintf('%syabe_webfont_fonts', $wpdb->prefix), [
             'type' => $type,
             'title' => $title,
             'slug' => $slug,
             'family' => $family,
             'status' => $status,
-            'metadata' => json_encode($metadata, JSON_THROW_ON_ERROR),
-            'font_faces' => json_encode($font_faces, JSON_THROW_ON_ERROR),
+            'metadata' => $metadata, //json_encode($metadata, JSON_THROW_ON_ERROR),
+            'font_faces' => $font_faces, //json_encode($font_faces, JSON_THROW_ON_ERROR),
         ], [
             '%s',
             '%s',
@@ -1092,95 +1158,116 @@ class Font extends AbstractApi implements ApiInterface
                     continue;
                 }
 
+                // TODO: variable font with subset number/digit
+
+                $all_filtered_m_font_files = [];
+
                 foreach ($metadata['google_fonts']['subsets'] as $subset) {
                     $filtered_m_font_files = array_filter(
                         $m_font_files,
-                        static fn ($f) => $f['weight'] === $m_face['weight']
+                        static fn($f) => $f['weight'] === $m_face['weight']
                             && $f['style'] === $m_face['style']
                             && in_array($subset, $f['subsets'], true)
                             && in_array($f['format'], $metadata['google_fonts']['formats'], true)
                     );
 
-                    foreach ($filtered_m_font_files as $filtered_m_font_file) {
-                        $wght = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'wght'
-                        );
+                    $all_filtered_m_font_files = array_merge($all_filtered_m_font_files, $filtered_m_font_files);
+                }
 
-                        $wdth = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'wdth'
-                        );
+                // variableFontFiles
+                $var_filtered_m_font_files = array_filter(
+                    $m_font_files,
+                    static fn($f) => $f['weight'] === $m_face['weight']
+                        && $f['style'] === $m_face['style']
+                        && in_array($f['format'], $metadata['google_fonts']['formats'], true)
 
-                        $slnt = array_filter(
-                            $metadata['google_fonts']['font_data']['axes'],
-                            static fn ($a) => $a['tag'] === 'slnt'
-                        );
+                        // if any of the element in $metadata['google_fonts']['subsets'] has digit/number
+                        && array_reduce(
+                            $metadata['google_fonts']['subsets'],
+                            static fn($carry, $subset) => $carry && ! preg_match('/\d/', $subset),
+                            true
+                        )
+                );
 
-                        $wdth = array_values($wdth);
-                        $wght = array_values($wght);
-                        $slnt = array_values($slnt);
+                foreach ($filtered_m_font_files as $filtered_m_font_file) {
+                    $wght = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'wght'
+                    );
 
-                        $font_face = [
-                            'id' => Common::random_slug(10),
-                            'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
-                            'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
-                            'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
-                            'display' => $m_face['display'],
-                            'selector' => $m_face['selector'],
-                            'comment' => $m_face['comment'],
-                            'preload' => $m_face['preload'],
-                        ];
+                    $wdth = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'wdth'
+                    );
 
-                        if (array_key_exists('file', $filtered_m_font_file)) {
-                            $file = $filtered_m_font_file['file'];
-                        } else {
-                            $file_name = sanitize_title_with_dashes(sprintf(
-                                'google-fonts-%s-%s-%s-var-%s-%s',
-                                $metadata['google_fonts']['font_data']['slug'], // family
-                                $metadata['google_fonts']['font_data']['version'],
-                                $subset,
-                                Common::random_slug(5),
-                                time()
-                            )) . '.' . $filtered_m_font_file['format'];
+                    $slnt = array_filter(
+                        $metadata['google_fonts']['font_data']['axes'],
+                        static fn($a) => $a['tag'] === 'slnt'
+                    );
 
-                            try {
-                                $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+                    $wdth = array_values($wdth);
+                    $wght = array_values($wght);
+                    $slnt = array_values($slnt);
 
-                                if (! $attachment_id) {
-                                    continue;
-                                }
-                            } catch (\Throwable $throwable) {
-                                //throw $th;
+                    $font_face = [
+                        'id' => Common::random_slug(10),
+                        'weight' => $wght !== [] ? sprintf('%s %s', $wght[0]['min'], $wght[0]['max']) : '400',
+                        'width' => $wdth !== [] ? sprintf('%s%% %s%%', $wdth[0]['min'], $wdth[0]['max']) : '100%',
+                        'style' => $slnt !== [] ? sprintf('oblique %sdeg %sdeg', $slnt[0]['max'] * -1, $slnt[0]['min'] * -1) : $m_face['style'],
+                        'display' => $m_face['display'],
+                        'selector' => $m_face['selector'],
+                        'comment' => $m_face['comment'],
+                        'preload' => $m_face['preload'],
+                    ];
+
+                    if (array_key_exists('file', $filtered_m_font_file)) {
+                        $file = $filtered_m_font_file['file'];
+                    } else {
+                        $file_name = sanitize_title_with_dashes(sprintf(
+                            'google-fonts-%s-%s-%s-var-%s-%s',
+                            $metadata['google_fonts']['font_data']['slug'], // family
+                            $metadata['google_fonts']['font_data']['version'],
+                            implode('_', $filtered_m_font_file['subsets']),
+                            Common::random_slug(5),
+                            time()
+                        )) . '.' . $filtered_m_font_file['format'];
+
+                        try {
+                            $attachment_id = Upload::remote_upload_media($filtered_m_font_file['url'], $file_name, $font_mime_types[$filtered_m_font_file['format']]);
+
+                            if (! $attachment_id) {
                                 continue;
                             }
-
-                            $file = [
-                                'uid' => Common::random_slug(10),
-                                'attachment_id' => $attachment_id,
-                                'attachment_url' => wp_get_attachment_url($attachment_id),
-                                'extension' => $filtered_m_font_file['format'],
-                                'mime' => $font_mime_types[$filtered_m_font_file['format']],
-                                'file_size' => filesize(get_attached_file($attachment_id)),
-                                'name' => substr($file_name, 0, strrpos($file_name, '.')),
-                            ];
-
-                            $metadata['google_fonts']['font_files'] = array_map(
-                                static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
-                                    'file' => $file,
-                                ]) : $f,
-                                $metadata['google_fonts']['font_files']
-                            );
+                        } catch (\Throwable $throwable) {
+                            //throw $th;
+                            continue;
                         }
 
-                        $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
+                        $file = [
+                            'uid' => Common::random_slug(10),
+                            'attachment_id' => $attachment_id,
+                            'attachment_url' => wp_get_attachment_url($attachment_id),
+                            'extension' => $filtered_m_font_file['format'],
+                            'mime' => $font_mime_types[$filtered_m_font_file['format']],
+                            'file_size' => filesize(get_attached_file($attachment_id)),
+                            'name' => substr($file_name, 0, strrpos($file_name, '.')),
+                        ];
 
-                        $font_face['files'] = [$file];
-
-                        $font_face['unicodeRange'] = $filtered_m_font_file['unicodeRange'];
-
-                        $font_faces[] = $font_face;
+                        $metadata['google_fonts']['font_files'] = array_map(
+                            static fn($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                                'file' => $file,
+                            ]) : $f,
+                            $metadata['google_fonts']['font_files']
+                        );
                     }
+
+                    $metadata['google_fonts']['font_faces'][$k]['attached_font_files'][] = $filtered_m_font_file['uid'];
+
+                    $font_face['files'] = [$file];
+
+                    $font_face['unicodeRange'] = $filtered_m_font_file['unicodeRange'];
+
+                    $font_faces[] = $font_face;
                 }
             } else {
                 if ($m_face['weight'] === 0) {
@@ -1203,7 +1290,7 @@ class Font extends AbstractApi implements ApiInterface
 
                 $filtered_m_font_files = array_filter(
                     $m_font_files,
-                    static fn ($f) => $f['weight'] === $m_face['weight']
+                    static fn($f) => $f['weight'] === $m_face['weight']
                         && $f['style'] === $m_face['style']
                         && array_diff($metadata['google_fonts']['subsets'], $f['subsets']) === array_diff($f['subsets'], $metadata['google_fonts']['subsets'])
                         && in_array($f['format'], $metadata['google_fonts']['formats'], true)
@@ -1217,7 +1304,7 @@ class Font extends AbstractApi implements ApiInterface
                     'eot' => 5,
                 ];
 
-                usort($filtered_m_font_files, static fn ($a, $b) => $format_precedence[$a['format']] <=> $format_precedence[$b['format']]);
+                usort($filtered_m_font_files, static fn($a, $b) => $format_precedence[$a['format']] <=> $format_precedence[$b['format']]);
 
                 foreach ($filtered_m_font_files as $filtered_m_font_file) {
                     if (array_key_exists('file', $filtered_m_font_file)) {
@@ -1255,7 +1342,7 @@ class Font extends AbstractApi implements ApiInterface
                         ];
 
                         $metadata['google_fonts']['font_files'] = array_map(
-                            static fn ($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
+                            static fn($f) => $f['uid'] === $filtered_m_font_file['uid'] ? array_merge($f, [
                                 'file' => $file,
                             ]) : $f,
                             $metadata['google_fonts']['font_files']

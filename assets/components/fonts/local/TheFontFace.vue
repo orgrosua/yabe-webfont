@@ -3,7 +3,8 @@ import { ref } from 'vue';
 import { nanoid } from 'nanoid';
 import prettyBytes from 'pretty-bytes';
 import { parse as otParse } from '@konghayao/opentype.js';
-import decompress from 'wawoff2/decompress.mjs';
+// import decompress from 'wawoff2/decompress.mjs';
+import decompress from 'wawoff2';
 
 import { useLocalFontStore } from '../../../stores/font/localFont';
 

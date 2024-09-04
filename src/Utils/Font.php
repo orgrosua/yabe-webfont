@@ -56,7 +56,11 @@ class Font
                     'fallback_family' => null,
                 ];
 
-                $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+                try {
+                    $font_faces = json_decode($row->font_faces, null, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException $e) {
+                    $font_faces = json_decode(gzuncompress(base64_decode($row->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+                }
 
                 foreach ($font_faces as $font_face) {
                     $f['variants'][] = [
@@ -67,7 +71,11 @@ class Font
 
                 $selectorParts = [];
 
-                $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+                try {
+                    $metadata = json_decode($row->metadata, null, 512, JSON_THROW_ON_ERROR);
+                } catch (\JsonException $e) {
+                    $metadata = json_decode(gzuncompress(base64_decode($row->metadata)), null, 512, JSON_THROW_ON_ERROR);
+                }
 
                 // if property selector is exists
                 if (property_exists($metadata, 'selector') && $metadata->selector) {
