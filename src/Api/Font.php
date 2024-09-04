@@ -465,7 +465,12 @@ class Font extends AbstractApi implements ApiInterface
 
         // delete attachment from wordpress media library
         if ($item->deleted_at) {
-            $font_faces = json_decode($item->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            try {
+                $font_faces = json_decode($item->font_faces, null, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                $font_faces = json_decode(gzuncompress(base64_decode($item->font_faces)), null, 512, JSON_THROW_ON_ERROR);
+            }
+
             foreach ($font_faces as $font_face) {
                 if ($font_face->files !== []) {
                     foreach ($font_face->files as $f) {
