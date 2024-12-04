@@ -96,7 +96,7 @@ function doCleanUp() {
                     <div class="rel flex items-start gap-x:12 py:16">
                         <div class="flex-shrink:0">
                             <span :class="['bg:blue-50', 'inline-flex h:40 w:40 align-items:center justify-content:center r:8']">
-                                <font-awesome-icon :icon="['far', 'file-import']" class="fg:white font:24" />
+                                <Icon icon="fa6-solid:file-import" class="h:24 w:24 fg:white fill:current" />
                             </span>
                         </div>
                         <div class="min-w:0 flex-grow:1">
@@ -109,7 +109,7 @@ function doCleanUp() {
                         </div>
                         <div class="flex-shrink:0 align-self:center">
                             <button type="button" :disabled="busyStore.isBusy" @click="doImport" v-ripple class="button flex align-items:center gap-x:8">
-                                <font-awesome-icon :icon="['fas', 'spinner']" :class="{ hidden: !busyStore.hasTask('migrations.index:import-fonts') }" class="animation:rotate|1.2s|infinite|linear fill:current" />
+                                <Icon icon="fa6-solid:spinner" :class="{ hidden: !busyStore.hasTask('migrations.index:import-fonts') }" class="animation:rotate|1.2s|infinite|linear fill:current" />
                                 {{ __('Run', 'yabe-webfont') }}
                             </button>
                         </div>
@@ -119,12 +119,12 @@ function doCleanUp() {
                     <div class="rel flex items-start gap-x:12 py:16">
                         <div class="flex-shrink:0">
                             <span :class="['bg:pink-50', 'inline-flex h:40 w:40 align-items:center justify-content:center r:8']">
-                                <font-awesome-icon :icon="['far', 'broom']" class="font:24 fg:white fill:current" />
+                                <Icon icon="fa6-solid:broom" class="h:24 w:24 fg:white fill:current" />
                             </span>
                         </div>
                         <div class="min-w:0 flex-grow:1">
                             <p class="m:0 font:14 font:medium fg:yellow-80">
-                                <font-awesome-icon :icon="['fas', 'triangle-exclamation']" />
+                                <Icon icon="fa6-solid:triangle-exclamation" />
                                 Clean up
                             </p>
                             <p class="m:0 font:14 fg:gray-50">
@@ -133,7 +133,8 @@ function doCleanUp() {
                         </div>
                         <div class="flex-shrink:0 align-self:center">
                             <button type="button" :disabled="busyStore.isBusy" @click="doCleanUp" v-ripple class="button flex align-items:center gap-x:8">
-                                <font-awesome-icon :icon="['fas', 'spinner']" :class="{ hidden: !busyStore.hasTask('migrations.index:cleanup-fonts') }" class="animation:rotate|1.2s|infinite|linear fill:current" />
+                                <Icon icon="fa6-solid:spinner" :class="{ hidden: !busyStore.hasTask('migrations.index:cleanup-fonts') }" class="animation:rotate|1.2s|infinite|linear fill:current" />
+                                
                                 {{ __('Run', 'yabe-webfont') }}
                             </button>
                         </div>
@@ -143,7 +144,7 @@ function doCleanUp() {
             <div class="mt:24 r:8 bg:sky-60/.10 p:16">
                 <div class="flex">
                     <div class="flex-shrink:0">
-                        <font-awesome-icon :icon="['fas', 'circle-info']" class="font:20 fg:blue-40" />
+                        <Icon icon="fa6-solid:circle-info" class="h:20 w:20 fg:blue-40" />
                     </div>
                     <div class="ml:12 flex-grow:1 flex justify-content:between">
                         <p class="m:0 font:14 fg:blue-70">

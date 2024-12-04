@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { v4wp } from '@kucrut/vite-for-wp';
 import { wp_scripts } from '@kucrut/vite-for-wp/plugins';
+import Icons from 'unplugin-icons/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Components from 'unplugin-vue-components/vite';
 
 export default defineConfig({
     plugins: [
@@ -13,24 +16,18 @@ export default defineConfig({
         }),
         // wp_scripts(),
         vue(),
-        {
-            name: 'override-config',
-            config: () => ({
-                build: {
-                    // ensure that manifest.json is not in ".vite/" folder
-                    manifest: 'manifest.json',
-
-                    // disable sourcemap
-                    sourcemap: false,
-                },
-            }),
-        },
+        Components({
+            resolvers: [
+                IconsResolver(),
+            ],
+        }),
+        Icons({ autoInstall: true, scale: 1 }),
     ],
     css: {
         lightningcss: true,
     },
     build: {
-        // target: 'esnext',
         target: 'modules',
+        sourcemap: false,
     },
 });

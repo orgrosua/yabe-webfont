@@ -33,22 +33,22 @@ const askForReviewClick = (action) => {
                     <div class="flex align-items:center flex:row gap:10">
                         <VDropdown :distance="12">
                             <button class="button button-secondary b:0 bg:transparent bg:gray-10:hover fg:gray-90 h:36 min-w:36 my:auto width:auto">
-                                <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" class="font:15" />
+                                <Icon icon="fa6-solid:ellipsis-vertical" class="font:15" />
                             </button>
 
                             <template #popper>
                                 <div>
                                     <div role="group" class="flex flex:column font:14 min-w:160 p:4 w:auto">
                                         <a href="https://webfont.yabe.land/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=yabe-webfont&utm_id=pro-version" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
-                                            <font-awesome-icon :icon="['fas', 'book']" class="min-w:14" />
+                                            <Icon icon="fa6-solid:book" class="min-w:14" />
                                             Documentation
                                         </a>
                                         <a href="https://rosua.org/support-portal" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
-                                            <font-awesome-icon :icon="['fas', 'user-headset']" class="min-w:14" />
+                                            <Icon icon="fa6-solid:headset" class="min-w:14" />
                                             Support
                                         </a>
                                         <a href="https://www.facebook.com/groups/1142662969627943" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
-                                            <font-awesome-icon :icon="['fab', 'facebook']" class="min-w:14" />
+                                            <Icon icon="fa6-brands:facebook" class="min-w:14" />
                                             Community
                                         </a>
                                         <!-- changelog -->
@@ -70,10 +70,10 @@ const askForReviewClick = (action) => {
                             <li>
                                 <a v-if="yabeWebfont.lite_edition" class="flex flex:cols bg:transparent align-items:center" href="https://webfont.yabe.land/#pricing" target="_blank">
                                     <div class="flex flex:cols align-items:center">
-                                        Upgrade to
-                                        <font-awesome-icon :icon="['fas', 'rectangle-pro']" class="mx:4 fg:crimson-80 font:14" />
+                                        Upgrade to Pro
+                                        <Icon icon="fa6-solid:gem" class="mx:4 fg:crimson-80 font:14" />
                                     </div>
-                                    <font-awesome-icon :icon="['far', 'arrow-up-right-from-square']" class=" translateY(-6)" />
+                                    <Icon icon="fa6-solid:arrow-up-right-from-square" class="translateY(-6)" />
                                 </a>
                             </li>
                         </ul>
@@ -92,11 +92,11 @@ const askForReviewClick = (action) => {
                         </p>
                         <p>
                             <button @click="askForReviewClick('done')" class="button button-primary">
-                                <font-awesome-icon :icon="['fas', 'face-smile-hearts']" />
+                                <Icon icon="fa6-solid:face-smile-beam" />
                                 OK, you deserve it!
                             </button>
                             <button @click="askForReviewClick('later')" class="button button-secondary float:right ml:8">
-                                <font-awesome-icon :icon="['fas', 'hourglass-clock']" />
+                                <Icon icon="fa6-solid:hourglass-half" />
                                 Later
                             </button>
                             <button @click="askForReviewClick('never')" class="button button-link button-link-delete float:right">Never</button>

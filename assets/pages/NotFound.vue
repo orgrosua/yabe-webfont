@@ -15,7 +15,7 @@
                         <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
                             <div class="flex-shrink:0">
                                 <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
-                                    <font-awesome-icon :icon="['fas', 'book']" class="f:24 fg:sky-80" />
+                                    <Icon icon="fa6-solid:book" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
                             <div class="flex:1|1|0 min-w:0">
@@ -30,14 +30,14 @@
                                 <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('A complete knowledge-base of the product', 'yabe-webfont') }}</p>
                             </div>
                             <div class="flex align-items:center align-self:center flex-shrink:0">
-                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
+                                <Icon icon="fa6-solid:chevron-right" class="fg:gray-40" />
                             </div>
                         </li>
 
                         <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
                             <div class="flex-shrink:0">
                                 <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
-                                    <font-awesome-icon :icon="['fas', 'user-headset']" class="f:24 fg:sky-80" />
+                                    <Icon icon="fa6-solid:headset" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
                             <div class="flex:1|1|0 min-w:0">
@@ -52,14 +52,14 @@
                                 <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('How can we help you?', 'yabe-webfont') }} </p>
                             </div>
                             <div class="flex align-items:center align-self:center flex-shrink:0">
-                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
+                                <Icon icon="fa6-solid:chevron-right" class="fg:gray-40" />
                             </div>
                         </li>
 
                         <li class="flex align-items:flex-start ml:16>:not([hidden])~:not([hidden]) position:rel py:24">
                             <div class="flex-shrink:0">
                                 <span class="flex align-items:center bg:gray-20 h:48 justify-content:center r:8 w:48">
-                                    <font-awesome-icon :icon="['fas', 'rss']" class="f:24 fg:sky-80" />
+                                    <Icon icon="fa6-solid:rss" class="f:24 fg:sky-80" />
                                 </span>
                             </div>
                             <div class="flex:1|1|0 min-w:0">
@@ -74,7 +74,7 @@
                                 <p class="f:16 fg:gray-50 line-height:24px my:0">{{ __('Read our latest news and articles', 'yabe-webfont') }}</p>
                             </div>
                             <div class="flex align-items:center align-self:center flex-shrink:0">
-                                <font-awesome-icon :icon="['far', 'chevron-right']" class="fg:gray-40" />
+                                <Icon icon="fa6-solid:chevron-right" class="fg:gray-40" />
                             </div>
                         </li>
                     </ul>

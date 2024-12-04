@@ -185,12 +185,12 @@ const weightOptions = [
                 </div>
                 <div class="flex p:12 gap:8 align-items:stretch rel">
                     <button type="button" ref="editTooltip" @click="isShowBody = !isShowBody" v-ripple class="button flex align-items:center px:6 py:0.5 focus:shadow-none cursor:pointer bg:inherit b:none">
-                        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="h:20 w:20 fg:blue-80 fg:blue-60:hover fill:current" />
+                        <Icon icon="fa6-solid:pen-to-square" class="h:20 w:20 fg:blue-80 fg:blue-60:hover fill:current" />
                         <TheTooltip :target-ref="editTooltip" :content="__('Edit', 'yabe-webfont')" />
                     </button>
                     <button type="button" ref="deleteTooltip" @click="deleteFontFace" v-ripple class="button flex align-items:center px:6 py:0.5 focus:shadow-none cursor:pointer bg:inherit b:none">
-                        <font-awesome-icon v-if="!isShowConfirmDeleteBtn" :icon="['fas', 'triangle-exclamation']" class="h:20 w:20 fg:red-80 fg:red-60:hover fill:current hover:animation:skeleton|2s|infinite" />
-                        <font-awesome-icon v-else :icon="['fas', 'trash']" class="h:20 w:20 fg:red-80 fg:red-60:hover fill:current" />
+                        <Icon v-if="!isShowConfirmDeleteBtn" icon="fa6-solid:triangle-exclamation" class="h:20 w:20 fg:red-80 fg:red-60:hover fill:current hover:animation:skeleton|2s|infinite" />
+                        <Icon v-else icon="fa6-solid:trash" class="h:20 w:20 fg:red-80 fg:red-60:hover fill:current" />
                         <TheTooltip v-if="!isShowConfirmDeleteBtn" :target-ref="deleteTooltip" :content="__('Delete', 'yabe-webfont')" />
                     </button>
                 </div>
@@ -245,11 +245,11 @@ const weightOptions = [
                         <template #item="{ element }">
                             <div class="flex grid-col-span:6 gap:6 p:12">
                                 <div class="flex w:0 flex:1|1|0% align-items:center">
-                                    <font-awesome-icon :icon="['fas', 'font']" class="h:20 w:20 flex-shrink:0 fg:gray-40 fill:current" />
+                                    <Icon icon="fa6-solid:font" class="h:20 w:20 flex-shrink:0 fg:gray-40 fill:current" />
                                     <span class="ml:8 w:0 flex:1|1|0% overflow:hidden text:ellipsis white-space:nowrap" :title="`${element.name} (${prettyBytes(element.filesize)})`">[<b>{{ element.extension }}</b>] {{ element.name }} ({{ prettyBytes(element.filesize) }})</span>
                                 </div>
                                 <button type="button" @click="deleteFontFile(element.uid)" v-ripple class="button flex ml:16 flex-shrink:0 align-items:center focus:shadow-none cursor:pointer bg:inherit b:none fg:gray-50 fg:red-60:hover font:medium">
-                                    <font-awesome-icon :icon="['fas', 'delete-left']" class="h:20 w:20 fill:current hover:animation:skeleton|2s|infinite pr:6" />
+                                    <Icon icon="fa6-solid:delete-left" class="h:20 w:20 fill:current hover:animation:skeleton|2s|infinite pr:6" />
                                     Delete
                                 </button>
                             </div>

@@ -1,15 +1,15 @@
-=== Yabe Webfont ===
+=== Yabe Webfont - Use Custom Fonts, Google Fonts or Adobe Fonts ===
 Contributors: suabahasa, rosua
 Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
-Tested up to: 6.6
-Stable tag: 2.0.69
+Tested up to: 6.7
+Stable tag: 2.0.70
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Self-host Google Fonts and the dedicated custom fonts manager for WordPress with seamless visual/page builders integration.
+Easy self-host Google Fonts, Adobe Fonts support, or upload custom fonts in WordPress that are integrated into the most popular themes and page builders.
 
 == Description ==
 
@@ -77,6 +77,10 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+
+= 2.0.70 =
+* **Improve**: Test compatibility with WordPress 6.7
+* **Improve**: Update dependencies
 
 = 2.0.69 =
 * **Improve**: Google Fonts' variable font subset is now loaded properly

@@ -32,7 +32,7 @@
                             <template v-if="css_cache.last_generated">
                                 {{ new dayjs(css_cache.last_generated * 1000).format('YYYY-MM-DD HH:mm:ss') }}
                                 <a :href="`${css_cache.file_url}?ver=${css_cache.last_generated}`" target="_blank">
-                                    <font-awesome-icon :icon="['far', 'arrow-up-right-from-square']" class="font:13 translateY(-6)" />
+                                    <Icon icon="fa6-solid:arrow-up-right-from-square" class="font:13 translateY(-6)" />
                                 </a>
                             </template>
                             <span :class="busy.isBusy && (busy.hasTask('settings:generate-cache') || busy.hasTask('settings:fetch-cache')) ? 'visible' : 'hidden'" class="spinner"></span>
@@ -43,7 +43,7 @@
                         <div class="flex align-items:center my:8">
                             <button type="button" @click="doGenerateCache" class="button button-secondary"> Re-generate cache </button>
                             <template v-if="css_cache.pending_task">
-                                <font-awesome-icon :icon="['fas', 'hourglass-clock']" class="ml:12 fg:gray-50"/>
+                                <Icon icon="fa6-solid:hourglass-half" class="ml:12 fg:gray-50"/>
                                 <span class="fg:gray-50 pl:4">
                                     There is a scheduled task to generate the cache.
                                 </span>

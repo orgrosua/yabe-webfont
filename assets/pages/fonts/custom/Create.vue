@@ -50,7 +50,7 @@
                         <div class="flex align-items:center {ml:8}>*+* mt:32 mb:12">
                             <h3 class="flex:1|1|0%">
                                 Variants
-                                <font-awesome-icon :icon="['fas', 'arrow-up-1-9']" @click="sortFontFaces" title="Sort variants" class="w:16 h:16 ml:4 cursor:pointer" />
+                                <Icon icon="fa6-solid:arrow-up-1-9" @click="sortFontFaces" title="Sort variants" class="w:16 h:16 ml:4 cursor:pointer" />
                             </h3>
 
                             <TheBulkUpload :font-faces="fontFaces" :family="family" />
@@ -87,17 +87,17 @@
                                         <div class="misc-pub-section">
                                             <!-- Font Info: Publish Status -->
                                             <div class="py:6 flex align-items:center">
-                                                <font-awesome-icon v-if="status" :icon="['fas', 'rocket-launch']" class="h:16 w:16 flex-shrink:0 fg:#8c8f94" />
-                                                <font-awesome-icon v-else :icon="['fas', 'rocket']" class="h:16 w:16 flex-shrink:0 fg:#8c8f94" />
+                                                <Icon v-if="status" icon="fa6-solid:rocket" class="h:16 w:16 flex-shrink:0 fg:gray-90" />
+                                                <Icon v-else icon="fa6-solid:rocket" class="h:16 w:16 flex-shrink:0 fg:gray-40" />
                                                 <span class="pl:10 pr:8">Status:</span>
                                                 <SwitchGroup as="div" class="flex align-items:center">
                                                     <Switch v-model="status" :class="[status ? 'bg:sky-60' : 'opacity:.5 bg:gray-85']" class="rel inline-flex p:0 h:24 w:44 flex-shrink:0 cursor:pointer rounded b:2 b:transparent transition-property:color,background-color,border-color,text-decoration-color,fill,stroke transition-duration:200 transition-timing-function:cubic-bezier(0.4,0,0.2,1) box-shadow:rgb(255,255,255)|0|0|0|2,rgb(14,165,233)|0|0|0|4,rgba(0,0,0,0)|0|0|0|0:focus outline:2|solid|transparent:focus">
                                                         <span :class="[status ? 'translateX(20)' : 'translateX(0)']" class="pointer-events:none rel inline-block font:12 h:20 w:20 rounded bg:white transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter transition-duration:200 transition-timing-function:cubic-bezier(0.4,0,0.2,1) box-shadow:rgb(255,255,255)|0|0|0|0,rgba(59,130,246,0.5)|0|0|0|0,rgba(0,0,0,0.1)|0|1|3|0,rgba(0,0,0,0.1)|0|1|2|-1">
                                                             <span aria-hidden="true" :class="[status ? 'opacity:0 transition-timing-function:ease-out transition-duration:100' : 'opacity:1 transition-timing-function:ease-in transition-duration:200']" class="abs inset:0 flex h:full w:full align-items:center justify-content:center tw-transition-opacity">
-                                                                <font-awesome-icon :icon="['fas', 'xmark']" class="fg:gray-60" />
+                                                                <Icon icon="fa6-solid:xmark" class="fg:gray-60" />
                                                             </span>
                                                             <span aria-hidden="true" :class="[status ? 'opacity:1 transition-timing-function:ease-in transition-duration:200' : 'opacity:0 transition-timing-function:ease-out transition-duration:100']" class="abs inset:0 flex h:full w:full align-items:center justify-content:center tw-transition-opacity">
-                                                                <font-awesome-icon :icon="['fas', 'check']" class="fg:sky-60" />
+                                                                <Icon icon="fa6-solid:check" class="fg:sky-60" />
                                                             </span>
                                                         </span>
                                                     </Switch>

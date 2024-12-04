@@ -1,13 +1,3 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// import './public-path.js';
-
-// any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
 import './master.css.js';
 
@@ -26,7 +16,7 @@ import VueSelect from 'vue-select';
 import draggable from 'zhyswan-vuedraggable';
 import InlineSvg from 'vue-inline-svg';
 import FloatingVue from 'floating-vue';
-import { FontAwesomeIcon } from './font-awesome.js';
+import { Icon } from '@iconify/vue';
 
 hljs.registerLanguage('css', hljsCssLang);
 
@@ -47,10 +37,11 @@ app
     });
 
 app
-    .component('font-awesome-icon', FontAwesomeIcon)
     .component('inline-svg', InlineSvg)
     .component('VueSelect', VueSelect)
-    .component('Draggable', draggable);
+    .component('Draggable', draggable)
+    .component('Icon', Icon);
+    ;
 
 app.directive('ripple', vRipple);
 

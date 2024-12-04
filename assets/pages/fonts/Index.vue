@@ -103,7 +103,7 @@
                     <Switch :checked="false" class="opacity:.5 bg:gray-85 rel inline-flex p:0 h:24 w:44 flex-shrink:0 cursor:pointer rounded b:2 b:transparent">
                         <span class="translateX(0) pointer-events:none rel inline-block h:20 w:20 rounded bg:white box-shadow:0|0">
                             <span aria-hidden="true" class="abs inset:0 flex h:full w:full align-items:center justify-content:center opacity:1">
-                                <font-awesome-icon :icon="['fas', 'spinner']" class="animation:rotate|linear|1s|infinite font:12 fg:gray-60"/>
+                                <Icon icon="fa6-solid:spinner" class="animation:rotate|linear|1s|infinite font:12 fg:gray-60"/>
                             </span>
                         </span>
                     </Switch>

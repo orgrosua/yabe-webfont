@@ -49,10 +49,6 @@ jobs:
             node-version: '18'
             cache: 'pnpm'
 
-        # Font Awesome Pro. https://fontawesome.com/docs/web/setup/packages
-        - run: npm config set "@fortawesome:registry" https://npm.fontawesome.com/
-        - run: npm config set "//npm.fontawesome.com/:_authToken" ${{ secrets.FONTAWESOME_NPM_AUTH_TOKEN }}
-
         - run: pnpm install
         - run: pnpm build
 
