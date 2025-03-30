@@ -73,7 +73,7 @@ class Main implements BuilderInterface
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
-                'name' => sprintf('[Yabe] %s', $font['title']),
+                'name' => $font['title'],
                 'slug' => Font::slugify($font['family']),
                 'fontFamily' => Font::css_variable($font['family']),
             ];
@@ -109,7 +109,7 @@ class Main implements BuilderInterface
              * @see https://www.w3.org/TR/CSS22/syndata.html#value-def-identifier
              */
             $theme_json_font_families[] = [
-                'name' => sprintf('[Yabe] %s', $font['title']),
+                'name' => $font['title'],
                 'slug' => Font::slugify($font['family']),
                 'fontFamily' => Font::css_variable($font['family']),
             ];
