@@ -1,0 +1,81 @@
+name: "Update google webfont data"
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # Every Sunday at midnight UTC
+
+jobs:
+  update-webfont-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ORGROSUA_DEV_PAT }}
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x # Run with latest stable Deno.
+          cache: true
+
+      - name: Install dependencies
+        working-directory: deploy/webfonts
+        run: deno install
+
+      - name: Update webfont data
+        working-directory: deploy/webfonts
+        run: deno run -A main.ts
+        env:
+          GOOGLE_FONTS_API_KEY: ${{ secrets.GOOGLE_FONTS_API_KEY }}
+
+      # commit changes
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'wakufont@users.noreply.github.com'
+          git add .
+          git commit -m "Update webfont data"
+
+      - name: Get latest tag and bump patch version
+        id: bump
+        run: |
+          # Fetch all tags
+          git fetch --tags
+
+          # Get latest SemVer tag (filter tags matching SemVer)
+          latest_tag=$(git tag --list | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1)
+
+          if [ -z "$latest_tag" ]; then
+            new_tag="1.0.0"
+          else
+            # Remove "v" prefix if present
+            version="${latest_tag#v}"
+
+            # Split into components
+            IFS='.' read -r major minor patch <<< "$version"
+
+            # Increment patch
+            patch=$((patch + 1))
+            new_tag="$major.$minor.$patch"
+          fi
+
+          echo "new_tag=$new_tag" >> "$GITHUB_OUTPUT"
+          echo "New tag will be: $new_tag"
+
+      - name: Create new tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git tag ${{ steps.bump.outputs.new_tag }}
+          git push origin ${{ steps.bump.outputs.new_tag }}
+
+      - name: Push changes
+        run: |
+          git push origin HEAD
+          git push origin --tags

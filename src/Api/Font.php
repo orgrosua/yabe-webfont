@@ -17,6 +17,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
 use wpdb;
+use Yabe\Webfont\Core\Cache;
 use Yabe\Webfont\Utils\Common;
 use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Upload;
@@ -169,6 +170,16 @@ class Font extends AbstractApi implements ApiInterface
             [
                 'methods' => WP_REST_Server::EDITABLE,
                 'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_update($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/google-fonts/metadata',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_metadata($wprestRequest),
                 'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
@@ -1364,5 +1375,64 @@ class Font extends AbstractApi implements ApiInterface
                 $font_faces[] = $font_face;
             }
         }
+    }
+
+    private function update_google_fonts_metadata()
+    {
+        $file_path = Cache::get_cache_path('webfonts.json');
+        $cdn_url = apply_filters('f!yabe/webfont/font:google_fonts.metadata.file_url', 'https://cdn.jsdelivr.net/gh/orgrosua/yabe-webfont@latest/fonts.json');
+
+        $temp_file = download_url($cdn_url);
+
+        if (is_wp_error($temp_file)) {
+            throw new \Exception(__('Failed to download metadata file', 'yabe-webfont'));
+        }
+
+        Common::save_file(file_get_contents($temp_file), $file_path);
+    }
+
+    private function google_fonts_metadata(WP_REST_Request $wprestRequest): WP_REST_Response
+    {
+        $file_path = Cache::get_cache_path('webfonts.json');
+
+        if (apply_filters('f!yabe/webfont/font:google_fonts.metadata.force_cdn', false)) {
+
+            try {
+                $this->update_google_fonts_metadata();
+            } catch (\Exception $e) {
+                return new WP_REST_Response([
+                    'message' => $e->getMessage(),
+                ], 500, []);
+            }
+
+            $metadata = json_decode(file_get_contents($file_path), true, 512, JSON_THROW_ON_ERROR);
+
+            return new WP_REST_Response([
+                'fonts' => $metadata,
+            ], 200, []);
+        }
+
+        if (!file_exists($file_path)) {
+            $payload = file_get_contents(dirname(YABE_WEBFONT::FILE) . '/fonts.json');
+            Common::save_file($payload, $file_path);
+        }
+
+        if (apply_filters('f!yabe/webfont/font:google_fonts.metadata.enable_update', true) !== false) {
+            if (filemtime($file_path) < strtotime('-7 days')) {
+                try {
+                    $this->update_google_fonts_metadata();
+                } catch (\Exception $e) {
+                    return new WP_REST_Response([
+                        'message' => $e->getMessage(),
+                    ], 500, []);
+                }
+            }
+        }
+
+        $metadata = json_decode(file_get_contents($file_path), true, 512, JSON_THROW_ON_ERROR);
+
+        return new WP_REST_Response([
+            'fonts' => $metadata,
+        ], 200, []);
     }
 }

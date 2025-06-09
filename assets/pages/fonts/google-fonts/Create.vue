@@ -383,10 +383,20 @@ function reComputeFontFiles() {
 function fetchFontFiles() {
     busy.add('fonts.create.google-fonts:fetch-font-files');
 
-    axios
+    // axios
+    //     .request({
+    //         method: 'GET',
+    //         url: `${yabeWebfont.hostedWakufont}/api/fonts/${fontData.value.slug}`,
+    //         params: {
+    //             subsets: subsets.value.join(','),
+    //         },
+    //     })
+
+    // TODO: implement the API endpoint for fetching Google Fonts files
+    api
         .request({
             method: 'GET',
-            url: `${yabeWebfont.hostedWakufont}/api/fonts/${fontData.value.slug}`,
+            url: `/fonts/google-fonts/webfonts/${fontData.value.slug}`,
             params: {
                 subsets: subsets.value.join(','),
             },
@@ -884,10 +894,16 @@ function resetForm() {
 onBeforeMount(() => {
     busy.add('fonts.create.google-fonts:on-before-mount');
 
-    axios
+    // axios
+    //     .request({
+    //         method: 'GET',
+    //         url: `${yabeWebfont.hostedWakufont}/api/fonts`,
+    //     })
+
+    api
         .request({
             method: 'GET',
-            url: `${yabeWebfont.hostedWakufont}/api/fonts`,
+            url: '/fonts/google-fonts/metadata'
         })
         .then(response => {
             catalog.value = response.data.fonts;
@@ -901,7 +917,6 @@ onBeforeMount(() => {
         .finally(() => {
             busy.remove('fonts.create.google-fonts:on-before-mount');
         });
-
 
     resetForm();
 
