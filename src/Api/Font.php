@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Yabe\Webfont\Api;
 
+use Sabberworm\CSS\Parser;
+use stdClass;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Server;
@@ -180,6 +182,16 @@ class Font extends AbstractApi implements ApiInterface
             [
                 'methods' => WP_REST_Server::READABLE,
                 'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_metadata($wprestRequest),
+                'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
+            ]
+        );
+
+        register_rest_route(
+            self::API_NAMESPACE,
+            $this->get_prefix() . '/google-fonts/webfonts/(?P<slug>[a-zA-Z0-9_\-+\.]+)',
+            [
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => fn(\WP_REST_Request $wprestRequest): \WP_REST_Response => $this->google_fonts_webfonts($wprestRequest),
                 'permission_callback' => fn(\WP_REST_Request $wprestRequest): bool => $this->permission_callback($wprestRequest),
             ]
         );
@@ -856,7 +868,7 @@ class Font extends AbstractApi implements ApiInterface
         );
 
         // get wpdb error
-        error_log(print_r($wpdb->last_error, true));
+        // error_log(print_r($wpdb->last_error, true));
 
         $id = $wpdb->insert_id;
 
@@ -1405,7 +1417,7 @@ class Font extends AbstractApi implements ApiInterface
                 ], 500, []);
             }
 
-            $metadata = json_decode(file_get_contents($file_path), true, 512, JSON_THROW_ON_ERROR);
+            $metadata = json_decode(file_get_contents($file_path), null, 512, JSON_THROW_ON_ERROR);
 
             return new WP_REST_Response([
                 'fonts' => $metadata,
@@ -1429,10 +1441,318 @@ class Font extends AbstractApi implements ApiInterface
             }
         }
 
-        $metadata = json_decode(file_get_contents($file_path), true, 512, JSON_THROW_ON_ERROR);
+        $metadata = json_decode(file_get_contents($file_path), null, 512, JSON_THROW_ON_ERROR);
 
         return new WP_REST_Response([
             'fonts' => $metadata,
         ], 200, []);
+    }
+
+    private function google_fonts_webfonts(WP_REST_Request $wprestRequest): WP_REST_Response
+    {
+        $url_params = $wprestRequest->get_url_params();
+        $query = $wprestRequest->get_query_params();
+
+        $slug = $url_params['slug'] ?? '';
+
+        if ('' === trim($slug)) {
+            return new WP_REST_Response([
+                'message' => __('Slug is required', 'yabe-webfont'),
+            ], 400, []);
+        }
+
+        // retrieve metadata
+        $file_path = Cache::get_cache_path('webfonts.json');
+        if (!file_exists($file_path)) {
+            $payload = file_get_contents(dirname(YABE_WEBFONT::FILE) . '/fonts.json');
+            Common::save_file($payload, $file_path);
+        }
+
+        $metadata = json_decode(file_get_contents($file_path), null, 512, JSON_THROW_ON_ERROR);
+
+        // search for the font by slug
+        $font = array_filter($metadata, static fn($font) => $font->slug === $slug);
+
+        if (empty($font)) {
+            return new WP_REST_Response([
+                'message' => __('Font not found', 'yabe-webfont'),
+            ], 404, []);
+        }
+
+        $font = array_values($font)[0]; // get the first element of the array
+
+        $subsets = $query['subsets'];
+
+        if (! $subsets) {
+            $subsets = in_array('latin', $font->subsets, true)
+                ? ['latin']
+                : [$font->subsets[0]];
+        } else {
+            $querySubsets = explode(',', $subsets);
+            $subsets = array_intersect($font->subsets, $querySubsets);
+        }
+
+        $subsets = array_unique($subsets);
+        sort($subsets);
+
+        $cache_key = 'yabe_webfont_google_fonts_files_' . md5($slug . ':' . implode(',', $subsets));
+
+        $cachedFontFiles = get_transient($cache_key);
+
+        if ($cachedFontFiles) {
+            return new WP_REST_Response([
+                'font' => $font,
+                'files' => array_values($cachedFontFiles),
+            ], 200, []);
+        }
+
+        $variantKeys = $font->variants;
+
+        $fontFormats = ['woff2', 'woff', 'ttf'];
+
+        foreach ($variantKeys as $variantKey) {
+            foreach ($fontFormats as $fontFormat) {
+                $fontUrl = $this->fetch_google_font_file($font, $fontFormat, $variantKey, $subsets);
+
+                $newFontFile = new stdClass();
+
+                $newFontFile->format = $fontFormat;
+                $newFontFile->weight = intval($variantKey);
+
+                switch (preg_replace('/\d/', '', (string) $variantKey)) {
+                    case 'i':
+                        $newFontFile->style = 'italic';
+                        break;
+                    case 'o':
+                        $newFontFile->style = 'oblique';
+                        break;
+                    default:
+                        $newFontFile->style = 'normal';
+                }
+
+                $newFontFile->subsets = $subsets;
+                $newFontFile->url = $fontUrl;
+                $font->files[] = $newFontFile;
+            }
+        }
+
+        if (!empty($font->axes)) {
+            $italics = [];
+
+            if (count(array_filter($variantKeys, static fn(string $variantKey) => preg_replace('/\d/', '', $variantKey) === '')) > 0) {
+                array_push($italics, 0);
+            }
+
+            if (count(array_filter($variantKeys, static fn(string $variantKey) => preg_replace('/\d/', '', $variantKey) === 'i')) > 0) {
+                array_push($italics, 1);
+            }
+
+            foreach ($italics as $italic) {
+                switch ($italic) {
+                    case 0:
+                        $style = 'normal';
+                        break;
+                    case 1:
+                        $style = 'italic';
+                        break;
+                    default:
+                        $style = 'normal';
+                }
+
+                $filteredFontFilesVariable = array_filter($font->files, static fn($fontFile) => $fontFile->format === 'woff2'
+                    && $fontFile->weight === 0
+                    && $fontFile->style === $style
+                    && in_array($fontFile->subsets[0], $subsets, true));
+
+                if (count($filteredFontFilesVariable) < count($subsets)) {
+
+                    $fetchedVariableFonts = $this->fetch_google_font_variable_file($font, $italic, $font->axes);
+
+                    foreach ($fetchedVariableFonts as $fetchedVariableFont) {
+                        $existFilteredFontFilesVariable = array_filter($filteredFontFilesVariable, static fn($fontFile) => $fontFile->format === 'woff2'
+                            && $fontFile->weight === 0
+                            && $fontFile->style === $style
+                            && in_array($fetchedVariableFont['subset'], $fontFile->subsets, true));
+
+                        if (empty($existFilteredFontFilesVariable)) {
+                            $newFontFile = new stdClass();
+
+                            $newFontFile->format = 'woff2';
+                            $newFontFile->weight = 0;
+                            $newFontFile->style = $style;
+                            $newFontFile->subsets = [$fetchedVariableFont['subset']];
+                            $newFontFile->url = $fetchedVariableFont['url'];
+                            $newFontFile->unicodeRange = $fetchedVariableFont['unicodeRange'];
+
+                            $font->files[] = $newFontFile;
+                        }
+                    }
+                }
+            }
+        }
+
+        $filteredFontFiles = array_filter($font->files, static function ($fontFile) use ($subsets) {
+            $fontFileSubsets = array_unique($fontFile->subsets);
+            sort($fontFileSubsets);
+
+            $variableNumberedSubsets = false;
+
+            if ($fontFile->weight === 0) {
+                foreach ($fontFile->subsets as $ffSubset) {
+                    if (preg_match('/\d/', $ffSubset)) {
+                        $variableNumberedSubsets = true;
+                        break;
+                    }
+                }
+            }
+
+            return $fontFileSubsets === $subsets || $variableNumberedSubsets;
+        });
+
+        // Cache the result for 1 day
+        set_transient($cache_key, $filteredFontFiles, DAY_IN_SECONDS);
+
+        return new WP_REST_Response([
+            'font' => $font,
+            'files' => array_values($filteredFontFiles),
+        ], 200, []);
+    }
+
+    private function fetch_google_font_file($font, string $format, string $variant, array $subsets): string
+    {
+        switch ($format) {
+            case 'woff2':
+                $userAgent = YABE_WEBFONT::USER_AGENTS['WOFF2'];
+                break;
+            case 'woff':
+                $userAgent = YABE_WEBFONT::USER_AGENTS['WOFF'];
+                break;
+            case 'ttf':
+                $userAgent = YABE_WEBFONT::USER_AGENTS['TTF'];
+                break;
+            default:
+                $userAgent = apply_filters('f!yabe/webfont/font:google_fonts.fetch.user_agent.default', YABE_WEBFONT::USER_AGENTS['CURRENT']);
+        }
+
+        $family = str_replace(' ', '+', $font->family);
+
+        $url = sprintf(
+            'https://fonts.googleapis.com/css?family=%s:%s&subset=%s',
+            $family,
+            $variant,
+            implode(',', $subsets)
+        );
+
+        $response = wp_remote_get($url, [
+            'headers' => [
+                'User-Agent' => $userAgent,
+            ],
+        ]);
+
+        if (is_wp_error($response)) {
+            throw new \Exception(__('Failed to fetch font file', 'yabe-webfont'));
+        }
+
+        $cssDocument = (new Parser(wp_remote_retrieve_body($response)))->parse();
+
+        $fontUrl = $cssDocument->getContents()[0]->getRules('src')[0]->getValue()->getListComponents()[0]->getURL()->getString();
+
+        return $fontUrl;
+    }
+
+    private function negative_case(string $string): string
+    {
+        $arr = str_split($string);
+
+        foreach ($arr as $key => $char) {
+            $arr[$key] = ctype_upper($char) ? strtolower($char) : strtoupper($char);
+        }
+
+        return implode('', $arr);
+    }
+
+    /**
+     * @see https://developers.google.com/fonts/docs/css2#api_url_specification
+     */
+    private function fetch_google_font_variable_file($font, int $italic, array $axes): array
+    {
+        $axis_tag_list = [];
+        $axis_tuple_list = [];
+        $family = str_replace(' ', '+', $font->family);
+
+        // convert axes to array
+        $axes = array_map(static fn($axis) => [
+            'tag' => $axis->tag,
+            'min' => $axis->min ?? null,
+            'max' => $axis->max ?? null,
+            'defaultValue' => $axis->defaultValue ?? null,
+        ], $axes);
+
+        // add ital axis
+        $axes[] = [
+            'tag' => 'ital',
+            'defaultValue' => $italic,
+        ];
+
+        // sort axes by "tag" alphabetically (e.g. a,b,c,A,B,C)
+        usort($axes, fn(array $a, array $b) => strcmp((string) $this->negative_case($a['tag']), (string) $this->negative_case($b['tag'])));
+
+        foreach ($axes as $a) {
+            $axis_tag_list[] = $a['tag'];
+
+            if (array_key_exists('min', $a) && array_key_exists('max', $a)) {
+                $axis_tuple_list[] = sprintf('%s..%s', $a['min'], $a['max']);
+            } else {
+                $axis_tuple_list[] = sprintf('%s', $a['defaultValue']);
+            }
+        }
+
+        $url = sprintf(
+            'https://fonts.googleapis.com/css2?family=%s:%s@%s',
+            $family,
+            implode(',', $axis_tag_list),
+            implode(',', $axis_tuple_list)
+        );
+
+        $parsedFiles = [];
+
+        $response = wp_remote_get($url, [
+            'headers' => [
+                'User-Agent' => apply_filters('f!yabe/webfont/font:google_fonts.fetch.user_agent.default', YABE_WEBFONT::USER_AGENTS['CURRENT']),
+            ],
+        ]);
+
+        if (is_wp_error($response)) {
+            throw new \Exception(__('Failed to fetch variable font file', 'yabe-webfont'));
+        }
+
+        // parse the css
+        $cssDocument = (new Parser(wp_remote_retrieve_body($response)))->parse();
+
+        // match all comment /* comment */
+        preg_match_all('/\/\*(.*?)\*\//s', wp_remote_retrieve_body($response), $parsedComments);
+
+        $comments = array_map(static fn(string $comment) => trim($comment), $parsedComments[1]);
+
+        $cssContents = $cssDocument->getContents();
+
+        for ($i = 0; $i < count($cssContents); $i++) {
+            $subset = $comments[$i];
+            $url = $cssContents[$i]->getRules('src')[0]->getValue()->getListComponents()[0]->getURL()->getString();
+
+            $unicodeRangeRuleSet = $cssContents[$i]->getRules('unicode-range')[0]->getValue();
+
+            $unicodeRange = $unicodeRangeRuleSet instanceof \Sabberworm\CSS\Value\RuleValueList
+                ? implode(', ', $unicodeRangeRuleSet->getListComponents())
+                : $unicodeRangeRuleSet;
+
+            $parsedFiles[] = [
+                'subset' => $subset,
+                'url' => $url,
+                'unicodeRange' => $unicodeRange,
+            ];
+        }
+
+        return $parsedFiles;
     }
 }

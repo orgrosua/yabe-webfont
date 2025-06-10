@@ -306,13 +306,15 @@ watch(format, (newValue, oldValue) => {
 });
 
 watch([subsets, family], ([newSubsets, newFamily, newVariable], [oldSubsets, oldFamily, oldVariable]) => {
-    if (isEqual(newSubsets.sort(), oldSubsets.sort()) && newFamily === oldFamily && newVariable === oldVariable) {
+    if (newFamily === '' || newSubsets.length === 0) {
         return;
     }
 
-    if (newFamily !== '') {
-        fetchFontFiles();
+    if (isEqual(newSubsets.sort(), oldSubsets.sort()) && newVariable === oldVariable && newFamily === oldFamily) {
+        return;
     }
+
+    fetchFontFiles();
 });
 
 function reComputeFontFiles() {
