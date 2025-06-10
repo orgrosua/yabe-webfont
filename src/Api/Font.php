@@ -1612,6 +1612,8 @@ class Font extends AbstractApi implements ApiInterface
         // Cache the result for 1 day
         set_transient($cache_key, $filteredFontFiles, DAY_IN_SECONDS);
 
+        unset($font->files);
+
         return new WP_REST_Response([
             'font' => $font,
             'files' => array_values($filteredFontFiles),
