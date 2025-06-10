@@ -39,15 +39,15 @@ const askForReviewClick = (action) => {
                             <template #popper>
                                 <div>
                                     <div role="group" class="flex flex:column font:14 min-w:160 p:4 w:auto">
-                                        <a href="https://webfont.yabe.land/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=yabe-webfont&utm_id=pro-version" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
+                                        <a href="https://webfont.yabe.land/docs?utm_source=wordpress-plugins&utm_medium=plugin-menu&utm_campaign=yabe-webfont&utm_id=pro-version" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
                                             <Icon icon="fa6-solid:book" class="min-w:14" />
                                             Documentation
                                         </a>
-                                        <a href="https://rosua.org/support-portal" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
+                                        <a href="https://rosua.org/support-portal" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
                                             <Icon icon="fa6-solid:headset" class="min-w:14" />
                                             Support
                                         </a>
-                                        <a href="https://www.facebook.com/groups/1142662969627943" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text:none user-select:none">
+                                        <a href="https://www.facebook.com/groups/1142662969627943" target="_blank" class="flex align-items:center bg:white bg:gray-10:hover box-shadow:none:focus cursor:pointer fg:gray-90 gap:10 px:10 py:6 r:4 text-decoration:none user-select:none">
                                             <Icon icon="fa6-brands:facebook" class="min-w:14" />
                                             Community
                                         </a>

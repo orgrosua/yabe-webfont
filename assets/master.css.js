@@ -12,6 +12,7 @@ import { initCSSRuntime } from '@master/css-runtime';
 
 /** @type {import('@master/css').Config} */
 const config = {
+    important: true,
     scope: '#webfont-app',
     animations: {
         skeleton: {

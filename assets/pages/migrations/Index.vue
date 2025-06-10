@@ -19,7 +19,7 @@
                 </div>
                 <div class="mt:32">
                     <h3 class="font:16 lh:24px font:semibold leading-6 fg:gray-90">
-                        <router-link :to="{ name: legacy.route }" class="text:none fg:black focus:outline-none">
+                        <router-link :to="{ name: legacy.route }" class="text-decoration:none fg:black focus:outline-none">
                             <!-- Extend touch target to entire panel -->
                             <!-- <span class="abs inset-0" aria-hidden="true" /> -->
                             {{ legacy.title }}

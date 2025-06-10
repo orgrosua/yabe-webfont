@@ -4,7 +4,7 @@
             {{ __('Migrations', 'yabe-webfont') }}
         </h2>
         <h2 v-else class="inline-block mr:8">
-            <router-link :to="{ name: 'migrations' }" class="text:none">{{ __('Migrations', 'yabe-webfont') }}</router-link>
+            <router-link :to="{ name: 'migrations' }" class="text-decoration:none">{{ __('Migrations', 'yabe-webfont') }}</router-link>
         </h2>
         <router-view>
         </router-view>
