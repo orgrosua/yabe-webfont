@@ -35,9 +35,9 @@ class Main implements BuilderInterface
          */
         // add_filter('bricks/builder/standard_fonts', static fn ($fonts) => array_merge($fonts, array_column(Font::get_fonts(), 'family')), 1_000_001);
 
-        add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('bricks'), 1_000_001);
+        add_action('admin_menu', static fn() => AdminPage::add_redirect_submenu_page('bricks'), 1_000_001);
 
-        add_action('wp_enqueue_scripts', fn () => $this->enqueue_scripts(), 1_000_001);
+        add_action('wp_enqueue_scripts', fn() => $this->enqueue_scripts(), 1_000_001);
     }
 
     public function get_name(): string
@@ -62,7 +62,11 @@ class Main implements BuilderInterface
         }
         wp_add_inline_script('bricks-builder', 'var yabeWebfontBricksOptions = ' . json_encode($yabeWebfontBricksOptions, JSON_THROW_ON_ERROR), 'before');
 
-        if (version_compare(BRICKS_VERSION, '1.7.1', '>=')) {
+        if (version_compare(BRICKS_VERSION, '2.0-alpha', '>=')) {
+            wp_add_inline_script('bricks-builder', 'bricksData.fonts.standard = bricksData.fonts.standard.concat(' . json_encode(array_column($fonts, 'family'), JSON_THROW_ON_ERROR) . ');', 'before');
+            wp_add_inline_script('bricks-builder', "bricksData.loadData.fontFavorites = bricksData.loadData.fontFavorites.concat(" . json_encode(array_map(static fn($font) => 'standard_' . $font['family'], $fonts), JSON_THROW_ON_ERROR) . ");", 'before');
+            wp_add_inline_script('bricks-builder', "bricksData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfont' }, ...yabeWebfontBricksOptions, ...bricksData.fonts.options};", 'before');
+        } else if (version_compare(BRICKS_VERSION, '1.7.1', '>=')) {
             wp_add_inline_script('bricks-builder', 'bricksData.fonts.yabe = ' . json_encode(array_column($fonts, 'family'), JSON_THROW_ON_ERROR), 'before');
             wp_add_inline_script('bricks-builder', "bricksData.fonts.options = { ...{'yabeFontsGroupTitle': 'Yabe Webfont' }, ...yabeWebfontBricksOptions, ...bricksData.fonts.options};", 'before');
         } else {

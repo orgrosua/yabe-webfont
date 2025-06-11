@@ -79,6 +79,7 @@ Pro version **2**.0.5
 
 
 = unreleased =
+* **Improve**: Ensure compatibility with Bricks 2.0-beta and later
 * **Fix**: Duplicate import of Google Fonts variable font files
 
 = 2.0.74 =
