@@ -78,6 +78,9 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
+= unreleased =
+* **Fix**: Duplicate import of Google Fonts variable font files
+
 = 2.0.74 =
 * **New**: Google Fonts data are now loaded through local machine instead of using the hosted [Wakufont API](https://github.com/orgrosua/wakufont/tree/symfony).
 

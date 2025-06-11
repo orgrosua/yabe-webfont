@@ -677,7 +677,8 @@ class Font extends AbstractApi implements ApiInterface
                         )
                 );
 
-                $all_filtered_m_font_files = array_merge($all_filtered_m_font_files, $var_filtered_m_font_files);
+                // merge and remove duplicates
+                $all_filtered_m_font_files = array_values(array_unique(array_merge($all_filtered_m_font_files, $var_filtered_m_font_files), SORT_REGULAR));
 
                 foreach ($all_filtered_m_font_files as $filtered_m_font_file) {
                     $wght = array_filter(
