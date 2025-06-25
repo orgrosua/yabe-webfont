@@ -1560,20 +1560,24 @@ class Font extends AbstractApi implements ApiInterface
                         $style = 'normal';
                 }
 
-                $filteredFontFilesVariable = array_filter($font->files, static fn($fontFile) => $fontFile->format === 'woff2'
-                    && $fontFile->weight === 0
-                    && $fontFile->style === $style
-                    && in_array($fontFile->subsets[0], $subsets, true));
+                $filteredFontFilesVariable = array_filter($font->files, function ($fontFile) use ($style, $subsets) {
+                    return $fontFile->format === 'woff2'
+                        && $fontFile->weight === 0
+                        && $fontFile->style === $style
+                        && array_intersect($fontFile->subsets, $subsets) !== [];
+                });
 
                 if (count($filteredFontFilesVariable) < count($subsets)) {
 
                     $fetchedVariableFonts = $this->fetch_google_font_variable_file($font, $italic, $font->axes);
 
                     foreach ($fetchedVariableFonts as $fetchedVariableFont) {
-                        $existFilteredFontFilesVariable = array_filter($filteredFontFilesVariable, static fn($fontFile) => $fontFile->format === 'woff2'
-                            && $fontFile->weight === 0
-                            && $fontFile->style === $style
-                            && in_array($fetchedVariableFont['subset'], $fontFile->subsets, true));
+                        $existFilteredFontFilesVariable = array_filter($filteredFontFilesVariable, function ($fontFile) use ($fetchedVariableFont, $style) {
+                            return $fontFile->format === 'woff2'
+                                && $fontFile->weight === 0
+                                && $fontFile->style === $style
+                                && in_array($fetchedVariableFont['subset'], $fontFile->subsets, true);
+                        });
 
                         if (empty($existFilteredFontFilesVariable)) {
                             $newFontFile = new stdClass();
@@ -1607,7 +1611,7 @@ class Font extends AbstractApi implements ApiInterface
                 }
             }
 
-            return $fontFileSubsets === $subsets || $variableNumberedSubsets;
+            return $fontFileSubsets === $subsets || $variableNumberedSubsets || ($fontFile->weight === 0 && array_intersect($fontFileSubsets, $subsets) !== []);
         });
 
         // Cache the result for 1 day
