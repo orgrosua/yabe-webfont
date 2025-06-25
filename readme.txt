@@ -80,6 +80,7 @@ Pro version **2**.0.5
 
 = unreleased =
 * **Fix**: Multiple subsets for variable fonts are not loaded properly
+* **[Breakdance] Improve**: Ensure compatibility with Breakdance 2.5.0 and later
 
 = 2.0.75 =
 * **Improve**: Ensure compatibility with Bricks 2.0-beta and later

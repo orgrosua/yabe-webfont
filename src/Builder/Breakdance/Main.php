@@ -61,12 +61,22 @@ class Main implements BuilderInterface
                 ],
             ];
 
+            $previewImageUrl = null;
+
+            if ($font['type'] === 'google-fonts') {
+                $previewImageUrl = sprintf(
+                    'https://cdn.jsdelivr.net/gh/khoben/gfont-previews/output/previews/%s-regular.png',
+                    str_replace(' ', '%20', $font['family'])
+                );
+            }
+
             $fontsController->registerFont(
                 Font::slugify($font['family']),
                 $cssName,
                 $dropdownLabel,
                 $fallbackString,
                 $dependencies,
+                $previewImageUrl
             );
         }
     }
