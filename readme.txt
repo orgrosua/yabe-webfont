@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.0.89
+Stable tag: 2.0.90
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -78,7 +78,7 @@ Free version **1**.0.5
 Pro version **2**.0.5
 
 
-= 2.0.89 =
+= 2.0.90 =
 * **New**: Added opt-out settings to control Google Fonts disabling in page builders (Bricks, Elementor, Oxygen, Breakdance, Slider Revolution, FunnelKit) while maintaining GDPR compliance by default
 * **[Elementor] New**: Added compatibility with Elementor v4 Atomic Widgets editor
 

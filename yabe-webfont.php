@@ -7,7 +7,7 @@
  * Plugin Name:         Yabe Webfont
  * Plugin URI:          https://webfont.yabe.land
  * Description:         Easy self-host Google Fonts, Adobe Fonts support, or upload custom fonts in WordPress that are integrated into the most popular themes and page builders.
- * Version:             2.0.89
+ * Version:             2.0.90
  * Requires at least:   6.0
  * Requires PHP:        7.4
  * Author:              Rosua

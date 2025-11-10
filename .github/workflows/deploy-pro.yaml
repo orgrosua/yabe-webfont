@@ -30,7 +30,7 @@ jobs:
         #   if: "startsWith(github.ref, 'refs/tags/')"
         #   run: sleep 120
 
-        - uses: actions/checkout@v3
+        - uses: actions/checkout@v4
           with:
             fetch-depth: 0
 
@@ -41,12 +41,10 @@ jobs:
         - run: rm -rf .wordpress-org
 
         # Use pnpm to install dependencies and build the assets.
-        - uses: pnpm/action-setup@v2
+        - uses: pnpm/action-setup@v4
+        - uses: actions/setup-node@v6
           with:
-            version: 8
-        - uses: actions/setup-node@v3
-          with:
-            node-version: '18'
+            node-version: '20'
             cache: 'pnpm'
 
         - run: pnpm install
@@ -87,7 +85,7 @@ jobs:
         #     cp CHANGELOG.md orgrosua-prefixed/
 
         # clone remote repository, so we can push it
-        - uses: "actions/checkout@v3"
+        - uses: "actions/checkout@v4"
           with:
             repository: orgrosua/yabe-webfont-pro
             ref: main
