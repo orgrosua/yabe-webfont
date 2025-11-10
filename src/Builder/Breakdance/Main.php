@@ -17,6 +17,7 @@ use Breakdance\Fonts\FontsController;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Cache;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 
 /**
@@ -31,10 +32,14 @@ class Main implements BuilderInterface
         if (defined('__BREAKDANCE_VERSION')) {
             // 1.2.1 is the last breakpoint version that supports the old font registration method
             if (version_compare(__BREAKDANCE_VERSION, '1.2.1', '>')) {
-                remove_action('breakdance_register_fonts', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
+                if (Config::get('builder_integrations.disable_google_fonts.breakdance', true)) {
+                    remove_action('breakdance_register_fonts', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
+                }
                 add_action('breakdance_register_fonts', fn (FontsController $fontsController) => $this->register_fonts($fontsController), -1_000_001);
             } else {
-                remove_action('init', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
+                if (Config::get('builder_integrations.disable_google_fonts.breakdance', true)) {
+                    remove_action('init', '\Breakdance\GoogleFontsPlugin\loadGoogleFonts');
+                }
                 add_action('breakdance_loaded', fn () => $this->register_fonts_v10201(), 1_000_001);
             }
         }

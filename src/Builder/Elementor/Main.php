@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder\Elementor;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 
 /**
@@ -29,13 +30,17 @@ class Main implements BuilderInterface
         /**
          * Disable Elementor's built-in Google Fonts.
          */
-        add_filter('pre_option_elementor_google_font', static fn ($pre_option, $option, $default) => '0', 1_000_001, 3);
-        add_filter('pre_update_option_elementor_google_font', static fn ($value, $old_value, $option) => '0', 1_000_001, 3);
+        if (Config::get('builder_integrations.disable_google_fonts.elementor', true)) {
+            add_filter('pre_option_elementor_google_font', static fn ($pre_option, $option, $default) => '0', 1_000_001, 3);
+            add_filter('pre_update_option_elementor_google_font', static fn ($value, $old_value, $option) => '0', 1_000_001, 3);
+        }
 
-        add_filter('elementor/fonts/groups', static fn ($groups) => array_merge([
-            'yabe-webfont' => 'Yabe Webfont',
-        ], $groups), 1_000_001);
+        /**
+         * Register fonts with 'custom' category for Atomic Widgets compatibility.
+         * Atomic Widgets (Elementor v4) only supports: system, custom, googlefonts
+         */
         add_filter('elementor/fonts/additional_fonts', fn ($fonts) => $this->filter_elementor_fonts($fonts), 1_000_001);
+
         add_action('admin_menu', static fn () => AdminPage::add_redirect_submenu_page('elementor'), 1_000_001);
     }
 
@@ -44,12 +49,21 @@ class Main implements BuilderInterface
         return 'elementor';
     }
 
+    /**
+     * Register fonts with Elementor.
+     * Uses 'custom' category for compatibility with both Classic Editor and Atomic Widgets.
+     *
+     * @param array $elementor_fonts Existing Elementor fonts.
+     * @return array Modified fonts array.
+     */
     public function filter_elementor_fonts($elementor_fonts)
     {
         $fonts = Font::get_fonts();
 
         foreach ($fonts as $font) {
-            $elementor_fonts[$font['family']] = 'yabe-webfont';
+            // Use 'custom' category for Atomic Widgets v4 compatibility
+            // Atomic Widgets only recognizes: system, custom, googlefonts
+            $elementor_fonts[$font['family']] = 'custom';
         }
 
         return $elementor_fonts;

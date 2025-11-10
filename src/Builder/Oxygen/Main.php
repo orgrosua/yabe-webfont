@@ -16,6 +16,7 @@ namespace Yabe\Webfont\Builder\Oxygen;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Builder\Gutenberg\Main as GutenbergMain;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 use YABE_WEBFONT;
 
@@ -29,17 +30,19 @@ class Main implements BuilderInterface
         /**
          * Disable Oxygen's built-in Google Fonts.
          */
-        add_filter('pre_option_oxygen_vsb_disable_google_fonts', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
-        add_filter('pre_update_option_oxygen_vsb_disable_google_fonts', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
-        add_filter('pre_option_oxygen_vsb_enable_google_fonts_cache', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
-        add_filter('pre_update_option_oxygen_vsb_enable_google_fonts_cache', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
-        add_filter('pre_option_oxygen_vsb_google_fonts_cache', static fn ($pre_option, $option, $default) => [[
-            'family' => 'Inherit',
-        ]], 1_000_001, 3);
-        add_filter('pre_update_option_oxygen_vsb_google_fonts_cache', static fn ($value, $old_value, $option) => [[
-            'family' => 'Inherit',
-        ]], 1_000_001, 3);
-        add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
+        if (Config::get('builder_integrations.disable_google_fonts.oxygen', true)) {
+            add_filter('pre_option_oxygen_vsb_disable_google_fonts', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
+            add_filter('pre_update_option_oxygen_vsb_disable_google_fonts', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
+            add_filter('pre_option_oxygen_vsb_enable_google_fonts_cache', static fn ($pre_option, $option, $default) => 'true', 1_000_001, 3);
+            add_filter('pre_update_option_oxygen_vsb_enable_google_fonts_cache', static fn ($value, $old_value, $option) => 'true', 1_000_001, 3);
+            add_filter('pre_option_oxygen_vsb_google_fonts_cache', static fn ($pre_option, $option, $default) => [[
+                'family' => 'Inherit',
+            ]], 1_000_001, 3);
+            add_filter('pre_update_option_oxygen_vsb_google_fonts_cache', static fn ($value, $old_value, $option) => [[
+                'family' => 'Inherit',
+            ]], 1_000_001, 3);
+            add_action('init', fn () => $this->remove_ecf_action(), 1_000_001);
+        }
 
         /**
          * Add Gutenberg non block-based theme support.

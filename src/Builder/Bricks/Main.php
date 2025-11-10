@@ -15,6 +15,7 @@ namespace Yabe\Webfont\Builder\Bricks;
 
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 
 /**
@@ -28,7 +29,9 @@ class Main implements BuilderInterface
          * Prevent Google Fonts loading
          * @see https://academy.bricksbuilder.io/article/filter-bricks-assets-load_webfonts/
          */
-        add_filter('bricks/assets/load_webfonts', '__return_false', 1_000_001);
+        if (Config::get('builder_integrations.disable_google_fonts.bricks', true)) {
+            add_filter('bricks/assets/load_webfonts', '__return_false', 1_000_001);
+        }
 
         /**
          * @see https://academy.bricksbuilder.io/article/filter-standard-fonts/

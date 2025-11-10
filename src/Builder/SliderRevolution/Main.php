@@ -16,6 +16,7 @@ namespace Yabe\Webfont\Builder\SliderRevolution;
 use Yabe\Webfont\Admin\AdminPage;
 use Yabe\Webfont\Builder\BuilderInterface;
 use Yabe\Webfont\Core\Cache;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 use YABE_WEBFONT;
 
@@ -29,7 +30,9 @@ class Main implements BuilderInterface
     public function __construct()
     {
         // disable revslider's built-in Google Fonts
-        add_filter('revslider_data_get_font_familys', fn ($rev_fonts) => $this->remove_google_fonts($rev_fonts), 1_000_001);
+        if (Config::get('builder_integrations.disable_google_fonts.slider_revolution', true)) {
+            add_filter('revslider_data_get_font_familys', fn ($rev_fonts) => $this->remove_google_fonts($rev_fonts), 1_000_001);
+        }
 
         add_filter('revslider_data_get_font_familys', fn ($rev_fonts) => $this->get_font_families($rev_fonts), 1_000_001);
 

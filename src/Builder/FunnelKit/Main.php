@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Yabe\Webfont\Builder\FunnelKit;
 
 use Yabe\Webfont\Builder\BuilderInterface;
+use Yabe\Webfont\Utils\Config;
 use Yabe\Webfont\Utils\Font;
 
 /**
@@ -28,10 +29,12 @@ class Main implements BuilderInterface
         /**
          * Disable SlingBlocks' built-in Google Fonts.
          */
-        add_filter('bwf_custom_google_font', static fn () => [], 1_000_001);
-        add_filter('bwf_custom_google_font_names_list', static fn () => [], 1_000_001);
-        add_action('enqueue_block_editor_assets', fn () => $this->remove_google_fonts_list(), 1_000_001);
-        add_action('wp_print_scripts', fn () => $this->dequeue_webfont(), 1_000_001);
+        if (Config::get('builder_integrations.disable_google_fonts.funnelkit', true)) {
+            add_filter('bwf_custom_google_font', static fn () => [], 1_000_001);
+            add_filter('bwf_custom_google_font_names_list', static fn () => [], 1_000_001);
+            add_action('enqueue_block_editor_assets', fn () => $this->remove_google_fonts_list(), 1_000_001);
+            add_action('wp_print_scripts', fn () => $this->dequeue_webfont(), 1_000_001);
+        }
 
         // SlingBlocks
         add_filter('bwf_custom_system_font', fn ($f) => $this->add_block_fonts($f), 1_000_001);

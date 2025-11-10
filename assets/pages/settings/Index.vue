@@ -104,6 +104,49 @@
     </div>
 
     <div class="mb:24">
+        <h2 class="title">Builder Integrations</h2>
+
+        <table class="form-table" role="presentation">
+            <tbody>
+                <tr>
+                    <th scope="row"><label>Disable Google Fonts in Builders</label></th>
+                    <td>
+                        <p class="description">
+                            Control whether Yabe Webfont should disable the built-in Google Fonts in each page builder. When enabled (recommended for GDPR compliance), the builder's default Google Fonts will be disabled.
+                        </p>
+                        <div class="mt:12">
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-bricks" name="disable_google_fonts_bricks" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.bricks', true)" :value="get(options, 'builder_integrations.disable_google_fonts.bricks', true)" @input="set(options, 'builder_integrations.disable_google_fonts.bricks', !get(options, 'builder_integrations.disable_google_fonts.bricks', true))">
+                                <label for="disable-google-fonts-bricks"> Bricks </label>
+                            </div>
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-elementor" name="disable_google_fonts_elementor" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.elementor', true)" :value="get(options, 'builder_integrations.disable_google_fonts.elementor', true)" @input="set(options, 'builder_integrations.disable_google_fonts.elementor', !get(options, 'builder_integrations.disable_google_fonts.elementor', true))">
+                                <label for="disable-google-fonts-elementor"> Elementor </label>
+                            </div>
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-oxygen" name="disable_google_fonts_oxygen" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.oxygen', true)" :value="get(options, 'builder_integrations.disable_google_fonts.oxygen', true)" @input="set(options, 'builder_integrations.disable_google_fonts.oxygen', !get(options, 'builder_integrations.disable_google_fonts.oxygen', true))">
+                                <label for="disable-google-fonts-oxygen"> Oxygen </label>
+                            </div>
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-breakdance" name="disable_google_fonts_breakdance" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.breakdance', true)" :value="get(options, 'builder_integrations.disable_google_fonts.breakdance', true)" @input="set(options, 'builder_integrations.disable_google_fonts.breakdance', !get(options, 'builder_integrations.disable_google_fonts.breakdance', true))">
+                                <label for="disable-google-fonts-breakdance"> Breakdance </label>
+                            </div>
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-slider-revolution" name="disable_google_fonts_slider_revolution" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.slider_revolution', true)" :value="get(options, 'builder_integrations.disable_google_fonts.slider_revolution', true)" @input="set(options, 'builder_integrations.disable_google_fonts.slider_revolution', !get(options, 'builder_integrations.disable_google_fonts.slider_revolution', true))">
+                                <label for="disable-google-fonts-slider-revolution"> Slider Revolution </label>
+                            </div>
+                            <div class="mb:8">
+                                <input id="disable-google-fonts-funnelkit" name="disable_google_fonts_funnelkit" type="checkbox" :checked="get(options, 'builder_integrations.disable_google_fonts.funnelkit', true)" :value="get(options, 'builder_integrations.disable_google_fonts.funnelkit', true)" @input="set(options, 'builder_integrations.disable_google_fonts.funnelkit', !get(options, 'builder_integrations.disable_google_fonts.funnelkit', true))">
+                                <label for="disable-google-fonts-funnelkit"> FunnelKit (SlingBlocks) </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb:24">
         <h2 class="title">Adobe Fonts</h2>
 
         <table class="form-table" role="presentation">
