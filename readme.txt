@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.0.97
+Stable tag: 2.0.98
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -78,7 +78,7 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
-= 2.0.97 =
+= 2.0.98 =
 * **New**: [Etch](https://etchwp.com) integration **[Pro]**. Type "ywf" on the Etch's CSS editor to see the font list.
 * **Improve**: Test compatibility with WordPress 6.9
 
