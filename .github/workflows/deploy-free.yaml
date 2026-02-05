@@ -82,7 +82,8 @@ jobs:
         # - src/Builder/Spectra
         # - src/Builder/YellowPencil
         # - src/Builder/Zion
-        - run: rm -rf src/Builder/{Beaver,Blocksy,Breakdance,Bricks,Cwicly,Divi,FunnelKit,Greenshift,Oxygen,SliderRevolution,Spectra,YellowPencil,Zion}
+        # - src/Builder/Etch
+        - run: rm -rf src/Builder/{Beaver,Blocksy,Breakdance,Bricks,Cwicly,Divi,Etch,FunnelKit,Greenshift,Oxygen,SliderRevolution,Spectra,YellowPencil,Zion}
 
         # remove custom update library
         - run: composer remove rosua/edd-sl-plugin-updater --ansi

@@ -17,7 +17,12 @@
                         <h3>Meta</h3>
                         <div class="grid grid-cols:12 gap:16">
                             <div class="grid-col-span:4 flex flex:col gap:6">
-                                <label class="font:14 lh:20px font:semibold">Font Family</label>
+                                <div class="flex align-items:center justify-content:space-between">
+                                    <label class="font:14 lh:20px font:semibold">Font Family</label>
+                                    <button type="button" class="button button-secondary px:8 py:2 font:12" :disabled="busy.hasTask('fonts.create.google-fonts:fetch-catalog')" @click="refreshCatalog" v-ripple>
+                                        {{ __('Force update', 'yabe-webfont') }}
+                                    </button>
+                                </div>
                                 <TheSearchFamily :catalog="catalog" v-model="fontData"></TheSearchFamily>
                             </div>
 
@@ -893,32 +898,50 @@ function resetForm() {
     };
 }
 
-onBeforeMount(() => {
-    busy.add('fonts.create.google-fonts:on-before-mount');
+function fetchCatalog(forceUpdate = false) {
+    const task = 'fonts.create.google-fonts:fetch-catalog';
 
-    // axios
-    //     .request({
-    //         method: 'GET',
-    //         url: `${yabeWebfont.hostedWakufont}/api/fonts`,
-    //     })
+    if (busy.hasTask(task)) {
+        return;
+    }
+
+    busy.add(task);
 
     api
         .request({
             method: 'GET',
-            url: '/fonts/google-fonts/metadata'
+            url: '/fonts/google-fonts/metadata',
+            params: forceUpdate ? { force: 1 } : {},
         })
         .then(response => {
+            const selectedSlug = fontData.value?.slug;
+
             catalog.value = response.data.fonts;
             catalog.value.forEach(font => {
                 font.subsets = font.subsets.filter(subset => subset !== 'menu');
             });
+
+            if (selectedSlug) {
+                const selectedFont = catalog.value.find(font => font.slug === selectedSlug);
+                if (selectedFont) {
+                    fontData.value = selectedFont;
+                }
+            }
         })
         .catch(error => {
             notifier.alert(error.message);
         })
         .finally(() => {
-            busy.remove('fonts.create.google-fonts:on-before-mount');
+            busy.remove(task);
         });
+}
+
+function refreshCatalog() {
+    fetchCatalog(true);
+}
+
+onBeforeMount(() => {
+    fetchCatalog();
 
     resetForm();
 

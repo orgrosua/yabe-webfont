@@ -4,7 +4,7 @@ Donate link: https://ko-fi.com/Q5Q75XSF7
 Tags: custom fonts, google fonts, adobe fonts, gdpr, dsgvo
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 2.0.90
+Stable tag: 2.0.96
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -47,6 +47,7 @@ The font must be available for use across different platforms. Yabe Webfont is f
 * [Bricks](https://bricksbuilder.io/) **[Pro]**
 * [Cwicly](https://cwicly.com/?ref=suabahasa) **[Pro]**
 * [Divi](https://www.elegantthemes.com/affiliates/idevaffiliate.php?id=47622) **[Pro]**
+* [Etch](https://etchwp.com) **[Pro]**
 * [FunnelKit/SlingBlocks](https://wordpress.org/plugins/slingblocks/) **[Pro]**
 * [Greenshift](https://greenshiftwp.com/) **[Pro]**
 * [Oxygen](https://oxygenbuilder.com/) **[Pro]**
@@ -77,6 +78,8 @@ For instance:
 Free version **1**.0.5
 Pro version **2**.0.5
 
+= 2.0.96 =
+* **New**: [Etch](https://etchwp.com) integration **[Pro]**. Type "ywf" on the Etch's CSS editor to see the font list.
 
 = 2.0.90 =
 * **New**: Added opt-out settings to control Google Fonts disabling in page builders (Bricks, Elementor, Oxygen, Breakdance, Slider Revolution, FunnelKit) while maintaining GDPR compliance by default
