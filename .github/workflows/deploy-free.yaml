@@ -56,8 +56,20 @@ jobs:
         - run: pnpm install
         - run: pnpm build
 
+        - name: Extract changelog for version
+          id: changelog
+          run: |
+            VERSION=${GITHUB_REF#refs/tags/}
+            CHANGELOG_CONTENT=$(node deploy/extract-changelog.js "$VERSION")
+            echo "content<<EOF" >> $GITHUB_OUTPUT
+            echo "$CHANGELOG_CONTENT" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+
+        - name: Update readme.txt changelog
+          run: node deploy/update-readme-changelog.js
+
         # clean up the assets dev files
-        - run: rm -rf assets node_modules package.json pnpm-lock.yaml postcss.config.js tailwind.config.js webpack.config.js bun.lockb vite.config.js
+        - run: rm -rf assets node_modules package.json pnpm-lock.yaml postcss.config.js tailwind.config.js webpack.config.js bun.lockb vite.config.js CHANGELOG.md
 
         # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
         - uses: shivammathur/setup-php@v2
@@ -181,3 +193,23 @@ jobs:
             git push --quiet origin main
             git tag ${{env.TAG_NAME}} -m "${{env.TAG_NAME}}"
             git push --quiet origin ${{env.TAG_NAME}}
+
+        - name: Create plugin zip file
+          run: |
+            mkdir -p yabe-webfont-zip/yabe-webfont
+            cp -r orgrosua-prefixed/* yabe-webfont-zip/yabe-webfont/
+            cd yabe-webfont-zip
+            zip -r "../yabe-webfont-${{ env.TAG_NAME }}-free.zip" . -x "*.git*" "*.DS_Store*"
+
+        - name: Create GitHub Release
+          uses: softprops/action-gh-release@v2
+          if: "startsWith(github.ref, 'refs/tags/')"
+          with:
+            name: "${{ github.ref_name }}"
+            body: ${{ steps.changelog.outputs.content }}
+            files: |
+              yabe-webfont-${{ env.TAG_NAME }}-free.zip
+            draft: false
+            prerelease: false
+          env:
+            GITHUB_TOKEN: ${{ secrets.ORGROSUA_DEV_PAT }}

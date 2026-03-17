@@ -1,105 +1,88 @@
 <?php
 
-/**
- * @var string Working directory.
- */
-define('WORK_DIR', getcwd());
+declare(strict_types=1);
 
-/**
- * src/Plugin.php
- * 
- * the pattern is `public const MAJOR_VERSION = X;`, where X is the major version.
- * then decrease it by 1.
- */
-function step_1()
+define('WORK_DIR', dirname(__DIR__));
+
+function decrement_major_version(string $version): string
 {
-    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
-    preg_match('/public const MAJOR_VERSION = (\d+);/', $curr_file, $matches);
-    $major_version = $matches[1];
-    $curr_file = preg_replace('/public const MAJOR_VERSION = (\d+);/', 'public const MAJOR_VERSION = ' . ($major_version - 1) . ';', $curr_file);
-    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
+    if (!preg_match('/^(\d+)\.(\d+)\.(\d+)$/', $version, $matches)) {
+        throw new RuntimeException(sprintf('Invalid version string: %s', $version));
+    }
+
+    $major = (int) $matches[1];
+    $minor = $matches[2];
+    $patch = $matches[3];
+
+    if ($major < 1) {
+        throw new RuntimeException(sprintf('Cannot decrease major version for: %s', $version));
+    }
+
+    return sprintf('%d.%s.%s', $major - 1, $minor, $patch);
 }
 
-
-/**
- * yabe-webfont.php
- * 
- * the pattern is `* Version:             X.Y.Z`, where X is the major version, Y is the minor version and Z is the patch version.
- */
-function step_2()
+function update_file(string $relativePath, string $pattern, callable $callback, bool $requireMatch = true): void
 {
-    $curr_file = file_get_contents(WORK_DIR . '/yabe-webfont.php');
-    preg_match('/\* Version:             (\d+)\.(\d+)\.(\d+)/', $curr_file, $matches);
-    $major_version = $matches[1];
-    $minor_version = $matches[2];
-    $patch_version = $matches[3];
-    $curr_file = preg_replace('/\* Version:             (\d+)\.(\d+)\.(\d+)/', '* Version:             ' . ($major_version - 1) . '.' . $minor_version . '.' . $patch_version, $curr_file);
-    file_put_contents(WORK_DIR . '/yabe-webfont.php', $curr_file);
+    $path = WORK_DIR . '/' . $relativePath;
+    $content = file_get_contents($path);
+
+    if ($content === false) {
+        throw new RuntimeException(sprintf('Unable to read file: %s', $relativePath));
+    }
+
+    $count = 0;
+    $updated = preg_replace_callback($pattern, $callback, $content, -1, $count);
+
+    if ($updated === null) {
+        throw new RuntimeException(sprintf('Regex error while updating: %s', $relativePath));
+    }
+
+    if ($requireMatch && $count === 0) {
+        throw new RuntimeException(sprintf('Pattern not found in file: %s', $relativePath));
+    }
+
+    if (file_put_contents($path, $updated) === false) {
+        throw new RuntimeException(sprintf('Unable to write file: %s', $relativePath));
+    }
 }
 
-/**
- * readme.txt
- * 
- * the pattern is `Stable tag: X.Y.Z`, where X is the major version, Y is the minor version and Z is the patch version.
- */
-function step_3()
-{
-    $curr_file = file_get_contents(WORK_DIR . '/readme.txt');
-    preg_match('/Stable tag: (\d+)\.(\d+)\.(\d+)/', $curr_file, $matches);
-    $major_version = $matches[1];
-    $minor_version = $matches[2];
-    $patch_version = $matches[3];
-    $curr_file = preg_replace('/Stable tag: (\d+)\.(\d+)\.(\d+)/', 'Stable tag: ' . ($major_version - 1) . '.' . $minor_version . '.' . $patch_version, $curr_file);
-    file_put_contents(WORK_DIR . '/readme.txt', $curr_file);
-}
+update_file(
+    'constant.php',
+    "/public const VERSION = '(\d+\.\d+\.\d+)';/",
+    static function (array $matches): string {
+        return "public const VERSION = '" . decrement_major_version($matches[1]) . "';";
+    }
+);
 
+update_file(
+    'yabe-webfont.php',
+    '/\* Version:\s+(\d+\.\d+\.\d+)/',
+    static function (array $matches): string {
+        return '* Version:             ' . decrement_major_version($matches[1]);
+    }
+);
 
-/**
- * readme.txt
- * 
- * the pattern is `= X.Y.Z =`, where X is the major version, Y is the minor version and Z is the patch version.
- * it occurs several times in the file but with different version.
- * decreace each X by 1.
- */
-function step_4()
-{
-    $curr_file = file_get_contents(WORK_DIR . '/readme.txt');
-    preg_match_all('/= (\d+)\.(\d+)\.(\d+) =/', $curr_file, $matches);
-    $curr_file = preg_replace_callback('/= (\d+)\.(\d+)\.(\d+) =/', function ($matches) {
-        return '= ' . ($matches[1] - 1) . '.' . $matches[2] . '.' . $matches[3] . ' =';
-    }, $curr_file);
-    file_put_contents(WORK_DIR . '/readme.txt', $curr_file);
-}
+update_file(
+    'readme.txt',
+    '/Stable tag: (\d+\.\d+\.\d+)/',
+    static function (array $matches): string {
+        return 'Stable tag: ' . decrement_major_version($matches[1]);
+    }
+);
 
-/**
- * On the constant.php file, the pattern is: `public const VERSION = 'X.Y.Z';`, where X is the major version, Y is the minor version and Z is the patch version. Decrease X by 1.
- */
-function step_5()
-{
-    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
-    preg_match('/public const VERSION = \'(\d+)\.(\d+)\.(\d+)\';/', $curr_file, $matches);
-    $major_version = $matches[1];
-    $minor_version = $matches[2];
-    $patch_version = $matches[3];
-    $curr_file = preg_replace('/public const VERSION = \'(\d+)\.(\d+)\.(\d+)\';/', 'public const VERSION = \'' . ($major_version - 1) . '.' . $minor_version . '.' . $patch_version . '\';', $curr_file);
-    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
-}
+update_file(
+    'readme.txt',
+    '/= (\d+\.\d+\.\d+) - ([0-9-]+) =/',
+    static function (array $matches): string {
+        return '= ' . decrement_major_version($matches[1]) . ' - ' . $matches[2] . ' =';
+    }
+);
 
-/**
- * On the constant.php file, the pattern is: `public const VERSION_ID = W;`, Where W is integer, do reduce W by 10000
- */
-function step_6()
-{
-    $curr_file = file_get_contents(WORK_DIR . '/constant.php');
-    preg_match('/public const VERSION_ID = (\d+);/', $curr_file, $matches);
-    $version_id = $matches[1];
-    $curr_file = preg_replace('/public const VERSION_ID = (\d+);/', 'public const VERSION_ID = ' . ($version_id - 10000) . ';', $curr_file);
-    file_put_contents(WORK_DIR . '/constant.php', $curr_file);
-}
-
-step_1();
-step_2();
-step_3();
-step_4();
-step_5();
-step_6();
+update_file(
+    'readme.txt',
+    '/= (\d+\.\d+\.\d+) =/',
+    static function (array $matches): string {
+        return '= ' . decrement_major_version($matches[1]) . ' =';
+    },
+    false
+);
