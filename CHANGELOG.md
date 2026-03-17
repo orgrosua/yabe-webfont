@@ -7,6 +7,11 @@ and the Pro release major version is one higher than the matching Free release.
 
 ## [Unreleased]
 
+## [2.0.100] - 2026-03-17
+
+### Changed
+- Improve WordPress.org changelog formatting and keep release notes in sync across releases.
+
 ## [2.0.98] - 2026-02-05
 
 ### Added
@@ -435,7 +440,8 @@ and the Pro release major version is one higher than the matching Free release.
 ### Added
 - Initial release.
 
-[unreleased]: https://github.com/orgrosua/yabe-webfont/compare/2.0.98...HEAD
+[unreleased]: https://github.com/orgrosua/yabe-webfont/compare/2.0.100...HEAD
+[2.0.100]: https://github.com/orgrosua/yabe-webfont/compare/2.0.98...2.0.100
 [2.0.98]: https://github.com/orgrosua/yabe-webfont/compare/2.0.90...2.0.98
 [2.0.90]: https://github.com/orgrosua/yabe-webfont/compare/2.0.78...2.0.90
 [2.0.78]: https://github.com/orgrosua/yabe-webfont/compare/2.0.75...2.0.78
