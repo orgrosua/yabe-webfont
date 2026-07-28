@@ -7,6 +7,12 @@ and the Pro release major version is one higher than the matching Free release.
 
 ## [Unreleased]
 
+### Fixed
+- Prevent header warnings when LifterLMS sends headers after Yabe frontend output.
+
+### Changed
+- Use WordPress APIs to enqueue cached CSS, font preloads, and inline scripts.
+
 ## [2.0.100] - 2026-03-17
 
 ### Changed
