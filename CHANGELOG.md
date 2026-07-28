@@ -7,6 +7,8 @@ and the Pro release major version is one higher than the matching Free release.
 
 ## [Unreleased]
 
+## [2.0.114] - 2026-07-28
+
 ### Fixed
 - Prevent header warnings when LifterLMS sends headers after Yabe frontend output.
 
@@ -446,7 +448,8 @@ and the Pro release major version is one higher than the matching Free release.
 ### Added
 - Initial release.
 
-[unreleased]: https://github.com/orgrosua/yabe-webfont/compare/2.0.100...HEAD
+[unreleased]: https://github.com/orgrosua/yabe-webfont/compare/2.0.114...HEAD
+[2.0.114]: https://github.com/orgrosua/yabe-webfont/compare/2.0.100...2.0.114
 [2.0.100]: https://github.com/orgrosua/yabe-webfont/compare/2.0.98...2.0.100
 [2.0.98]: https://github.com/orgrosua/yabe-webfont/compare/2.0.90...2.0.98
 [2.0.90]: https://github.com/orgrosua/yabe-webfont/compare/2.0.78...2.0.90

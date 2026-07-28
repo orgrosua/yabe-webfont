@@ -14,9 +14,9 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
-          token: ${{ secrets.ORGROSUA_DEV_PAT }}
+          token: ${{ github.token }}
 
       - uses: denoland/setup-deno@v2
         with:
